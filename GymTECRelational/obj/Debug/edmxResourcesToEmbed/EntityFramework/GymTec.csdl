@@ -1,0 +1,413 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="GymTECModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Administrador">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Nombre" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Apellidos" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Contraseña" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Salt" Type="String" MaxLength="32" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Token" Type="String" MaxLength="32" FixedLength="false" Unicode="false" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Clase">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Hora_Inicio" Type="Time" Precision="0" />
+    <Property Name="Fecha" Type="DateTime" Precision="0" />
+    <Property Name="Tipo_Servicio" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Hora_Final" Type="Time" Nullable="false" Precision="0" />
+    <Property Name="Sucursal" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Instructor" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="Modalidad" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Capacidad" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Cliente_Clase" Relationship="Self.FKClase_ClientClase" FromRole="Clase" ToRole="Cliente_Clase" />
+    <NavigationProperty Name="Empleado" Relationship="Self.FKInstructor_Clase" FromRole="Clase" ToRole="Empleado" />
+    <NavigationProperty Name="SucursalName" Relationship="Self.FKSucursal_Clase" FromRole="Clase" ToRole="Sucursal" />
+    <NavigationProperty Name="Tipo_Servicio_Name" Relationship="Self.FKTipoServicio_Clase" FromRole="Clase" ToRole="Tipo_Servicio" />
+  </EntityType>
+  <EntityType Name="Cliente_Clase">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" />
+    <Property Name="Hora_Inicio_Clase" Type="Time" Precision="7" />
+    <Property Name="Fecha_Clase" Type="DateTime" Precision="0" />
+    <Property Name="Tipo_Clase" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
+    <Property Name="Cliente" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Clase" Relationship="Self.FKClase_ClientClase" FromRole="Cliente_Clase" ToRole="Clase" />
+  </EntityType>
+  <EntityType Name="Direccion">
+    <Key>
+      <PropertyRef Name="Distrito" />
+      <PropertyRef Name="Canton" />
+      <PropertyRef Name="Provincia" />
+    </Key>
+    <Property Name="Distrito" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Canton" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Provincia" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="Empleadoes" Relationship="Self.FKDireccion_Empleado" FromRole="Direccion" ToRole="Empleado" />
+    <NavigationProperty Name="Sucursals" Relationship="Self.FKDireccion_Sucursal" FromRole="Direccion" ToRole="Sucursal" />
+  </EntityType>
+  <EntityType Name="Empleado">
+    <Key>
+      <PropertyRef Name="Cedula" />
+    </Key>
+    <Property Name="Cedula" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Puesto" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Planilla" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Distrito" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Canton" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Provincia" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Sucursal" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="Nombre" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Apellidos" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Salario" Type="Decimal" Precision="7" Scale="2" Nullable="false" />
+    <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Contraseña" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Salt" Type="String" MaxLength="32" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Token" Type="String" MaxLength="32" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="Clases" Relationship="Self.FKInstructor_Clase" FromRole="Empleado" ToRole="Clase" />
+    <NavigationProperty Name="Direccion" Relationship="Self.FKDireccion_Empleado" FromRole="Empleado" ToRole="Direccion" />
+    <NavigationProperty Name="Sucursals" Relationship="Self.FKGerente_Sucursal" FromRole="Empleado" ToRole="Sucursal" />
+    <NavigationProperty Name="Planilla1" Relationship="Self.FKPlanilla_Empleado" FromRole="Empleado" ToRole="Planilla" />
+    <NavigationProperty Name="Puesto1" Relationship="Self.FKPuesto_Empleado" FromRole="Empleado" ToRole="Puesto" />
+    <NavigationProperty Name="Sucursal1" Relationship="Self.FKSucursal_Empleado" FromRole="Empleado" ToRole="Sucursal" />
+  </EntityType>
+  <EntityType Name="Maquina">
+    <Key>
+      <PropertyRef Name="Serial" />
+    </Key>
+    <Property Name="Serial" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Tipo_Equipo" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Sucursal" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="Marca" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Costo" Type="Decimal" Precision="7" Scale="2" Nullable="false" />
+    <NavigationProperty Name="Sucursal1" Relationship="Self.FKSucursal_Maquina" FromRole="Maquina" ToRole="Sucursal" />
+    <NavigationProperty Name="Tipo_Equipo1" Relationship="Self.FKTipoEquipo_Maquina" FromRole="Maquina" ToRole="Tipo_Equipo" />
+  </EntityType>
+  <EntityType Name="Planilla">
+    <Key>
+      <PropertyRef Name="Nombre" />
+    </Key>
+    <Property Name="Nombre" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Descripcion" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="Empleadoes" Relationship="Self.FKPlanilla_Empleado" FromRole="Planilla" ToRole="Empleado" />
+  </EntityType>
+  <EntityType Name="Producto">
+    <Key>
+      <PropertyRef Name="Codigo_Barras" />
+    </Key>
+    <Property Name="Codigo_Barras" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Nombre" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Descripcion" Type="String" MaxLength="300" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Costo" Type="Decimal" Precision="7" Scale="2" />
+    <NavigationProperty Name="Sucursals" Relationship="Self.Producto_Sucursal" FromRole="Producto" ToRole="Sucursal" />
+  </EntityType>
+  <EntityType Name="Puesto">
+    <Key>
+      <PropertyRef Name="Nombre" />
+    </Key>
+    <Property Name="Nombre" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Descripcion" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="Empleadoes" Relationship="Self.FKPuesto_Empleado" FromRole="Puesto" ToRole="Empleado" />
+  </EntityType>
+  <EntityType Name="Sucursal">
+    <Key>
+      <PropertyRef Name="Nombre" />
+    </Key>
+    <Property Name="Nombre" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Distrito" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Canton" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Provincia" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Fecha_Apertura" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="Capacidad_Max" Type="Int32" Nullable="false" />
+    <Property Name="Gerente" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="Tienda_Act" Type="Boolean" />
+    <Property Name="Spa_Act" Type="Boolean" />
+    <NavigationProperty Name="Clases" Relationship="Self.FKSucursal_Clase" FromRole="Sucursal" ToRole="Clase" />
+    <NavigationProperty Name="Direccion" Relationship="Self.FKDireccion_Sucursal" FromRole="Sucursal" ToRole="Direccion" />
+    <NavigationProperty Name="Empleado" Relationship="Self.FKGerente_Sucursal" FromRole="Sucursal" ToRole="Empleado" />
+    <NavigationProperty Name="Empleadoes" Relationship="Self.FKSucursal_Empleado" FromRole="Sucursal" ToRole="Empleado" />
+    <NavigationProperty Name="Maquinas" Relationship="Self.FKSucursal_Maquina" FromRole="Sucursal" ToRole="Maquina" />
+    <NavigationProperty Name="Productos" Relationship="Self.Producto_Sucursal" FromRole="Sucursal" ToRole="Producto" />
+    <NavigationProperty Name="Tratamiento_Spa" Relationship="Self.Tratamiento_Sucursal" FromRole="Sucursal" ToRole="Tratamiento_Spa" />
+  </EntityType>
+  <EntityType Name="Tipo_Equipo">
+    <Key>
+      <PropertyRef Name="Nombre" />
+    </Key>
+    <Property Name="Nombre" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Descripcion" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="Maquinas" Relationship="Self.FKTipoEquipo_Maquina" FromRole="Tipo_Equipo" ToRole="Maquina" />
+  </EntityType>
+  <EntityType Name="Tipo_Servicio">
+    <Key>
+      <PropertyRef Name="Nombre" />
+    </Key>
+    <Property Name="Nombre" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Descripcion" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="Clases" Relationship="Self.FKTipoServicio_Clase" FromRole="Tipo_Servicio" ToRole="Clase" />
+  </EntityType>
+  <EntityType Name="Tratamiento_Spa">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Nombre" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="Sucursals" Relationship="Self.Tratamiento_Sucursal" FromRole="Tratamiento_Spa" ToRole="Sucursal" />
+  </EntityType>
+  <Association Name="FKClase_ClientClase">
+    <End Role="Clase" Type="Self.Clase" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Cliente_Clase" Type="Self.Cliente_Clase" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="Clase">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Cliente_Clase">
+        <PropertyRef Name="Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FKInstructor_Clase">
+    <End Role="Empleado" Type="Self.Empleado" Multiplicity="0..1" />
+    <End Role="Clase" Type="Self.Clase" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Empleado">
+        <PropertyRef Name="Cedula" />
+      </Principal>
+      <Dependent Role="Clase">
+        <PropertyRef Name="Instructor" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FKSucursal_Clase">
+    <End Role="Sucursal" Type="Self.Sucursal" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Clase" Type="Self.Clase" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Sucursal">
+        <PropertyRef Name="Nombre" />
+      </Principal>
+      <Dependent Role="Clase">
+        <PropertyRef Name="Sucursal" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FKTipoServicio_Clase">
+    <End Role="Tipo_Servicio" Type="Self.Tipo_Servicio" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Clase" Type="Self.Clase" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Tipo_Servicio">
+        <PropertyRef Name="Nombre" />
+      </Principal>
+      <Dependent Role="Clase">
+        <PropertyRef Name="Tipo_Servicio" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FKDireccion_Empleado">
+    <End Role="Direccion" Type="Self.Direccion" Multiplicity="1" />
+    <End Role="Empleado" Type="Self.Empleado" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Direccion">
+        <PropertyRef Name="Provincia" />
+        <PropertyRef Name="Canton" />
+        <PropertyRef Name="Distrito" />
+      </Principal>
+      <Dependent Role="Empleado">
+        <PropertyRef Name="Provincia" />
+        <PropertyRef Name="Canton" />
+        <PropertyRef Name="Distrito" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FKDireccion_Sucursal">
+    <End Role="Direccion" Type="Self.Direccion" Multiplicity="1" />
+    <End Role="Sucursal" Type="Self.Sucursal" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Direccion">
+        <PropertyRef Name="Provincia" />
+        <PropertyRef Name="Canton" />
+        <PropertyRef Name="Distrito" />
+      </Principal>
+      <Dependent Role="Sucursal">
+        <PropertyRef Name="Provincia" />
+        <PropertyRef Name="Canton" />
+        <PropertyRef Name="Distrito" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FKGerente_Sucursal">
+    <End Role="Empleado" Type="Self.Empleado" Multiplicity="0..1" />
+    <End Role="Sucursal" Type="Self.Sucursal" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Empleado">
+        <PropertyRef Name="Cedula" />
+      </Principal>
+      <Dependent Role="Sucursal">
+        <PropertyRef Name="Gerente" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FKPlanilla_Empleado">
+    <End Role="Planilla" Type="Self.Planilla" Multiplicity="1" />
+    <End Role="Empleado" Type="Self.Empleado" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Planilla">
+        <PropertyRef Name="Nombre" />
+      </Principal>
+      <Dependent Role="Empleado">
+        <PropertyRef Name="Planilla" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FKPuesto_Empleado">
+    <End Role="Puesto" Type="Self.Puesto" Multiplicity="1" />
+    <End Role="Empleado" Type="Self.Empleado" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Puesto">
+        <PropertyRef Name="Nombre" />
+      </Principal>
+      <Dependent Role="Empleado">
+        <PropertyRef Name="Puesto" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FKSucursal_Empleado">
+    <End Role="Sucursal" Type="Self.Sucursal" Multiplicity="0..1" />
+    <End Role="Empleado" Type="Self.Empleado" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Sucursal">
+        <PropertyRef Name="Nombre" />
+      </Principal>
+      <Dependent Role="Empleado">
+        <PropertyRef Name="Sucursal" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FKSucursal_Maquina">
+    <End Role="Sucursal" Type="Self.Sucursal" Multiplicity="0..1" />
+    <End Role="Maquina" Type="Self.Maquina" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Sucursal">
+        <PropertyRef Name="Nombre" />
+      </Principal>
+      <Dependent Role="Maquina">
+        <PropertyRef Name="Sucursal" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FKTipoEquipo_Maquina">
+    <End Role="Tipo_Equipo" Type="Self.Tipo_Equipo" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Maquina" Type="Self.Maquina" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Tipo_Equipo">
+        <PropertyRef Name="Nombre" />
+      </Principal>
+      <Dependent Role="Maquina">
+        <PropertyRef Name="Tipo_Equipo" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="Producto_Sucursal">
+    <End Role="Producto" Type="Self.Producto" Multiplicity="*" />
+    <End Role="Sucursal" Type="Self.Sucursal" Multiplicity="*" />
+  </Association>
+  <Association Name="Tratamiento_Sucursal">
+    <End Role="Tratamiento_Spa" Type="Self.Tratamiento_Spa" Multiplicity="*" />
+    <End Role="Sucursal" Type="Self.Sucursal" Multiplicity="*" />
+  </Association>
+  <EntityContainer Name="GymTECEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Administradors" EntityType="Self.Administrador" />
+    <EntitySet Name="Clases" EntityType="Self.Clase" />
+    <EntitySet Name="Cliente_Clase" EntityType="Self.Cliente_Clase" />
+    <EntitySet Name="Direccions" EntityType="Self.Direccion" />
+    <EntitySet Name="Empleadoes" EntityType="Self.Empleado" />
+    <EntitySet Name="Maquinas" EntityType="Self.Maquina" />
+    <EntitySet Name="Planillas" EntityType="Self.Planilla" />
+    <EntitySet Name="Productoes" EntityType="Self.Producto" />
+    <EntitySet Name="Puestoes" EntityType="Self.Puesto" />
+    <EntitySet Name="Sucursals" EntityType="Self.Sucursal" />
+    <EntitySet Name="Tipo_Equipo" EntityType="Self.Tipo_Equipo" />
+    <EntitySet Name="Tipo_Servicio" EntityType="Self.Tipo_Servicio" />
+    <EntitySet Name="Tratamiento_Spa" EntityType="Self.Tratamiento_Spa" />
+    <AssociationSet Name="FKClase_ClientClase" Association="Self.FKClase_ClientClase">
+      <End Role="Clase" EntitySet="Clases" />
+      <End Role="Cliente_Clase" EntitySet="Cliente_Clase" />
+    </AssociationSet>
+    <AssociationSet Name="FKInstructor_Clase" Association="Self.FKInstructor_Clase">
+      <End Role="Empleado" EntitySet="Empleadoes" />
+      <End Role="Clase" EntitySet="Clases" />
+    </AssociationSet>
+    <AssociationSet Name="FKSucursal_Clase" Association="Self.FKSucursal_Clase">
+      <End Role="Sucursal" EntitySet="Sucursals" />
+      <End Role="Clase" EntitySet="Clases" />
+    </AssociationSet>
+    <AssociationSet Name="FKTipoServicio_Clase" Association="Self.FKTipoServicio_Clase">
+      <End Role="Tipo_Servicio" EntitySet="Tipo_Servicio" />
+      <End Role="Clase" EntitySet="Clases" />
+    </AssociationSet>
+    <AssociationSet Name="FKDireccion_Empleado" Association="Self.FKDireccion_Empleado">
+      <End Role="Direccion" EntitySet="Direccions" />
+      <End Role="Empleado" EntitySet="Empleadoes" />
+    </AssociationSet>
+    <AssociationSet Name="FKDireccion_Sucursal" Association="Self.FKDireccion_Sucursal">
+      <End Role="Direccion" EntitySet="Direccions" />
+      <End Role="Sucursal" EntitySet="Sucursals" />
+    </AssociationSet>
+    <AssociationSet Name="FKGerente_Sucursal" Association="Self.FKGerente_Sucursal">
+      <End Role="Empleado" EntitySet="Empleadoes" />
+      <End Role="Sucursal" EntitySet="Sucursals" />
+    </AssociationSet>
+    <AssociationSet Name="FKPlanilla_Empleado" Association="Self.FKPlanilla_Empleado">
+      <End Role="Planilla" EntitySet="Planillas" />
+      <End Role="Empleado" EntitySet="Empleadoes" />
+    </AssociationSet>
+    <AssociationSet Name="FKPuesto_Empleado" Association="Self.FKPuesto_Empleado">
+      <End Role="Puesto" EntitySet="Puestoes" />
+      <End Role="Empleado" EntitySet="Empleadoes" />
+    </AssociationSet>
+    <AssociationSet Name="FKSucursal_Empleado" Association="Self.FKSucursal_Empleado">
+      <End Role="Sucursal" EntitySet="Sucursals" />
+      <End Role="Empleado" EntitySet="Empleadoes" />
+    </AssociationSet>
+    <AssociationSet Name="FKSucursal_Maquina" Association="Self.FKSucursal_Maquina">
+      <End Role="Sucursal" EntitySet="Sucursals" />
+      <End Role="Maquina" EntitySet="Maquinas" />
+    </AssociationSet>
+    <AssociationSet Name="FKTipoEquipo_Maquina" Association="Self.FKTipoEquipo_Maquina">
+      <End Role="Tipo_Equipo" EntitySet="Tipo_Equipo" />
+      <End Role="Maquina" EntitySet="Maquinas" />
+    </AssociationSet>
+    <AssociationSet Name="Producto_Sucursal" Association="Self.Producto_Sucursal">
+      <End Role="Producto" EntitySet="Productoes" />
+      <End Role="Sucursal" EntitySet="Sucursals" />
+    </AssociationSet>
+    <AssociationSet Name="Tratamiento_Sucursal" Association="Self.Tratamiento_Sucursal">
+      <End Role="Tratamiento_Spa" EntitySet="Tratamiento_Spa" />
+      <End Role="Sucursal" EntitySet="Sucursals" />
+    </AssociationSet>
+    <FunctionImport Name="selectAllAdmins" ReturnType="Collection(GymTECModel.selectAllAdmins_Result)" />
+  </EntityContainer>
+  <ComplexType Name="selectAllAdmins_Result">
+    <Property Type="Int32" Name="Id" Nullable="false" />
+    <Property Type="String" Name="Email" Nullable="false" MaxLength="50" />
+    <Property Type="String" Name="Nombre" Nullable="false" MaxLength="20" />
+    <Property Type="String" Name="Apellidos" Nullable="false" MaxLength="45" />
+    <Property Type="String" Name="Contraseña" Nullable="false" MaxLength="50" />
+    <Property Type="String" Name="Salt" Nullable="false" MaxLength="32" />
+    <Property Type="String" Name="Token" Nullable="false" MaxLength="32" />
+  </ComplexType>
+</Schema>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="31598ac8d80c45b48bdbf715b3593059" Name="Diagram1" ZoomLevel="114">
+        <EntityTypeShape EntityType="GymTECModel.Administrador" Width="1.5" PointX="2.75" PointY="9.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="GymTECModel.Clase" Width="1.5" PointX="5.25" PointY="4.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="GymTECModel.Cliente_Clase" Width="1.5" PointX="7.5" PointY="8.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="GymTECModel.Direccion" Width="1.5" PointX="0.75" PointY="4.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="GymTECModel.Empleado" Width="1.5" PointX="3" PointY="3.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="GymTECModel.Maquina" Width="1.5" PointX="10.5" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="GymTECModel.Planilla" Width="1.5" PointX="0.75" PointY="1.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="GymTECModel.Producto" Width="1.5" PointX="6" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="GymTECModel.Puesto" Width="1.5" PointX="0.75" PointY="7.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="GymTECModel.Sucursal" Width="1.5" PointX="8.25" PointY="3.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="GymTECModel.Tipo_Equipo" Width="1.5" PointX="8.25" PointY="1.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="GymTECModel.Tipo_Servicio" Width="1.5" PointX="3" PointY="1.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="GymTECModel.Tratamiento_Spa" Width="1.5" PointX="6" PointY="12.5" IsExpanded="true" />
+        <AssociationConnector Association="GymTECModel.FKClase_ClientClase" ManuallyRouted="false" />
+        <AssociationConnector Association="GymTECModel.FKInstructor_Clase" ManuallyRouted="false" />
+        <AssociationConnector Association="GymTECModel.FKSucursal_Clase" ManuallyRouted="false" />
+        <AssociationConnector Association="GymTECModel.FKTipoServicio_Clase" ManuallyRouted="false" />
+        <AssociationConnector Association="GymTECModel.FKDireccion_Empleado" ManuallyRouted="false" />
+        <AssociationConnector Association="GymTECModel.FKDireccion_Sucursal" ManuallyRouted="false" />
+        <AssociationConnector Association="GymTECModel.FKGerente_Sucursal" ManuallyRouted="false" />
+        <AssociationConnector Association="GymTECModel.FKPlanilla_Empleado" ManuallyRouted="false" />
+        <AssociationConnector Association="GymTECModel.FKPuesto_Empleado" ManuallyRouted="false" />
+        <AssociationConnector Association="GymTECModel.FKSucursal_Empleado" ManuallyRouted="false" />
+        <AssociationConnector Association="GymTECModel.FKSucursal_Maquina" ManuallyRouted="false" />
+        <AssociationConnector Association="GymTECModel.FKTipoEquipo_Maquina" ManuallyRouted="false" />
+        <AssociationConnector Association="GymTECModel.Producto_Sucursal" ManuallyRouted="false" />
+        <AssociationConnector Association="GymTECModel.Tratamiento_Sucursal" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
