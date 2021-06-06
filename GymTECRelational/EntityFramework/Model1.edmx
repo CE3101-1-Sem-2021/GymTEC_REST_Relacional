@@ -125,6 +125,13 @@
           <Property Name="Tienda_Act" Type="bit" StoreGeneratedPattern="Computed" />
           <Property Name="Spa_Act" Type="bit" StoreGeneratedPattern="Computed" />
         </EntityType>
+        <EntityType Name="Sucursal_Telefono">
+          <Key>
+            <PropertyRef Name="Telefono" />
+          </Key>
+          <Property Name="Telefono" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="Sucursal" Type="varchar" MaxLength="20" Nullable="false" />
+        </EntityType>
         <EntityType Name="Tipo_Equipo">
           <Key>
             <PropertyRef Name="Nombre" />
@@ -328,6 +335,20 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FKSucursal_Telefono">
+          <End Role="Sucursal" Type="Self.Sucursal" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Sucursal_Telefono" Type="Self.Sucursal_Telefono" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Sucursal">
+              <PropertyRef Name="Nombre" />
+            </Principal>
+            <Dependent Role="Sucursal_Telefono">
+              <PropertyRef Name="Sucursal" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FKSucursal_TratSuc">
           <End Role="Sucursal" Type="Self.Sucursal" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -370,6 +391,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="activateGymSpa" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="State" Type="bit" Mode="In" />
+          <Parameter Name="Nombre" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="activateGymStore" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="State" Type="bit" Mode="In" />
+          <Parameter Name="Nombre" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="addPhoneNumb" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Nombre" Type="varchar" Mode="In" />
+          <Parameter Name="Telefono" Type="varchar" Mode="In" />
+        </Function>
         <Function Name="assignTokenAdmin" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Token" Type="varchar" Mode="In" />
           <Parameter Name="Id" Type="int" Mode="In" />
@@ -378,8 +411,17 @@
           <Parameter Name="Token" Type="varchar" Mode="In" />
           <Parameter Name="Id" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="deleteGym" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Nombre" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="deletePhoneNumb" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Telefono" Type="varchar" Mode="In" />
+        </Function>
         <Function Name="getAdminByMail" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Email" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="getAllPhoneNumbByGym" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Nombre" Type="varchar" Mode="In" />
         </Function>
         <Function Name="getEmployeeById" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Cedula" Type="varchar" Mode="In" />
@@ -422,6 +464,24 @@
         </Function>
         <Function Name="selectAllAdmins" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="selectAllGyms" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="selectGym" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Nombre" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="updateGym" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Currentname" Type="varchar" Mode="In" />
+          <Parameter Name="Nombre" Type="varchar" Mode="In" />
+          <Parameter Name="Distrito" Type="varchar" Mode="In" />
+          <Parameter Name="Canton" Type="varchar" Mode="In" />
+          <Parameter Name="Provincia" Type="varchar" Mode="In" />
+          <Parameter Name="Fecha_Apertura" Type="date" Mode="In" />
+          <Parameter Name="Capacidad_Max" Type="int" Mode="In" />
+          <Parameter Name="Gerente" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="updatePhoneNumb" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CurrentNumb" Type="varchar" Mode="In" />
+          <Parameter Name="Nombre" Type="varchar" Mode="In" />
+          <Parameter Name="Telefono" Type="varchar" Mode="In" />
+        </Function>
         <EntityContainer Name="GymTECModelStoreContainer">
           <EntitySet Name="Administrador" EntityType="Self.Administrador" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Clase" EntityType="Self.Clase" Schema="dbo" store:Type="Tables" />
@@ -434,6 +494,7 @@
           <EntitySet Name="Producto_Sucursal" EntityType="Self.Producto_Sucursal" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Puesto" EntityType="Self.Puesto" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Sucursal" EntityType="Self.Sucursal" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Sucursal_Telefono" EntityType="Self.Sucursal_Telefono" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Tipo_Equipo" EntityType="Self.Tipo_Equipo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Tipo_Servicio" EntityType="Self.Tipo_Servicio" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Tratamiento_Spa" EntityType="Self.Tratamiento_Spa" Schema="dbo" store:Type="Tables" />
@@ -489,6 +550,10 @@
           <AssociationSet Name="FKSucursal_ProdSuc" Association="Self.FKSucursal_ProdSuc">
             <End Role="Sucursal" EntitySet="Sucursal" />
             <End Role="Producto_Sucursal" EntitySet="Producto_Sucursal" />
+          </AssociationSet>
+          <AssociationSet Name="FKSucursal_Telefono" Association="Self.FKSucursal_Telefono">
+            <End Role="Sucursal" EntitySet="Sucursal" />
+            <End Role="Sucursal_Telefono" EntitySet="Sucursal_Telefono" />
           </AssociationSet>
           <AssociationSet Name="FKSucursal_TratSuc" Association="Self.FKSucursal_TratSuc">
             <End Role="Sucursal" EntitySet="Sucursal" />
@@ -951,6 +1016,50 @@
             <Parameter Name="Gerente" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="selectAllGyms" EntitySet="Sucursals" ReturnType="Collection(GymTECModel.Sucursal)" />
+          <FunctionImport Name="activateGymSpa">
+            <Parameter Name="State" Mode="In" Type="Boolean" />
+            <Parameter Name="Nombre" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="activateGymStore">
+            <Parameter Name="State" Mode="In" Type="Boolean" />
+            <Parameter Name="Nombre" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="selectGym" EntitySet="Sucursals" ReturnType="Collection(GymTECModel.Sucursal)">
+          <Parameter Name="Nombre" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="updateGym">
+            <Parameter Name="Currentname" Mode="In" Type="String" />
+            <Parameter Name="Nombre" Mode="In" Type="String" />
+            <Parameter Name="Distrito" Mode="In" Type="String" />
+            <Parameter Name="Canton" Mode="In" Type="String" />
+            <Parameter Name="Provincia" Mode="In" Type="String" />
+            <Parameter Name="Fecha_Apertura" Mode="In" Type="DateTime" />
+            <Parameter Name="Capacidad_Max" Mode="In" Type="Int32" />
+            <Parameter Name="Gerente" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="deleteGym">
+          <Parameter Name="Nombre" Mode="In" Type="String" />
+          </FunctionImport>
+          <EntitySet Name="Sucursal_Telefono" EntityType="GymTECModel.Sucursal_Telefono" />
+          <AssociationSet Name="FKSucursal_Telefono" Association="GymTECModel.FKSucursal_Telefono">
+            <End Role="Sucursal" EntitySet="Sucursals" />
+            <End Role="Sucursal_Telefono" EntitySet="Sucursal_Telefono" />
+          </AssociationSet>
+          <FunctionImport Name="addPhoneNumb">
+            <Parameter Name="Nombre" Mode="In" Type="String" />
+            <Parameter Name="Telefono" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="deletePhoneNumb">
+          <Parameter Name="Telefono" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="getAllPhoneNumbByGym" EntitySet="Sucursal_Telefono" ReturnType="Collection(GymTECModel.Sucursal_Telefono)">
+          <Parameter Name="Nombre" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="updatePhoneNumb">
+            <Parameter Name="CurrentNumb" Mode="In" Type="String" />
+            <Parameter Name="Nombre" Mode="In" Type="String" />
+            <Parameter Name="Telefono" Mode="In" Type="String" />
+          </FunctionImport>
         </EntityContainer>
         <ComplexType Name="selectAllAdmins_Result">
           <Property Type="Int32" Name="Id" Nullable="false" />
@@ -1069,6 +1178,53 @@
           <Property Type="String" Name="Gerente" Nullable="true" MaxLength="20" />
           <Property Type="Boolean" Name="Tienda_Act" Nullable="true" />
           <Property Type="Boolean" Name="Spa_Act" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="selectGym_Result">
+          <Property Type="String" Name="Nombre" Nullable="false" MaxLength="20" />
+          <Property Type="String" Name="Distrito" Nullable="false" MaxLength="25" />
+          <Property Type="String" Name="Canton" Nullable="false" MaxLength="25" />
+          <Property Type="String" Name="Provincia" Nullable="false" MaxLength="25" />
+          <Property Type="DateTime" Name="Fecha_Apertura" Nullable="false" />
+          <Property Type="Int32" Name="Capacidad_Max" Nullable="false" />
+          <Property Type="String" Name="Gerente" Nullable="true" MaxLength="20" />
+          <Property Type="Boolean" Name="Tienda_Act" Nullable="true" />
+          <Property Type="Boolean" Name="Spa_Act" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="selectGym_Result1">
+          <Property Type="String" Name="Nombre" Nullable="false" MaxLength="20" />
+          <Property Type="String" Name="Distrito" Nullable="false" MaxLength="25" />
+          <Property Type="String" Name="Canton" Nullable="false" MaxLength="25" />
+          <Property Type="String" Name="Provincia" Nullable="false" MaxLength="25" />
+          <Property Type="DateTime" Name="Fecha_Apertura" Nullable="false" />
+          <Property Type="Int32" Name="Capacidad_Max" Nullable="false" />
+          <Property Type="String" Name="Gerente" Nullable="true" MaxLength="20" />
+          <Property Type="Boolean" Name="Tienda_Act" Nullable="true" />
+          <Property Type="Boolean" Name="Spa_Act" Nullable="true" />
+        </ComplexType>
+        <EntityType Name="Sucursal_Telefono">
+          <Key>
+            <PropertyRef Name="Telefono" />
+          </Key>
+          <Property Name="Sucursal" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Telefono" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <Association Name="FKSucursal_Telefono">
+          <End Type="GymTECModel.Sucursal" Role="Sucursal" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="GymTECModel.Sucursal_Telefono" Role="Sucursal_Telefono" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Sucursal">
+              <PropertyRef Name="Nombre" />
+            </Principal>
+            <Dependent Role="Sucursal_Telefono">
+              <PropertyRef Name="Sucursal" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <ComplexType Name="getAllPhoneNumbByGym_Result">
+          <Property Type="String" Name="Sucursal" Nullable="false" MaxLength="20" />
+          <Property Type="String" Name="Telefono" Nullable="false" MaxLength="20" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -1227,6 +1383,32 @@
                 <ScalarProperty Name="Spa_Act" ColumnName="Spa_Act" />
               </MappingFragment>
             </EntityTypeMapping>
+            <EntityTypeMapping TypeName="GymTECModel.Sucursal">
+              <ModificationFunctionMapping>
+                <UpdateFunction FunctionName="GymTECModel.Store.updateGym">
+                  <ScalarProperty Name="Nombre" ParameterName="Currentname" Version="Current" />
+                  <ScalarProperty Name="Gerente" ParameterName="Gerente" Version="Current" />
+                  <ScalarProperty Name="Capacidad_Max" ParameterName="Capacidad_Max" Version="Current" />
+                  <ScalarProperty Name="Fecha_Apertura" ParameterName="Fecha_Apertura" Version="Current" />
+                  <ScalarProperty Name="Provincia" ParameterName="Provincia" Version="Current" />
+                  <ScalarProperty Name="Canton" ParameterName="Canton" Version="Current" />
+                  <ScalarProperty Name="Distrito" ParameterName="Distrito" Version="Current" />
+                  <ScalarProperty Name="Nombre" ParameterName="Nombre" Version="Current" />
+                </UpdateFunction>
+                <InsertFunction FunctionName="GymTECModel.Store.insertGym">
+                  <ScalarProperty Name="Gerente" ParameterName="Gerente" />
+                  <ScalarProperty Name="Capacidad_Max" ParameterName="Capacidad_Max" />
+                  <ScalarProperty Name="Fecha_Apertura" ParameterName="Fecha_Apertura" />
+                  <ScalarProperty Name="Provincia" ParameterName="Provincia" />
+                  <ScalarProperty Name="Canton" ParameterName="Canton" />
+                  <ScalarProperty Name="Distrito" ParameterName="Distrito" />
+                  <ScalarProperty Name="Nombre" ParameterName="Nombre" />
+                </InsertFunction>
+                <DeleteFunction FunctionName="GymTECModel.Store.deleteGym">
+                  <ScalarProperty Name="Nombre" ParameterName="Nombre" />
+                </DeleteFunction>
+              </ModificationFunctionMapping>
+            </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Tipo_Equipo">
             <EntityTypeMapping TypeName="GymTECModel.Tipo_Equipo">
@@ -1282,6 +1464,41 @@
           <FunctionImportMapping FunctionImportName="insertGym" FunctionName="GymTECModel.Store.insertGym" />
           <FunctionImportMapping FunctionImportName="selectAllGyms" FunctionName="GymTECModel.Store.selectAllGyms">
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="activateGymSpa" FunctionName="GymTECModel.Store.activateGymSpa" />
+          <FunctionImportMapping FunctionImportName="activateGymStore" FunctionName="GymTECModel.Store.activateGymStore" />
+          <FunctionImportMapping FunctionImportName="selectGym" FunctionName="GymTECModel.Store.selectGym">
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="updateGym" FunctionName="GymTECModel.Store.updateGym" />
+          <FunctionImportMapping FunctionImportName="deleteGym" FunctionName="GymTECModel.Store.deleteGym" />
+          <EntitySetMapping Name="Sucursal_Telefono">
+            <EntityTypeMapping TypeName="GymTECModel.Sucursal_Telefono">
+              <MappingFragment StoreEntitySet="Sucursal_Telefono">
+                <ScalarProperty Name="Telefono" ColumnName="Telefono" />
+                <ScalarProperty Name="Sucursal" ColumnName="Sucursal" />
+              </MappingFragment>
+            </EntityTypeMapping>
+            <EntityTypeMapping TypeName="GymTECModel.Sucursal_Telefono">
+              <ModificationFunctionMapping>
+                <InsertFunction FunctionName="GymTECModel.Store.addPhoneNumb">
+                  <ScalarProperty Name="Sucursal" ParameterName="Nombre" />
+                  <ScalarProperty Name="Telefono" ParameterName="Telefono" />
+                </InsertFunction>
+                <UpdateFunction FunctionName="GymTECModel.Store.updatePhoneNumb">
+                  <ScalarProperty Name="Sucursal" ParameterName="Nombre" Version="Current" />
+                  <ScalarProperty Name="Telefono" ParameterName="CurrentNumb" Version="Current" />
+                  <ScalarProperty Name="Telefono" ParameterName="Telefono" Version="Current" />
+                </UpdateFunction>
+                <DeleteFunction FunctionName="GymTECModel.Store.deletePhoneNumb">
+                  <ScalarProperty Name="Telefono" ParameterName="Telefono" />
+                </DeleteFunction>
+              </ModificationFunctionMapping>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="addPhoneNumb" FunctionName="GymTECModel.Store.addPhoneNumb" />
+          <FunctionImportMapping FunctionImportName="deletePhoneNumb" FunctionName="GymTECModel.Store.deletePhoneNumb" />
+          <FunctionImportMapping FunctionImportName="getAllPhoneNumbByGym" FunctionName="GymTECModel.Store.getAllPhoneNumbByGym">
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="updatePhoneNumb" FunctionName="GymTECModel.Store.updatePhoneNumb" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

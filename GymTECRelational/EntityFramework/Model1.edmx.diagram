@@ -32,6 +32,8 @@
         <AssociationConnector Association="GymTECModel.FKTipoEquipo_Maquina" ManuallyRouted="false" />
         <AssociationConnector Association="GymTECModel.Producto_Sucursal" ManuallyRouted="false" />
         <AssociationConnector Association="GymTECModel.Tratamiento_Sucursal" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="GymTECModel.Sucursal_Telefono" Width="1.5" PointX="10.5" PointY="1.5" />
+        <AssociationConnector Association="GymTECModel.FKSucursal_Telefono" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

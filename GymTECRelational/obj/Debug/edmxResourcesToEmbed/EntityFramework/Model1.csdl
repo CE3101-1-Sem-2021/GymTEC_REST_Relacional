@@ -444,6 +444,50 @@
       <Parameter Name="Gerente" Mode="In" Type="String" />
     </FunctionImport>
     <FunctionImport Name="selectAllGyms" EntitySet="Sucursals" ReturnType="Collection(GymTECModel.Sucursal)" />
+    <FunctionImport Name="activateGymSpa">
+      <Parameter Name="State" Mode="In" Type="Boolean" />
+      <Parameter Name="Nombre" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="activateGymStore">
+      <Parameter Name="State" Mode="In" Type="Boolean" />
+      <Parameter Name="Nombre" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="selectGym" EntitySet="Sucursals" ReturnType="Collection(GymTECModel.Sucursal)">
+      <Parameter Name="Nombre" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="updateGym">
+      <Parameter Name="Currentname" Mode="In" Type="String" />
+      <Parameter Name="Nombre" Mode="In" Type="String" />
+      <Parameter Name="Distrito" Mode="In" Type="String" />
+      <Parameter Name="Canton" Mode="In" Type="String" />
+      <Parameter Name="Provincia" Mode="In" Type="String" />
+      <Parameter Name="Fecha_Apertura" Mode="In" Type="DateTime" />
+      <Parameter Name="Capacidad_Max" Mode="In" Type="Int32" />
+      <Parameter Name="Gerente" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="deleteGym">
+      <Parameter Name="Nombre" Mode="In" Type="String" />
+    </FunctionImport>
+    <EntitySet Name="Sucursal_Telefono" EntityType="GymTECModel.Sucursal_Telefono" />
+    <AssociationSet Name="FKSucursal_Telefono" Association="GymTECModel.FKSucursal_Telefono">
+      <End Role="Sucursal" EntitySet="Sucursals" />
+      <End Role="Sucursal_Telefono" EntitySet="Sucursal_Telefono" />
+    </AssociationSet>
+    <FunctionImport Name="addPhoneNumb">
+      <Parameter Name="Nombre" Mode="In" Type="String" />
+      <Parameter Name="Telefono" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="deletePhoneNumb">
+      <Parameter Name="Telefono" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="getAllPhoneNumbByGym" EntitySet="Sucursal_Telefono" ReturnType="Collection(GymTECModel.Sucursal_Telefono)">
+      <Parameter Name="Nombre" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="updatePhoneNumb">
+      <Parameter Name="CurrentNumb" Mode="In" Type="String" />
+      <Parameter Name="Nombre" Mode="In" Type="String" />
+      <Parameter Name="Telefono" Mode="In" Type="String" />
+    </FunctionImport>
   </EntityContainer>
   <ComplexType Name="selectAllAdmins_Result">
     <Property Type="Int32" Name="Id" Nullable="false" />
@@ -562,5 +606,52 @@
     <Property Type="String" Name="Gerente" Nullable="true" MaxLength="20" />
     <Property Type="Boolean" Name="Tienda_Act" Nullable="true" />
     <Property Type="Boolean" Name="Spa_Act" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="selectGym_Result">
+    <Property Type="String" Name="Nombre" Nullable="false" MaxLength="20" />
+    <Property Type="String" Name="Distrito" Nullable="false" MaxLength="25" />
+    <Property Type="String" Name="Canton" Nullable="false" MaxLength="25" />
+    <Property Type="String" Name="Provincia" Nullable="false" MaxLength="25" />
+    <Property Type="DateTime" Name="Fecha_Apertura" Nullable="false" />
+    <Property Type="Int32" Name="Capacidad_Max" Nullable="false" />
+    <Property Type="String" Name="Gerente" Nullable="true" MaxLength="20" />
+    <Property Type="Boolean" Name="Tienda_Act" Nullable="true" />
+    <Property Type="Boolean" Name="Spa_Act" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="selectGym_Result1">
+    <Property Type="String" Name="Nombre" Nullable="false" MaxLength="20" />
+    <Property Type="String" Name="Distrito" Nullable="false" MaxLength="25" />
+    <Property Type="String" Name="Canton" Nullable="false" MaxLength="25" />
+    <Property Type="String" Name="Provincia" Nullable="false" MaxLength="25" />
+    <Property Type="DateTime" Name="Fecha_Apertura" Nullable="false" />
+    <Property Type="Int32" Name="Capacidad_Max" Nullable="false" />
+    <Property Type="String" Name="Gerente" Nullable="true" MaxLength="20" />
+    <Property Type="Boolean" Name="Tienda_Act" Nullable="true" />
+    <Property Type="Boolean" Name="Spa_Act" Nullable="true" />
+  </ComplexType>
+  <EntityType Name="Sucursal_Telefono">
+    <Key>
+      <PropertyRef Name="Telefono" />
+    </Key>
+    <Property Name="Sucursal" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="Telefono" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <Association Name="FKSucursal_Telefono">
+    <End Type="GymTECModel.Sucursal" Role="Sucursal" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="GymTECModel.Sucursal_Telefono" Role="Sucursal_Telefono" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Sucursal">
+        <PropertyRef Name="Nombre" />
+      </Principal>
+      <Dependent Role="Sucursal_Telefono">
+        <PropertyRef Name="Sucursal" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <ComplexType Name="getAllPhoneNumbByGym_Result">
+    <Property Type="String" Name="Sucursal" Nullable="false" MaxLength="20" />
+    <Property Type="String" Name="Telefono" Nullable="false" MaxLength="20" />
   </ComplexType>
 </Schema>

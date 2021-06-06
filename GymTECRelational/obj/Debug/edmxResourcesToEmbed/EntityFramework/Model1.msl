@@ -152,6 +152,32 @@
           <ScalarProperty Name="Spa_Act" ColumnName="Spa_Act" />
         </MappingFragment>
       </EntityTypeMapping>
+      <EntityTypeMapping TypeName="GymTECModel.Sucursal">
+        <ModificationFunctionMapping>
+          <UpdateFunction FunctionName="GymTECModel.Store.updateGym">
+            <ScalarProperty Name="Nombre" ParameterName="Currentname" Version="Current" />
+            <ScalarProperty Name="Gerente" ParameterName="Gerente" Version="Current" />
+            <ScalarProperty Name="Capacidad_Max" ParameterName="Capacidad_Max" Version="Current" />
+            <ScalarProperty Name="Fecha_Apertura" ParameterName="Fecha_Apertura" Version="Current" />
+            <ScalarProperty Name="Provincia" ParameterName="Provincia" Version="Current" />
+            <ScalarProperty Name="Canton" ParameterName="Canton" Version="Current" />
+            <ScalarProperty Name="Distrito" ParameterName="Distrito" Version="Current" />
+            <ScalarProperty Name="Nombre" ParameterName="Nombre" Version="Current" />
+          </UpdateFunction>
+          <InsertFunction FunctionName="GymTECModel.Store.insertGym">
+            <ScalarProperty Name="Gerente" ParameterName="Gerente" />
+            <ScalarProperty Name="Capacidad_Max" ParameterName="Capacidad_Max" />
+            <ScalarProperty Name="Fecha_Apertura" ParameterName="Fecha_Apertura" />
+            <ScalarProperty Name="Provincia" ParameterName="Provincia" />
+            <ScalarProperty Name="Canton" ParameterName="Canton" />
+            <ScalarProperty Name="Distrito" ParameterName="Distrito" />
+            <ScalarProperty Name="Nombre" ParameterName="Nombre" />
+          </InsertFunction>
+          <DeleteFunction FunctionName="GymTECModel.Store.deleteGym">
+            <ScalarProperty Name="Nombre" ParameterName="Nombre" />
+          </DeleteFunction>
+        </ModificationFunctionMapping>
+      </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="Tipo_Equipo">
       <EntityTypeMapping TypeName="GymTECModel.Tipo_Equipo">
@@ -203,5 +229,38 @@
     <FunctionImportMapping FunctionImportName="insertAdmin" FunctionName="GymTECModel.Store.insertAdmin" />
     <FunctionImportMapping FunctionImportName="insertGym" FunctionName="GymTECModel.Store.insertGym" />
     <FunctionImportMapping FunctionImportName="selectAllGyms" FunctionName="GymTECModel.Store.selectAllGyms" />
+    <FunctionImportMapping FunctionImportName="activateGymSpa" FunctionName="GymTECModel.Store.activateGymSpa" />
+    <FunctionImportMapping FunctionImportName="activateGymStore" FunctionName="GymTECModel.Store.activateGymStore" />
+    <FunctionImportMapping FunctionImportName="selectGym" FunctionName="GymTECModel.Store.selectGym" />
+    <FunctionImportMapping FunctionImportName="updateGym" FunctionName="GymTECModel.Store.updateGym" />
+    <FunctionImportMapping FunctionImportName="deleteGym" FunctionName="GymTECModel.Store.deleteGym" />
+    <EntitySetMapping Name="Sucursal_Telefono">
+      <EntityTypeMapping TypeName="GymTECModel.Sucursal_Telefono">
+        <MappingFragment StoreEntitySet="Sucursal_Telefono">
+          <ScalarProperty Name="Telefono" ColumnName="Telefono" />
+          <ScalarProperty Name="Sucursal" ColumnName="Sucursal" />
+        </MappingFragment>
+      </EntityTypeMapping>
+      <EntityTypeMapping TypeName="GymTECModel.Sucursal_Telefono">
+        <ModificationFunctionMapping>
+          <InsertFunction FunctionName="GymTECModel.Store.addPhoneNumb">
+            <ScalarProperty Name="Sucursal" ParameterName="Nombre" />
+            <ScalarProperty Name="Telefono" ParameterName="Telefono" />
+          </InsertFunction>
+          <UpdateFunction FunctionName="GymTECModel.Store.updatePhoneNumb">
+            <ScalarProperty Name="Sucursal" ParameterName="Nombre" Version="Current" />
+            <ScalarProperty Name="Telefono" ParameterName="CurrentNumb" Version="Current" />
+            <ScalarProperty Name="Telefono" ParameterName="Telefono" Version="Current" />
+          </UpdateFunction>
+          <DeleteFunction FunctionName="GymTECModel.Store.deletePhoneNumb">
+            <ScalarProperty Name="Telefono" ParameterName="Telefono" />
+          </DeleteFunction>
+        </ModificationFunctionMapping>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="addPhoneNumb" FunctionName="GymTECModel.Store.addPhoneNumb" />
+    <FunctionImportMapping FunctionImportName="deletePhoneNumb" FunctionName="GymTECModel.Store.deletePhoneNumb" />
+    <FunctionImportMapping FunctionImportName="getAllPhoneNumbByGym" FunctionName="GymTECModel.Store.getAllPhoneNumbByGym" />
+    <FunctionImportMapping FunctionImportName="updatePhoneNumb" FunctionName="GymTECModel.Store.updatePhoneNumb" />
   </EntityContainerMapping>
 </Mapping>

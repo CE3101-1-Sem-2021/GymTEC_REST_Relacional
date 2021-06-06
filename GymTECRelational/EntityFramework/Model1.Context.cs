@@ -40,6 +40,7 @@ namespace GymTECRelational.EntityFramework
         public virtual DbSet<Tipo_Equipo> Tipo_Equipo { get; set; }
         public virtual DbSet<Tipo_Servicio> Tipo_Servicio { get; set; }
         public virtual DbSet<Tratamiento_Spa> Tratamiento_Spa { get; set; }
+        public virtual DbSet<Sucursal_Telefono> Sucursal_Telefono { get; set; }
     
         public virtual ObjectResult<Administrador> selectAllAdmins()
         {
@@ -262,6 +263,153 @@ namespace GymTECRelational.EntityFramework
         public virtual ObjectResult<Sucursal> selectAllGyms(MergeOption mergeOption)
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sucursal>("selectAllGyms", mergeOption);
+        }
+    
+        public virtual int activateGymSpa(Nullable<bool> state, string nombre)
+        {
+            var stateParameter = state.HasValue ?
+                new ObjectParameter("State", state) :
+                new ObjectParameter("State", typeof(bool));
+    
+            var nombreParameter = nombre != null ?
+                new ObjectParameter("Nombre", nombre) :
+                new ObjectParameter("Nombre", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("activateGymSpa", stateParameter, nombreParameter);
+        }
+    
+        public virtual int activateGymStore(Nullable<bool> state, string nombre)
+        {
+            var stateParameter = state.HasValue ?
+                new ObjectParameter("State", state) :
+                new ObjectParameter("State", typeof(bool));
+    
+            var nombreParameter = nombre != null ?
+                new ObjectParameter("Nombre", nombre) :
+                new ObjectParameter("Nombre", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("activateGymStore", stateParameter, nombreParameter);
+        }
+    
+        public virtual ObjectResult<Sucursal> selectGym(string nombre)
+        {
+            var nombreParameter = nombre != null ?
+                new ObjectParameter("Nombre", nombre) :
+                new ObjectParameter("Nombre", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sucursal>("selectGym", nombreParameter);
+        }
+    
+        public virtual ObjectResult<Sucursal> selectGym(string nombre, MergeOption mergeOption)
+        {
+            var nombreParameter = nombre != null ?
+                new ObjectParameter("Nombre", nombre) :
+                new ObjectParameter("Nombre", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sucursal>("selectGym", mergeOption, nombreParameter);
+        }
+    
+        public virtual int updateGym(string currentname, string nombre, string distrito, string canton, string provincia, Nullable<System.DateTime> fecha_Apertura, Nullable<int> capacidad_Max, string gerente)
+        {
+            var currentnameParameter = currentname != null ?
+                new ObjectParameter("Currentname", currentname) :
+                new ObjectParameter("Currentname", typeof(string));
+    
+            var nombreParameter = nombre != null ?
+                new ObjectParameter("Nombre", nombre) :
+                new ObjectParameter("Nombre", typeof(string));
+    
+            var distritoParameter = distrito != null ?
+                new ObjectParameter("Distrito", distrito) :
+                new ObjectParameter("Distrito", typeof(string));
+    
+            var cantonParameter = canton != null ?
+                new ObjectParameter("Canton", canton) :
+                new ObjectParameter("Canton", typeof(string));
+    
+            var provinciaParameter = provincia != null ?
+                new ObjectParameter("Provincia", provincia) :
+                new ObjectParameter("Provincia", typeof(string));
+    
+            var fecha_AperturaParameter = fecha_Apertura.HasValue ?
+                new ObjectParameter("Fecha_Apertura", fecha_Apertura) :
+                new ObjectParameter("Fecha_Apertura", typeof(System.DateTime));
+    
+            var capacidad_MaxParameter = capacidad_Max.HasValue ?
+                new ObjectParameter("Capacidad_Max", capacidad_Max) :
+                new ObjectParameter("Capacidad_Max", typeof(int));
+    
+            var gerenteParameter = gerente != null ?
+                new ObjectParameter("Gerente", gerente) :
+                new ObjectParameter("Gerente", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("updateGym", currentnameParameter, nombreParameter, distritoParameter, cantonParameter, provinciaParameter, fecha_AperturaParameter, capacidad_MaxParameter, gerenteParameter);
+        }
+    
+        public virtual int deleteGym(string nombre)
+        {
+            var nombreParameter = nombre != null ?
+                new ObjectParameter("Nombre", nombre) :
+                new ObjectParameter("Nombre", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("deleteGym", nombreParameter);
+        }
+    
+        public virtual int addPhoneNumb(string nombre, string telefono)
+        {
+            var nombreParameter = nombre != null ?
+                new ObjectParameter("Nombre", nombre) :
+                new ObjectParameter("Nombre", typeof(string));
+    
+            var telefonoParameter = telefono != null ?
+                new ObjectParameter("Telefono", telefono) :
+                new ObjectParameter("Telefono", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("addPhoneNumb", nombreParameter, telefonoParameter);
+        }
+    
+        public virtual int deletePhoneNumb(string telefono)
+        {
+            var telefonoParameter = telefono != null ?
+                new ObjectParameter("Telefono", telefono) :
+                new ObjectParameter("Telefono", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("deletePhoneNumb", telefonoParameter);
+        }
+    
+        public virtual ObjectResult<Sucursal_Telefono> getAllPhoneNumbByGym(string nombre)
+        {
+            var nombreParameter = nombre != null ?
+                new ObjectParameter("Nombre", nombre) :
+                new ObjectParameter("Nombre", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sucursal_Telefono>("getAllPhoneNumbByGym", nombreParameter);
+        }
+    
+        public virtual ObjectResult<Sucursal_Telefono> getAllPhoneNumbByGym(string nombre, MergeOption mergeOption)
+        {
+            var nombreParameter = nombre != null ?
+                new ObjectParameter("Nombre", nombre) :
+                new ObjectParameter("Nombre", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sucursal_Telefono>("getAllPhoneNumbByGym", mergeOption, nombreParameter);
+        }
+    
+        public virtual int updatePhoneNumb(string currentNumb, string nombre, string telefono)
+        {
+            var currentNumbParameter = currentNumb != null ?
+                new ObjectParameter("CurrentNumb", currentNumb) :
+                new ObjectParameter("CurrentNumb", typeof(string));
+    
+            var nombreParameter = nombre != null ?
+                new ObjectParameter("Nombre", nombre) :
+                new ObjectParameter("Nombre", typeof(string));
+    
+            var telefonoParameter = telefono != null ?
+                new ObjectParameter("Telefono", telefono) :
+                new ObjectParameter("Telefono", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("updatePhoneNumb", currentNumbParameter, nombreParameter, telefonoParameter);
         }
     }
 }

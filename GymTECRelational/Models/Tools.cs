@@ -199,7 +199,172 @@ namespace GymTECRelational.Models
                 return response;
             }
             response = new HttpResponseMessage(HttpStatusCode.Conflict);
-            response.Content = new StringContent("El nombre de la nueva sucursal ya se encuentra registrado!");
+            response.Content = new StringContent("Token invalido");
+            return response;
+        }
+        public HttpResponseMessage updateGym(string gymName,string token, Sucursal gym)
+        {
+            HttpResponseMessage response = null;
+
+            if (tokenVerifier(token, "Admin"))
+            {
+                if (context.Sucursals.Any(o => o.Nombre == gymName))
+                {
+                    if(gymName==gym.Nombre||!context.Sucursals.Any(o=>o.Nombre==gym.Nombre))
+                    {
+                        if(context.Direccions.Any(o=>o.Provincia==gym.Provincia)&& context.Direccions.Any(o => o.Canton == gym.Canton)&& context.Direccions.Any(o => o.Distrito == gym.Distrito))
+                        {
+                            try
+                            {
+                                context.updateGym(gymName,gym.Nombre,gym.Distrito,gym.Canton,gym.Provincia,gym.Fecha_Apertura,gym.Capacidad_Max,gym.Gerente);
+                                context.SaveChanges();
+                                response = new HttpResponseMessage(HttpStatusCode.OK);
+                                response.Content = new StringContent("Gimnasio actualizado correctamente!");
+                                return response;
+                            }
+                            catch(Exception e)
+                            {
+                                response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
+                                response.Content = new StringContent("Error inesperado");
+                                return response;
+                            }
+                        }
+                        response = new HttpResponseMessage(HttpStatusCode.Conflict);
+                        response.Content = new StringContent("La nueva direccion del gimnasio no esta registrada");
+                        return response;
+                    }
+                    response = new HttpResponseMessage(HttpStatusCode.Conflict);
+                    response.Content = new StringContent("El nuevo nombre que se le quiere asignar a la sucursal ya se encuentra registrado");
+                    return response;
+                }
+                response = new HttpResponseMessage(HttpStatusCode.Conflict);
+                response.Content = new StringContent("La sucursal que se quiere modificar no esta registrada");
+                return response;
+            }
+            response = new HttpResponseMessage(HttpStatusCode.Conflict);
+            response.Content = new StringContent("Token invalido");
+            return response;
+
+        }
+
+        /*Metodo para agregar un numero de telefono a un gimnasio.
+         * 
+         * Entradas:Numero de telefono a agregar,token del administrador que realiza la operacion
+         * Salidas:Respuesta de tipo HTTP que indica si la operacion fue exitosa.
+         */
+        public HttpResponseMessage addPhoneNumber(Sucursal_Telefono phoneNumb,string token)
+        {
+            HttpResponseMessage response = null;
+            if(tokenVerifier(token,"Admin"))
+            {
+                if(!context.Sucursal_Telefono.Any(o=> o.Telefono==phoneNumb.Telefono))
+                {
+                    try
+                    {
+                        context.Sucursal_Telefono.Add(phoneNumb);
+                        context.SaveChanges();
+                        response = new HttpResponseMessage(HttpStatusCode.OK);
+                        response.Content = new StringContent("Numero de telefono agregado correctamente!");
+                        return response;
+                    }
+                    catch (Exception e)
+                    {
+                        response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
+                        response.Content = new StringContent("Error inesperado");
+                        return response;
+                    }
+                }
+                response = new HttpResponseMessage(HttpStatusCode.Conflict);
+                response.Content = new StringContent("Ese numero ya se encuentra registrado");
+                return response;
+            }
+            response = new HttpResponseMessage(HttpStatusCode.Conflict);
+            response.Content = new StringContent("Token invalido");
+            return response;
+        }
+
+        /*Metodo para actualizar un numero de telefono de un gimnasio.
+         * 
+         * Entradas:Numero de telefono actual,token de quien realiza la solicitud,informacion actualizada del numero de telefono
+         * Salidas:Respuesta de tipo HTTP que indica si la operacion fue exitosa.
+         */
+        public HttpResponseMessage updatePhoneNumber(string currentNumber,string token,Sucursal_Telefono phoneNumb)
+        {
+            HttpResponseMessage response = null;
+            if(tokenVerifier(token,"Admin"))
+            {
+                if(phoneNumb.Telefono==currentNumber||!context.Sucursal_Telefono.Any(o=>o.Telefono==phoneNumb.Telefono))
+                {
+                    if (context.Sucursals.Any(o => o.Nombre == phoneNumb.Sucursal))
+                    {
+                        try
+                        {
+                            context.updatePhoneNumb(currentNumber, phoneNumb.Sucursal, phoneNumb.Telefono);
+                            context.SaveChanges();
+                            response = new HttpResponseMessage(HttpStatusCode.OK);
+                            response.Content = new StringContent("Numero actualizado correctamente!");
+                            return response;
+                        }
+                        catch (Exception e)
+                        {
+                            response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
+                            response.Content = new StringContent("Error inesperado");
+                            return response;
+                        }
+                    }
+                    response = new HttpResponseMessage(HttpStatusCode.Conflict);
+                    response.Content = new StringContent("La sucursal a la que se le quiere asignar el nuevo numero no esta registrada");
+                    return response;
+                }
+                response = new HttpResponseMessage(HttpStatusCode.Conflict);
+                response.Content = new StringContent("Ese nuevo numero ya se encuentra registrado");
+                return response;
+
+            }
+            response = new HttpResponseMessage(HttpStatusCode.Conflict);
+            response.Content = new StringContent("Token invalido");
+            return response;
+        }
+
+        /*Metodo para activar y desactivar la tienda y spa de un gimnasio en particular.
+         * 
+         * Entradas:Token del administrador que realiza la operacion,operacion a realizar,nombre del gimnasio
+         * Salidas:Respuesta de tipo HTTP que indica si la operacion fue exitosa.
+         */
+        public HttpResponseMessage gymSpecialsActivation(string token,string operation,int state,string gymName)
+        {
+            HttpResponseMessage response = null;
+
+            if(tokenVerifier(token,"Admin"))
+            {
+                if(context.Sucursals.Any(o=>o.Nombre==gymName))
+                {
+                    if(operation.Equals("activateSpa"))
+                    {
+                        context.activateGymSpa(Convert.ToBoolean(state), gymName);
+                        response = new HttpResponseMessage(HttpStatusCode.OK);
+                        response.Content = new StringContent("Se ha cambiado el estado del Spa correctamente");
+                        return response;
+                    }
+                    else if(operation.Equals("activateStore"))
+                    {
+                        context.activateGymStore(Convert.ToBoolean(state), gymName);
+                        response = new HttpResponseMessage(HttpStatusCode.OK);
+                        response.Content = new StringContent("Se ha cambiado el estado de la tienda correctamente");
+                        return response;
+                    }
+                    response = new HttpResponseMessage(HttpStatusCode.Conflict);
+                    response.Content = new StringContent("Operacion desconocida");
+                    return response;
+
+                }
+                response = new HttpResponseMessage(HttpStatusCode.Conflict);
+                response.Content = new StringContent("La sucursal indicada no se encuentra registrada");
+                return response;
+
+            }
+            response = new HttpResponseMessage(HttpStatusCode.Conflict);
+            response.Content = new StringContent("Token invalido");
             return response;
         }
 
@@ -261,6 +426,49 @@ namespace GymTECRelational.Models
             return context.Empleadoes.Any(o => o.Token == token);
         }
 
+        /*Metodo para eliminar valores de la base de datos.
+        * 
+        * Entrada:Token de quien realiza la solicitud,tabla en la que se va a hacer la eliminacion,identificador de la fila
+        * Salida: Respuesta de tipo HTTP que indica si la operacion fue exitosa
+        */
+        public HttpResponseMessage deleteFromDatabaseOneKey(string token,string table,string id)
+        {
+            HttpResponseMessage response = null;
 
+            if(tokenVerifier(token,"Admin"))
+            {
+                    try
+                    {
+                        if (table.Equals("Sucursal"))
+                        {
+                           context.deleteGym(id);
+                        }
+                        else if(table.Equals("SucursalTelefono"))
+                        {
+                            context.deletePhoneNumb(id);
+                        }
+                        else
+                        {
+                            response = new HttpResponseMessage(HttpStatusCode.NotFound);
+                            response.Content = new StringContent("La tabla indicada no existe");
+                            return response;
+                        }
+                        context.SaveChanges();
+                        response = new HttpResponseMessage(HttpStatusCode.OK);
+                        response.Content = new StringContent("Valor eliminado correctamente");
+                        return response;
+                    }
+                    catch (Exception e)
+                    {
+                        response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
+                        response.Content = new StringContent("Error inesperado");
+                        return response;
+                    }
+
+            }
+            response = new HttpResponseMessage(HttpStatusCode.Conflict);
+            response.Content = new StringContent("Token invalido");
+            return response;
+        }
     }
 }

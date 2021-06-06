@@ -120,6 +120,13 @@
     <Property Name="Tienda_Act" Type="bit" StoreGeneratedPattern="Computed" />
     <Property Name="Spa_Act" Type="bit" StoreGeneratedPattern="Computed" />
   </EntityType>
+  <EntityType Name="Sucursal_Telefono">
+    <Key>
+      <PropertyRef Name="Telefono" />
+    </Key>
+    <Property Name="Telefono" Type="varchar" MaxLength="20" Nullable="false" />
+    <Property Name="Sucursal" Type="varchar" MaxLength="20" Nullable="false" />
+  </EntityType>
   <EntityType Name="Tipo_Equipo">
     <Key>
       <PropertyRef Name="Nombre" />
@@ -323,6 +330,20 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FKSucursal_Telefono">
+    <End Role="Sucursal" Type="Self.Sucursal" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Sucursal_Telefono" Type="Self.Sucursal_Telefono" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Sucursal">
+        <PropertyRef Name="Nombre" />
+      </Principal>
+      <Dependent Role="Sucursal_Telefono">
+        <PropertyRef Name="Sucursal" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FKSucursal_TratSuc">
     <End Role="Sucursal" Type="Self.Sucursal" Multiplicity="1">
       <OnDelete Action="Cascade" />
@@ -365,6 +386,18 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Function Name="activateGymSpa" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="State" Type="bit" Mode="In" />
+    <Parameter Name="Nombre" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="activateGymStore" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="State" Type="bit" Mode="In" />
+    <Parameter Name="Nombre" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="addPhoneNumb" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="Nombre" Type="varchar" Mode="In" />
+    <Parameter Name="Telefono" Type="varchar" Mode="In" />
+  </Function>
   <Function Name="assignTokenAdmin" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="Token" Type="varchar" Mode="In" />
     <Parameter Name="Id" Type="int" Mode="In" />
@@ -373,8 +406,17 @@
     <Parameter Name="Token" Type="varchar" Mode="In" />
     <Parameter Name="Id" Type="varchar" Mode="In" />
   </Function>
+  <Function Name="deleteGym" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="Nombre" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="deletePhoneNumb" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="Telefono" Type="varchar" Mode="In" />
+  </Function>
   <Function Name="getAdminByMail" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="Email" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="getAllPhoneNumbByGym" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="Nombre" Type="varchar" Mode="In" />
   </Function>
   <Function Name="getEmployeeById" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="Cedula" Type="varchar" Mode="In" />
@@ -417,6 +459,24 @@
   </Function>
   <Function Name="selectAllAdmins" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
   <Function Name="selectAllGyms" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="selectGym" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="Nombre" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="updateGym" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="Currentname" Type="varchar" Mode="In" />
+    <Parameter Name="Nombre" Type="varchar" Mode="In" />
+    <Parameter Name="Distrito" Type="varchar" Mode="In" />
+    <Parameter Name="Canton" Type="varchar" Mode="In" />
+    <Parameter Name="Provincia" Type="varchar" Mode="In" />
+    <Parameter Name="Fecha_Apertura" Type="date" Mode="In" />
+    <Parameter Name="Capacidad_Max" Type="int" Mode="In" />
+    <Parameter Name="Gerente" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="updatePhoneNumb" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="CurrentNumb" Type="varchar" Mode="In" />
+    <Parameter Name="Nombre" Type="varchar" Mode="In" />
+    <Parameter Name="Telefono" Type="varchar" Mode="In" />
+  </Function>
   <EntityContainer Name="GymTECModelStoreContainer">
     <EntitySet Name="Administrador" EntityType="Self.Administrador" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Clase" EntityType="Self.Clase" Schema="dbo" store:Type="Tables" />
@@ -429,6 +489,7 @@
     <EntitySet Name="Producto_Sucursal" EntityType="Self.Producto_Sucursal" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Puesto" EntityType="Self.Puesto" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Sucursal" EntityType="Self.Sucursal" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Sucursal_Telefono" EntityType="Self.Sucursal_Telefono" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Tipo_Equipo" EntityType="Self.Tipo_Equipo" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Tipo_Servicio" EntityType="Self.Tipo_Servicio" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Tratamiento_Spa" EntityType="Self.Tratamiento_Spa" Schema="dbo" store:Type="Tables" />
@@ -484,6 +545,10 @@
     <AssociationSet Name="FKSucursal_ProdSuc" Association="Self.FKSucursal_ProdSuc">
       <End Role="Sucursal" EntitySet="Sucursal" />
       <End Role="Producto_Sucursal" EntitySet="Producto_Sucursal" />
+    </AssociationSet>
+    <AssociationSet Name="FKSucursal_Telefono" Association="Self.FKSucursal_Telefono">
+      <End Role="Sucursal" EntitySet="Sucursal" />
+      <End Role="Sucursal_Telefono" EntitySet="Sucursal_Telefono" />
     </AssociationSet>
     <AssociationSet Name="FKSucursal_TratSuc" Association="Self.FKSucursal_TratSuc">
       <End Role="Sucursal" EntitySet="Sucursal" />
