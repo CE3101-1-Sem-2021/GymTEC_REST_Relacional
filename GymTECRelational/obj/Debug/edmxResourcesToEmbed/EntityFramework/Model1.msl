@@ -111,6 +111,28 @@
           <ScalarProperty Name="Costo" ColumnName="Costo" />
         </MappingFragment>
       </EntityTypeMapping>
+      <EntityTypeMapping TypeName="GymTECModel.Maquina">
+        <ModificationFunctionMapping>
+          <InsertFunction FunctionName="GymTECModel.Store.insertMachine">
+            <ScalarProperty Name="Costo" ParameterName="Costo" />
+            <ScalarProperty Name="Marca" ParameterName="Marca" />
+            <ScalarProperty Name="Sucursal" ParameterName="Sucursal" />
+            <ScalarProperty Name="Tipo_Equipo" ParameterName="Tipo_Equipo" />
+            <ScalarProperty Name="Serial" ParameterName="Serial" />
+          </InsertFunction>
+          <UpdateFunction FunctionName="GymTECModel.Store.updateMachine">
+            <ScalarProperty Name="Serial" ParameterName="CurrentSerial" Version="Current" />
+            <ScalarProperty Name="Costo" ParameterName="Costo" Version="Current" />
+            <ScalarProperty Name="Marca" ParameterName="Marca" Version="Current" />
+            <ScalarProperty Name="Sucursal" ParameterName="Sucursal" Version="Current" />
+            <ScalarProperty Name="Tipo_Equipo" ParameterName="Tipo_Equipo" Version="Current" />
+            <ScalarProperty Name="Serial" ParameterName="Serial" Version="Current" />
+          </UpdateFunction>
+          <DeleteFunction FunctionName="GymTECModel.Store.deleteMachine">
+            <ScalarProperty Name="Serial" ParameterName="Serial" />
+          </DeleteFunction>
+        </ModificationFunctionMapping>
+      </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="Planillas">
       <EntityTypeMapping TypeName="GymTECModel.Planilla">
@@ -185,6 +207,22 @@
           <ScalarProperty Name="Nombre" ColumnName="Nombre" />
           <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
         </MappingFragment>
+      </EntityTypeMapping>
+      <EntityTypeMapping TypeName="GymTECModel.Tipo_Equipo">
+        <ModificationFunctionMapping>
+          <InsertFunction FunctionName="GymTECModel.Store.insertMachineType">
+            <ScalarProperty Name="Descripcion" ParameterName="Descripcion" />
+            <ScalarProperty Name="Nombre" ParameterName="Nombre" />
+          </InsertFunction>
+          <UpdateFunction FunctionName="GymTECModel.Store.updateMachineType">
+            <ScalarProperty Name="Nombre" ParameterName="CurrentTypeName" Version="Current" />
+            <ScalarProperty Name="Descripcion" ParameterName="Descripcion" Version="Current" />
+            <ScalarProperty Name="Nombre" ParameterName="Nombre" Version="Current" />
+          </UpdateFunction>
+          <DeleteFunction FunctionName="GymTECModel.Store.deleteMachineType">
+            <ScalarProperty Name="Nombre" ParameterName="Nombre" />
+          </DeleteFunction>
+        </ModificationFunctionMapping>
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="Tipo_Servicio">
@@ -262,5 +300,16 @@
     <FunctionImportMapping FunctionImportName="deletePhoneNumb" FunctionName="GymTECModel.Store.deletePhoneNumb" />
     <FunctionImportMapping FunctionImportName="getAllPhoneNumbByGym" FunctionName="GymTECModel.Store.getAllPhoneNumbByGym" />
     <FunctionImportMapping FunctionImportName="updatePhoneNumb" FunctionName="GymTECModel.Store.updatePhoneNumb" />
+    <FunctionImportMapping FunctionImportName="deleteMachine" FunctionName="GymTECModel.Store.deleteMachine" />
+    <FunctionImportMapping FunctionImportName="getAllMachines" FunctionName="GymTECModel.Store.getAllMachines" />
+    <FunctionImportMapping FunctionImportName="getMachine" FunctionName="GymTECModel.Store.getMachine" />
+    <FunctionImportMapping FunctionImportName="getMachinesByGym" FunctionName="GymTECModel.Store.getMachinesByGym" />
+    <FunctionImportMapping FunctionImportName="insertMachine" FunctionName="GymTECModel.Store.insertMachine" />
+    <FunctionImportMapping FunctionImportName="updateMachine" FunctionName="GymTECModel.Store.updateMachine" />
+    <FunctionImportMapping FunctionImportName="deleteMachineType" FunctionName="GymTECModel.Store.deleteMachineType" />
+    <FunctionImportMapping FunctionImportName="getAllMachineTypes" FunctionName="GymTECModel.Store.getAllMachineTypes" />
+    <FunctionImportMapping FunctionImportName="getMachineType" FunctionName="GymTECModel.Store.getMachineType" />
+    <FunctionImportMapping FunctionImportName="insertMachineType" FunctionName="GymTECModel.Store.insertMachineType" />
+    <FunctionImportMapping FunctionImportName="updateMachineType" FunctionName="GymTECModel.Store.updateMachineType" />
   </EntityContainerMapping>
 </Mapping>

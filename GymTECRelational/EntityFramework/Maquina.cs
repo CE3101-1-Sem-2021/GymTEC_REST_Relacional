@@ -19,8 +19,5 @@ namespace GymTECRelational.EntityFramework
         public string Sucursal { get; set; }
         public string Marca { get; set; }
         public decimal Costo { get; set; }
-    
-        public virtual Sucursal Sucursal1 { get; set; }
-        public virtual Tipo_Equipo Tipo_Equipo1 { get; set; }
     }
 }

@@ -368,6 +368,189 @@ namespace GymTECRelational.Models
             return response;
         }
 
+        /*Metodo para agregar una maquina a la base de datos.
+         * 
+         * Entradas:Token del administrador que realiza la operacion,informacion de la maquina a agregar
+         * Salidas:Respuesta de tipo HTTP que indica si la operacion fue exitosa.
+         */
+        public HttpResponseMessage createMachine(Maquina machine,string token)
+        {
+            HttpResponseMessage response = null;
+            if(tokenVerifier(token,"Admin"))
+            {
+                if(!context.Maquinas.Any(o=>o.Serial==machine.Serial))
+                {
+                    if(context.Tipo_Equipo.Any(o=>o.Nombre==machine.Tipo_Equipo))
+                    {
+                        if(machine.Sucursal==null||context.Sucursals.Any(o=>o.Nombre==machine.Sucursal))
+                        {
+                            try
+                            {
+                                context.Maquinas.Add(machine);
+                                context.SaveChanges();
+                                response = new HttpResponseMessage(HttpStatusCode.OK);
+                                response.Content = new StringContent("Maquina agregada correctamente!");
+                                return response;
+                            }
+                            catch (Exception e)
+                            {
+                                response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
+                                response.Content = new StringContent("Error inesperado");
+                                return response;
+                            }
+                        }
+                        response = new HttpResponseMessage(HttpStatusCode.Conflict);
+                        response.Content = new StringContent("La sucursal especificada no se encuentra registrada");
+                        return response;
+                    }
+                    response = new HttpResponseMessage(HttpStatusCode.Conflict);
+                    response.Content = new StringContent("El tipo de maquina especificado no se encuentra registrado");
+                    return response;
+                }
+                response = new HttpResponseMessage(HttpStatusCode.Conflict);
+                response.Content = new StringContent("El serial de la nueva maquina ya se encuentra registrado");
+                return response;
+            }
+            response = new HttpResponseMessage(HttpStatusCode.Conflict);
+            response.Content = new StringContent("Token invalido");
+            return response;
+        }
+
+        /*Metodo para modificar los datos de una maquina registrada en la base de datos.
+         * 
+         * Entradas:Token del administrador que realiza la operacion,informacion actualizada de la maquina,serial actual de la maquina 
+         * Salidas:Respuesta de tipo HTTP que indica si la operacion fue exitosa.
+         */
+        public HttpResponseMessage updateMachine(Maquina machine,string token,string currentSerial)
+        {
+            HttpResponseMessage response = null;
+            if(tokenVerifier(token,"Admin"))
+            {
+                if (context.Maquinas.Any(o => o.Serial == currentSerial))
+                {
+                    if (machine.Serial==currentSerial||!context.Maquinas.Any(o => o.Serial == machine.Serial))
+                    {
+                        if (context.Tipo_Equipo.Any(o => o.Nombre == machine.Tipo_Equipo))
+                        {
+                            if (machine.Sucursal == null || context.Sucursals.Any(o => o.Nombre == machine.Sucursal))
+                            {
+                                try
+                                {
+                                    context.updateMachine(currentSerial,machine.Serial,machine.Tipo_Equipo,machine.Sucursal,machine.Marca,machine.Costo);
+                                    context.SaveChanges();
+                                    response = new HttpResponseMessage(HttpStatusCode.OK);
+                                    response.Content = new StringContent("Maquina modificada correctamente!");
+                                    return response;
+                                }
+                                catch (Exception e)
+                                {
+                                    response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
+                                    response.Content = new StringContent("Error inesperado");
+                                    return response;
+                                }
+                            }
+                            response = new HttpResponseMessage(HttpStatusCode.Conflict);
+                            response.Content = new StringContent("La nueva sucursal especificada no se encuentra registrada");
+                            return response;
+                        }
+                        response = new HttpResponseMessage(HttpStatusCode.Conflict);
+                        response.Content = new StringContent("El nuevo tipo de maquina especificado no se encuentra registrado");
+                        return response;
+                    }
+                    response = new HttpResponseMessage(HttpStatusCode.Conflict);
+                    response.Content = new StringContent("El nuevo serial de la maquina ya se encuentra registrado en otra maquina");
+                    return response;
+                }
+                response = new HttpResponseMessage(HttpStatusCode.Conflict);
+                response.Content = new StringContent("La maquina que se quiere modificar no se encuentra registrada");
+                return response;
+            }
+            response = new HttpResponseMessage(HttpStatusCode.Conflict);
+            response.Content = new StringContent("Token invalido");
+            return response;
+        }
+
+
+        /*Metodo para añadir un nuevo tipo de equipo a la base de datos.
+        * 
+        * Entradas:Token del administrador que realiza la operacion,informacion del tipo de equipo a agregar 
+        * Salidas:Respuesta de tipo HTTP que indica si la operacion fue exitosa.
+        */
+        public HttpResponseMessage createMachineType(Tipo_Equipo machineType,string token)
+        {
+            HttpResponseMessage response = null;
+
+            if(tokenVerifier(token,"Admin"))
+            {
+                if(!context.Tipo_Equipo.Any(o=> o.Nombre==machineType.Nombre))
+                {
+                    try
+                    {
+                        context.Tipo_Equipo.Add(machineType);
+                        context.SaveChanges();
+                        response = new HttpResponseMessage(HttpStatusCode.OK);
+                        response.Content = new StringContent("Tipo agregado correctamente!");
+                        return response;
+                    }
+                    catch (Exception e)
+                    {
+                        response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
+                        response.Content = new StringContent("Error inesperado");
+                        return response;
+                    }
+                }
+                response = new HttpResponseMessage(HttpStatusCode.Conflict);
+                response.Content = new StringContent("El nombre del nuevo tipo ya se encuentra registrado");
+                return response;
+            }
+            response = new HttpResponseMessage(HttpStatusCode.Conflict);
+            response.Content = new StringContent("Token invalido");
+            return response;
+        }
+
+        /*Metodo para modificar un tipo de equipo en la base de datos.
+       * 
+       * Entradas:Token del administrador que realiza la operacion,informacion actualizada del tipo de equipo a agregar,nombre actual del tipo de equipo 
+       * Salidas:Respuesta de tipo HTTP que indica si la operacion fue exitosa.
+       */
+        public HttpResponseMessage updateMachineType(Tipo_Equipo machineType, string token,string currentName)
+        {
+            HttpResponseMessage response = null;
+
+            if (tokenVerifier(token, "Admin"))
+            {
+                if (context.Tipo_Equipo.Any(o => o.Nombre == currentName))
+                {
+                    if (machineType.Nombre == currentName || !context.Tipo_Equipo.Any(o => o.Nombre == machineType.Nombre))
+                    {
+                        try
+                        {
+                            context.updateMachineType(currentName,machineType.Nombre,machineType.Descripcion);
+                            context.SaveChanges();
+                            response = new HttpResponseMessage(HttpStatusCode.OK);
+                            response.Content = new StringContent("Tipo modificado correctamente!");
+                            return response;
+                        }
+                        catch (Exception e)
+                        {
+                            response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
+                            response.Content = new StringContent("Error inesperado");
+                            return response;
+                        }
+                    }
+                    response = new HttpResponseMessage(HttpStatusCode.Conflict);
+                    response.Content = new StringContent("El nuevo nombre del tipo ya se encuentra registrado");
+                    return response;
+                }
+                response = new HttpResponseMessage(HttpStatusCode.Conflict);
+                response.Content = new StringContent("El tipo que se quiere modificar no se encuentra registrado");
+                return response;
+            }
+            response = new HttpResponseMessage(HttpStatusCode.Conflict);
+            response.Content = new StringContent("Token invalido");
+            return response;
+        }
+
         /*Metodo para obtener un token unico.
          * 
          * Entradas:-
@@ -446,6 +629,14 @@ namespace GymTECRelational.Models
                         else if(table.Equals("SucursalTelefono"))
                         {
                             context.deletePhoneNumb(id);
+                        }
+                        else if(table.Equals("Maquina"))
+                        {
+                            context.deleteMachine(id);
+                        }
+                        else if(table.Equals("Tipo_Equipo"))
+                        {
+                        context.deleteMachineType(id);
                         }
                         else
                         {

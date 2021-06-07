@@ -414,12 +414,20 @@
         <Function Name="deleteGym" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Nombre" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="deleteMachine" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Serial" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="deleteMachineType" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Nombre" Type="varchar" Mode="In" />
+        </Function>
         <Function Name="deletePhoneNumb" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Telefono" Type="varchar" Mode="In" />
         </Function>
         <Function Name="getAdminByMail" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Email" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="getAllMachines" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="getAllMachineTypes" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="getAllPhoneNumbByGym" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Nombre" Type="varchar" Mode="In" />
         </Function>
@@ -428,6 +436,15 @@
         </Function>
         <Function Name="getEmployeeByMail" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Email" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="getMachine" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Serial" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="getMachinesByGym" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Sucursal" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="getMachineType" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="TypeName" Type="varchar" Mode="In" />
         </Function>
         <Function Name="insertAdmin" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Email" Type="varchar" Mode="In" />
@@ -462,6 +479,17 @@
           <Parameter Name="Capacidad_Max" Type="int" Mode="In" />
           <Parameter Name="Gerente" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="insertMachine" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Serial" Type="varchar" Mode="In" />
+          <Parameter Name="Tipo_Equipo" Type="varchar" Mode="In" />
+          <Parameter Name="Sucursal" Type="varchar" Mode="In" />
+          <Parameter Name="Marca" Type="varchar" Mode="In" />
+          <Parameter Name="Costo" Type="numeric" Mode="In" />
+        </Function>
+        <Function Name="insertMachineType" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Nombre" Type="varchar" Mode="In" />
+          <Parameter Name="Descripcion" Type="varchar" Mode="In" />
+        </Function>
         <Function Name="selectAllAdmins" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="selectAllGyms" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="selectGym" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
@@ -476,6 +504,19 @@
           <Parameter Name="Fecha_Apertura" Type="date" Mode="In" />
           <Parameter Name="Capacidad_Max" Type="int" Mode="In" />
           <Parameter Name="Gerente" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="updateMachine" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CurrentSerial" Type="varchar" Mode="In" />
+          <Parameter Name="Serial" Type="varchar" Mode="In" />
+          <Parameter Name="Tipo_Equipo" Type="varchar" Mode="In" />
+          <Parameter Name="Sucursal" Type="varchar" Mode="In" />
+          <Parameter Name="Marca" Type="varchar" Mode="In" />
+          <Parameter Name="Costo" Type="numeric" Mode="In" />
+        </Function>
+        <Function Name="updateMachineType" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CurrentTypeName" Type="varchar" Mode="In" />
+          <Parameter Name="Nombre" Type="varchar" Mode="In" />
+          <Parameter Name="Descripcion" Type="varchar" Mode="In" />
         </Function>
         <Function Name="updatePhoneNumb" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="CurrentNumb" Type="varchar" Mode="In" />
@@ -659,8 +700,6 @@
           <Property Name="Sucursal" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="Marca" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Costo" Type="Decimal" Precision="7" Scale="2" Nullable="false" />
-          <NavigationProperty Name="Sucursal1" Relationship="Self.FKSucursal_Maquina" FromRole="Maquina" ToRole="Sucursal" />
-          <NavigationProperty Name="Tipo_Equipo1" Relationship="Self.FKTipoEquipo_Maquina" FromRole="Maquina" ToRole="Tipo_Equipo" />
         </EntityType>
         <EntityType Name="Planilla">
           <Key>
@@ -708,7 +747,6 @@
           </Key>
           <Property Name="Nombre" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Descripcion" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
-          <NavigationProperty Name="Maquinas" Relationship="Self.FKTipoEquipo_Maquina" FromRole="Tipo_Equipo" ToRole="Maquina" />
         </EntityType>
         <EntityType Name="Tipo_Servicio">
           <Key>
@@ -1060,6 +1098,47 @@
             <Parameter Name="Nombre" Mode="In" Type="String" />
             <Parameter Name="Telefono" Mode="In" Type="String" />
           </FunctionImport>
+          <FunctionImport Name="deleteMachine">
+          <Parameter Name="Serial" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="getAllMachines" EntitySet="Maquinas" ReturnType="Collection(GymTECModel.Maquina)" />
+          <FunctionImport Name="getMachine" EntitySet="Maquinas" ReturnType="Collection(GymTECModel.Maquina)">
+          <Parameter Name="Serial" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="getMachinesByGym" EntitySet="Maquinas" ReturnType="Collection(GymTECModel.Maquina)">
+          <Parameter Name="Sucursal" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="insertMachine">
+            <Parameter Name="Serial" Mode="In" Type="String" />
+            <Parameter Name="Tipo_Equipo" Mode="In" Type="String" />
+            <Parameter Name="Sucursal" Mode="In" Type="String" />
+            <Parameter Name="Marca" Mode="In" Type="String" />
+            <Parameter Name="Costo" Mode="In" Type="Decimal" />
+          </FunctionImport>
+          <FunctionImport Name="updateMachine">
+            <Parameter Name="CurrentSerial" Mode="In" Type="String" />
+            <Parameter Name="Serial" Mode="In" Type="String" />
+            <Parameter Name="Tipo_Equipo" Mode="In" Type="String" />
+            <Parameter Name="Sucursal" Mode="In" Type="String" />
+            <Parameter Name="Marca" Mode="In" Type="String" />
+            <Parameter Name="Costo" Mode="In" Type="Decimal" />
+          </FunctionImport>
+          <FunctionImport Name="deleteMachineType">
+            <Parameter Name="Nombre" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="getAllMachineTypes" EntitySet="Tipo_Equipo" ReturnType="Collection(GymTECModel.Tipo_Equipo)" />
+          <FunctionImport Name="getMachineType" EntitySet="Tipo_Equipo" ReturnType="Collection(GymTECModel.Tipo_Equipo)">
+            <Parameter Name="TypeName" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="insertMachineType">
+            <Parameter Name="Nombre" Mode="In" Type="String" />
+            <Parameter Name="Descripcion" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="updateMachineType">
+            <Parameter Name="CurrentTypeName" Mode="In" Type="String" />
+            <Parameter Name="Nombre" Mode="In" Type="String" />
+            <Parameter Name="Descripcion" Mode="In" Type="String" />
+          </FunctionImport>
         </EntityContainer>
         <ComplexType Name="selectAllAdmins_Result">
           <Property Type="Int32" Name="Id" Nullable="false" />
@@ -1226,6 +1305,35 @@
           <Property Type="String" Name="Sucursal" Nullable="false" MaxLength="20" />
           <Property Type="String" Name="Telefono" Nullable="false" MaxLength="20" />
         </ComplexType>
+        <ComplexType Name="getAllMachines_Result">
+          <Property Type="String" Name="Serial" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="Tipo_Equipo" Nullable="false" MaxLength="25" />
+          <Property Type="String" Name="Sucursal" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="Marca" Nullable="false" MaxLength="30" />
+          <Property Type="Decimal" Name="Costo" Nullable="false" Precision="7" Scale="2" />
+        </ComplexType>
+        <ComplexType Name="getMachine_Result">
+          <Property Type="String" Name="Serial" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="Tipo_Equipo" Nullable="false" MaxLength="25" />
+          <Property Type="String" Name="Sucursal" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="Marca" Nullable="false" MaxLength="30" />
+          <Property Type="Decimal" Name="Costo" Nullable="false" Precision="7" Scale="2" />
+        </ComplexType>
+        <ComplexType Name="getMachinesByGym_Result">
+          <Property Type="String" Name="Serial" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="Tipo_Equipo" Nullable="false" MaxLength="25" />
+          <Property Type="String" Name="Sucursal" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="Marca" Nullable="false" MaxLength="30" />
+          <Property Type="Decimal" Name="Costo" Nullable="false" Precision="7" Scale="2" />
+        </ComplexType>
+        <ComplexType Name="getAllMachineTypes_Result">
+          <Property Type="String" Name="Nombre" Nullable="false" MaxLength="25" />
+          <Property Type="String" Name="Descripcion" Nullable="false" MaxLength="200" />
+        </ComplexType>
+        <ComplexType Name="getMachineType_Result">
+          <Property Type="String" Name="Nombre" Nullable="false" MaxLength="25" />
+          <Property Type="String" Name="Descripcion" Nullable="false" MaxLength="200" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1342,6 +1450,28 @@
                 <ScalarProperty Name="Costo" ColumnName="Costo" />
               </MappingFragment>
             </EntityTypeMapping>
+            <EntityTypeMapping TypeName="GymTECModel.Maquina">
+              <ModificationFunctionMapping>
+                <InsertFunction FunctionName="GymTECModel.Store.insertMachine">
+                  <ScalarProperty Name="Costo" ParameterName="Costo" />
+                  <ScalarProperty Name="Marca" ParameterName="Marca" />
+                  <ScalarProperty Name="Sucursal" ParameterName="Sucursal" />
+                  <ScalarProperty Name="Tipo_Equipo" ParameterName="Tipo_Equipo" />
+                  <ScalarProperty Name="Serial" ParameterName="Serial" />
+                </InsertFunction>
+                <UpdateFunction FunctionName="GymTECModel.Store.updateMachine">
+                  <ScalarProperty Name="Serial" ParameterName="CurrentSerial" Version="Current" />
+                  <ScalarProperty Name="Costo" ParameterName="Costo" Version="Current" />
+                  <ScalarProperty Name="Marca" ParameterName="Marca" Version="Current" />
+                  <ScalarProperty Name="Sucursal" ParameterName="Sucursal" Version="Current" />
+                  <ScalarProperty Name="Tipo_Equipo" ParameterName="Tipo_Equipo" Version="Current" />
+                  <ScalarProperty Name="Serial" ParameterName="Serial" Version="Current" />
+                </UpdateFunction>
+                <DeleteFunction FunctionName="GymTECModel.Store.deleteMachine">
+                  <ScalarProperty Name="Serial" ParameterName="Serial" />
+                </DeleteFunction>
+              </ModificationFunctionMapping>
+            </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Planillas">
             <EntityTypeMapping TypeName="GymTECModel.Planilla">
@@ -1416,6 +1546,22 @@
                 <ScalarProperty Name="Nombre" ColumnName="Nombre" />
                 <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
               </MappingFragment>
+            </EntityTypeMapping>
+            <EntityTypeMapping TypeName="GymTECModel.Tipo_Equipo">
+              <ModificationFunctionMapping>
+                <InsertFunction FunctionName="GymTECModel.Store.insertMachineType">
+                  <ScalarProperty Name="Descripcion" ParameterName="Descripcion" />
+                  <ScalarProperty Name="Nombre" ParameterName="Nombre" />
+                </InsertFunction>
+                <UpdateFunction FunctionName="GymTECModel.Store.updateMachineType">
+                  <ScalarProperty Name="Nombre" ParameterName="CurrentTypeName" Version="Current" />
+                  <ScalarProperty Name="Descripcion" ParameterName="Descripcion" Version="Current" />
+                  <ScalarProperty Name="Nombre" ParameterName="Nombre" Version="Current" />
+                </UpdateFunction>
+                <DeleteFunction FunctionName="GymTECModel.Store.deleteMachineType">
+                  <ScalarProperty Name="Nombre" ParameterName="Nombre" />
+                </DeleteFunction>
+              </ModificationFunctionMapping>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Tipo_Servicio">
@@ -1499,6 +1645,22 @@
           <FunctionImportMapping FunctionImportName="getAllPhoneNumbByGym" FunctionName="GymTECModel.Store.getAllPhoneNumbByGym">
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="updatePhoneNumb" FunctionName="GymTECModel.Store.updatePhoneNumb" />
+          <FunctionImportMapping FunctionImportName="deleteMachine" FunctionName="GymTECModel.Store.deleteMachine" />
+          <FunctionImportMapping FunctionImportName="getAllMachines" FunctionName="GymTECModel.Store.getAllMachines">
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="getMachine" FunctionName="GymTECModel.Store.getMachine">
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="getMachinesByGym" FunctionName="GymTECModel.Store.getMachinesByGym">
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="insertMachine" FunctionName="GymTECModel.Store.insertMachine" />
+          <FunctionImportMapping FunctionImportName="updateMachine" FunctionName="GymTECModel.Store.updateMachine" />
+          <FunctionImportMapping FunctionImportName="deleteMachineType" FunctionName="GymTECModel.Store.deleteMachineType" />
+          <FunctionImportMapping FunctionImportName="getAllMachineTypes" FunctionName="GymTECModel.Store.getAllMachineTypes">
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="getMachineType" FunctionName="GymTECModel.Store.getMachineType">
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="insertMachineType" FunctionName="GymTECModel.Store.insertMachineType" />
+          <FunctionImportMapping FunctionImportName="updateMachineType" FunctionName="GymTECModel.Store.updateMachineType" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

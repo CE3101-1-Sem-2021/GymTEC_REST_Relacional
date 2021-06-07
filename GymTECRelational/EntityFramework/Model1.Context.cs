@@ -411,5 +411,181 @@ namespace GymTECRelational.EntityFramework
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("updatePhoneNumb", currentNumbParameter, nombreParameter, telefonoParameter);
         }
+    
+        public virtual int deleteMachine(string serial)
+        {
+            var serialParameter = serial != null ?
+                new ObjectParameter("Serial", serial) :
+                new ObjectParameter("Serial", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("deleteMachine", serialParameter);
+        }
+    
+        public virtual ObjectResult<Maquina> getAllMachines()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Maquina>("getAllMachines");
+        }
+    
+        public virtual ObjectResult<Maquina> getAllMachines(MergeOption mergeOption)
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Maquina>("getAllMachines", mergeOption);
+        }
+    
+        public virtual ObjectResult<Maquina> getMachine(string serial)
+        {
+            var serialParameter = serial != null ?
+                new ObjectParameter("Serial", serial) :
+                new ObjectParameter("Serial", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Maquina>("getMachine", serialParameter);
+        }
+    
+        public virtual ObjectResult<Maquina> getMachine(string serial, MergeOption mergeOption)
+        {
+            var serialParameter = serial != null ?
+                new ObjectParameter("Serial", serial) :
+                new ObjectParameter("Serial", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Maquina>("getMachine", mergeOption, serialParameter);
+        }
+    
+        public virtual ObjectResult<Maquina> getMachinesByGym(string sucursal)
+        {
+            var sucursalParameter = sucursal != null ?
+                new ObjectParameter("Sucursal", sucursal) :
+                new ObjectParameter("Sucursal", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Maquina>("getMachinesByGym", sucursalParameter);
+        }
+    
+        public virtual ObjectResult<Maquina> getMachinesByGym(string sucursal, MergeOption mergeOption)
+        {
+            var sucursalParameter = sucursal != null ?
+                new ObjectParameter("Sucursal", sucursal) :
+                new ObjectParameter("Sucursal", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Maquina>("getMachinesByGym", mergeOption, sucursalParameter);
+        }
+    
+        public virtual int insertMachine(string serial, string tipo_Equipo, string sucursal, string marca, Nullable<decimal> costo)
+        {
+            var serialParameter = serial != null ?
+                new ObjectParameter("Serial", serial) :
+                new ObjectParameter("Serial", typeof(string));
+    
+            var tipo_EquipoParameter = tipo_Equipo != null ?
+                new ObjectParameter("Tipo_Equipo", tipo_Equipo) :
+                new ObjectParameter("Tipo_Equipo", typeof(string));
+    
+            var sucursalParameter = sucursal != null ?
+                new ObjectParameter("Sucursal", sucursal) :
+                new ObjectParameter("Sucursal", typeof(string));
+    
+            var marcaParameter = marca != null ?
+                new ObjectParameter("Marca", marca) :
+                new ObjectParameter("Marca", typeof(string));
+    
+            var costoParameter = costo.HasValue ?
+                new ObjectParameter("Costo", costo) :
+                new ObjectParameter("Costo", typeof(decimal));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("insertMachine", serialParameter, tipo_EquipoParameter, sucursalParameter, marcaParameter, costoParameter);
+        }
+    
+        public virtual int updateMachine(string currentSerial, string serial, string tipo_Equipo, string sucursal, string marca, Nullable<decimal> costo)
+        {
+            var currentSerialParameter = currentSerial != null ?
+                new ObjectParameter("CurrentSerial", currentSerial) :
+                new ObjectParameter("CurrentSerial", typeof(string));
+    
+            var serialParameter = serial != null ?
+                new ObjectParameter("Serial", serial) :
+                new ObjectParameter("Serial", typeof(string));
+    
+            var tipo_EquipoParameter = tipo_Equipo != null ?
+                new ObjectParameter("Tipo_Equipo", tipo_Equipo) :
+                new ObjectParameter("Tipo_Equipo", typeof(string));
+    
+            var sucursalParameter = sucursal != null ?
+                new ObjectParameter("Sucursal", sucursal) :
+                new ObjectParameter("Sucursal", typeof(string));
+    
+            var marcaParameter = marca != null ?
+                new ObjectParameter("Marca", marca) :
+                new ObjectParameter("Marca", typeof(string));
+    
+            var costoParameter = costo.HasValue ?
+                new ObjectParameter("Costo", costo) :
+                new ObjectParameter("Costo", typeof(decimal));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("updateMachine", currentSerialParameter, serialParameter, tipo_EquipoParameter, sucursalParameter, marcaParameter, costoParameter);
+        }
+    
+        public virtual int deleteMachineType(string nombre)
+        {
+            var nombreParameter = nombre != null ?
+                new ObjectParameter("Nombre", nombre) :
+                new ObjectParameter("Nombre", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("deleteMachineType", nombreParameter);
+        }
+    
+        public virtual ObjectResult<Tipo_Equipo> getAllMachineTypes()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Tipo_Equipo>("getAllMachineTypes");
+        }
+    
+        public virtual ObjectResult<Tipo_Equipo> getAllMachineTypes(MergeOption mergeOption)
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Tipo_Equipo>("getAllMachineTypes", mergeOption);
+        }
+    
+        public virtual ObjectResult<Tipo_Equipo> getMachineType(string typeName)
+        {
+            var typeNameParameter = typeName != null ?
+                new ObjectParameter("TypeName", typeName) :
+                new ObjectParameter("TypeName", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Tipo_Equipo>("getMachineType", typeNameParameter);
+        }
+    
+        public virtual ObjectResult<Tipo_Equipo> getMachineType(string typeName, MergeOption mergeOption)
+        {
+            var typeNameParameter = typeName != null ?
+                new ObjectParameter("TypeName", typeName) :
+                new ObjectParameter("TypeName", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Tipo_Equipo>("getMachineType", mergeOption, typeNameParameter);
+        }
+    
+        public virtual int insertMachineType(string nombre, string descripcion)
+        {
+            var nombreParameter = nombre != null ?
+                new ObjectParameter("Nombre", nombre) :
+                new ObjectParameter("Nombre", typeof(string));
+    
+            var descripcionParameter = descripcion != null ?
+                new ObjectParameter("Descripcion", descripcion) :
+                new ObjectParameter("Descripcion", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("insertMachineType", nombreParameter, descripcionParameter);
+        }
+    
+        public virtual int updateMachineType(string currentTypeName, string nombre, string descripcion)
+        {
+            var currentTypeNameParameter = currentTypeName != null ?
+                new ObjectParameter("CurrentTypeName", currentTypeName) :
+                new ObjectParameter("CurrentTypeName", typeof(string));
+    
+            var nombreParameter = nombre != null ?
+                new ObjectParameter("Nombre", nombre) :
+                new ObjectParameter("Nombre", typeof(string));
+    
+            var descripcionParameter = descripcion != null ?
+                new ObjectParameter("Descripcion", descripcion) :
+                new ObjectParameter("Descripcion", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("updateMachineType", currentTypeNameParameter, nombreParameter, descripcionParameter);
+        }
     }
 }

@@ -87,8 +87,6 @@
     <Property Name="Sucursal" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
     <Property Name="Marca" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
     <Property Name="Costo" Type="Decimal" Precision="7" Scale="2" Nullable="false" />
-    <NavigationProperty Name="Sucursal1" Relationship="Self.FKSucursal_Maquina" FromRole="Maquina" ToRole="Sucursal" />
-    <NavigationProperty Name="Tipo_Equipo1" Relationship="Self.FKTipoEquipo_Maquina" FromRole="Maquina" ToRole="Tipo_Equipo" />
   </EntityType>
   <EntityType Name="Planilla">
     <Key>
@@ -136,7 +134,6 @@
     </Key>
     <Property Name="Nombre" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" />
     <Property Name="Descripcion" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
-    <NavigationProperty Name="Maquinas" Relationship="Self.FKTipoEquipo_Maquina" FromRole="Tipo_Equipo" ToRole="Maquina" />
   </EntityType>
   <EntityType Name="Tipo_Servicio">
     <Key>
@@ -488,6 +485,47 @@
       <Parameter Name="Nombre" Mode="In" Type="String" />
       <Parameter Name="Telefono" Mode="In" Type="String" />
     </FunctionImport>
+    <FunctionImport Name="deleteMachine">
+      <Parameter Name="Serial" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="getAllMachines" EntitySet="Maquinas" ReturnType="Collection(GymTECModel.Maquina)" />
+    <FunctionImport Name="getMachine" EntitySet="Maquinas" ReturnType="Collection(GymTECModel.Maquina)">
+      <Parameter Name="Serial" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="getMachinesByGym" EntitySet="Maquinas" ReturnType="Collection(GymTECModel.Maquina)">
+      <Parameter Name="Sucursal" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="insertMachine">
+      <Parameter Name="Serial" Mode="In" Type="String" />
+      <Parameter Name="Tipo_Equipo" Mode="In" Type="String" />
+      <Parameter Name="Sucursal" Mode="In" Type="String" />
+      <Parameter Name="Marca" Mode="In" Type="String" />
+      <Parameter Name="Costo" Mode="In" Type="Decimal" />
+    </FunctionImport>
+    <FunctionImport Name="updateMachine">
+      <Parameter Name="CurrentSerial" Mode="In" Type="String" />
+      <Parameter Name="Serial" Mode="In" Type="String" />
+      <Parameter Name="Tipo_Equipo" Mode="In" Type="String" />
+      <Parameter Name="Sucursal" Mode="In" Type="String" />
+      <Parameter Name="Marca" Mode="In" Type="String" />
+      <Parameter Name="Costo" Mode="In" Type="Decimal" />
+    </FunctionImport>
+    <FunctionImport Name="deleteMachineType">
+      <Parameter Name="Nombre" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="getAllMachineTypes" EntitySet="Tipo_Equipo" ReturnType="Collection(GymTECModel.Tipo_Equipo)" />
+    <FunctionImport Name="getMachineType" EntitySet="Tipo_Equipo" ReturnType="Collection(GymTECModel.Tipo_Equipo)">
+      <Parameter Name="TypeName" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="insertMachineType">
+      <Parameter Name="Nombre" Mode="In" Type="String" />
+      <Parameter Name="Descripcion" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="updateMachineType">
+      <Parameter Name="CurrentTypeName" Mode="In" Type="String" />
+      <Parameter Name="Nombre" Mode="In" Type="String" />
+      <Parameter Name="Descripcion" Mode="In" Type="String" />
+    </FunctionImport>
   </EntityContainer>
   <ComplexType Name="selectAllAdmins_Result">
     <Property Type="Int32" Name="Id" Nullable="false" />
@@ -653,5 +691,34 @@
   <ComplexType Name="getAllPhoneNumbByGym_Result">
     <Property Type="String" Name="Sucursal" Nullable="false" MaxLength="20" />
     <Property Type="String" Name="Telefono" Nullable="false" MaxLength="20" />
+  </ComplexType>
+  <ComplexType Name="getAllMachines_Result">
+    <Property Type="String" Name="Serial" Nullable="false" MaxLength="50" />
+    <Property Type="String" Name="Tipo_Equipo" Nullable="false" MaxLength="25" />
+    <Property Type="String" Name="Sucursal" Nullable="true" MaxLength="20" />
+    <Property Type="String" Name="Marca" Nullable="false" MaxLength="30" />
+    <Property Type="Decimal" Name="Costo" Nullable="false" Precision="7" Scale="2" />
+  </ComplexType>
+  <ComplexType Name="getMachine_Result">
+    <Property Type="String" Name="Serial" Nullable="false" MaxLength="50" />
+    <Property Type="String" Name="Tipo_Equipo" Nullable="false" MaxLength="25" />
+    <Property Type="String" Name="Sucursal" Nullable="true" MaxLength="20" />
+    <Property Type="String" Name="Marca" Nullable="false" MaxLength="30" />
+    <Property Type="Decimal" Name="Costo" Nullable="false" Precision="7" Scale="2" />
+  </ComplexType>
+  <ComplexType Name="getMachinesByGym_Result">
+    <Property Type="String" Name="Serial" Nullable="false" MaxLength="50" />
+    <Property Type="String" Name="Tipo_Equipo" Nullable="false" MaxLength="25" />
+    <Property Type="String" Name="Sucursal" Nullable="true" MaxLength="20" />
+    <Property Type="String" Name="Marca" Nullable="false" MaxLength="30" />
+    <Property Type="Decimal" Name="Costo" Nullable="false" Precision="7" Scale="2" />
+  </ComplexType>
+  <ComplexType Name="getAllMachineTypes_Result">
+    <Property Type="String" Name="Nombre" Nullable="false" MaxLength="25" />
+    <Property Type="String" Name="Descripcion" Nullable="false" MaxLength="200" />
+  </ComplexType>
+  <ComplexType Name="getMachineType_Result">
+    <Property Type="String" Name="Nombre" Nullable="false" MaxLength="25" />
+    <Property Type="String" Name="Descripcion" Nullable="false" MaxLength="200" />
   </ComplexType>
 </Schema>

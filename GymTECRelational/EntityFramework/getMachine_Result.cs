@@ -10,11 +10,13 @@
 namespace GymTECRelational.EntityFramework
 {
     using System;
-    using System.Collections.Generic;
     
-    public partial class Tipo_Equipo
+    public partial class getMachine_Result
     {
-        public string Nombre { get; set; }
-        public string Descripcion { get; set; }
+        public string Serial { get; set; }
+        public string Tipo_Equipo { get; set; }
+        public string Sucursal { get; set; }
+        public string Marca { get; set; }
+        public decimal Costo { get; set; }
     }
 }
