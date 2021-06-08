@@ -166,13 +166,13 @@
     <Compile Include="Controllers\EmployeeController.cs" />
     <Compile Include="Controllers\GymController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\JobController.cs" />
     <Compile Include="Controllers\MachineController.cs" />
+    <Compile Include="Controllers\PayrollController.cs" />
     <Compile Include="Controllers\PhoneController.cs" />
     <Compile Include="Controllers\TipoEquipoController.cs" />
+    <Compile Include="Controllers\TreatmentController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
-    <Compile Include="EntityFramework\Administrador.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
-    </Compile>
     <Compile Include="EntityFramework\Clase.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -194,7 +194,13 @@
     <Compile Include="EntityFramework\getAllMachineTypes_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="EntityFramework\getAllPayrolls_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="EntityFramework\getAllPhoneNumbByGym_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\getAllTreatments_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="EntityFramework\getEmployeeById_Result.cs">
@@ -212,6 +218,9 @@
     <Compile Include="EntityFramework\getEmployee_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="EntityFramework\getJob_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="EntityFramework\getMachinesByGym_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -219,6 +228,15 @@
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="EntityFramework\getMachine_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\getPayroll_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\gettAllJobs_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\getTreatment_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="EntityFramework\Maquina.cs">

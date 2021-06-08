@@ -1,31 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
   <EntityContainerMapping StorageEntityContainer="GymTECModelStoreContainer" CdmEntityContainer="GymTECEntities">
-    <EntitySetMapping Name="Administradors">
-      <EntityTypeMapping TypeName="GymTECModel.Administrador">
-        <MappingFragment StoreEntitySet="Administrador">
-          <ScalarProperty Name="Id" ColumnName="Id" />
-          <ScalarProperty Name="Email" ColumnName="Email" />
-          <ScalarProperty Name="Nombre" ColumnName="Nombre" />
-          <ScalarProperty Name="Apellidos" ColumnName="Apellidos" />
-          <ScalarProperty Name="Contraseña" ColumnName="Contraseña" />
-          <ScalarProperty Name="Salt" ColumnName="Salt" />
-          <ScalarProperty Name="Token" ColumnName="Token" />
-        </MappingFragment>
-      </EntityTypeMapping>
-      <EntityTypeMapping TypeName="GymTECModel.Administrador">
-        <ModificationFunctionMapping>
-          <InsertFunction FunctionName="GymTECModel.Store.insertAdmin">
-            <ScalarProperty Name="Token" ParameterName="Token" />
-            <ScalarProperty Name="Salt" ParameterName="Salt" />
-            <ScalarProperty Name="Contraseña" ParameterName="Contraseña" />
-            <ScalarProperty Name="Apellidos" ParameterName="Apellidos" />
-            <ScalarProperty Name="Nombre" ParameterName="Nombre" />
-            <ScalarProperty Name="Email" ParameterName="Email" />
-          </InsertFunction>
-        </ModificationFunctionMapping>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="Clases">
       <EntityTypeMapping TypeName="GymTECModel.Clase">
         <MappingFragment StoreEntitySet="Clase">
@@ -141,6 +116,22 @@
           <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
         </MappingFragment>
       </EntityTypeMapping>
+      <EntityTypeMapping TypeName="GymTECModel.Planilla">
+        <ModificationFunctionMapping>
+          <InsertFunction FunctionName="GymTECModel.Store.insertPayRoll">
+            <ScalarProperty Name="Descripcion" ParameterName="Descripcion" />
+            <ScalarProperty Name="Nombre" ParameterName="Nombre" />
+          </InsertFunction>
+          <UpdateFunction FunctionName="GymTECModel.Store.updatePayRoll">
+            <ScalarProperty Name="Nombre" ParameterName="CurrentName" Version="Current" />
+            <ScalarProperty Name="Descripcion" ParameterName="Descripcion" Version="Current" />
+            <ScalarProperty Name="Nombre" ParameterName="Nombre" Version="Current" />
+          </UpdateFunction>
+          <DeleteFunction FunctionName="GymTECModel.Store.deletePayroll">
+            <ScalarProperty Name="Nombre" ParameterName="Nombre" />
+          </DeleteFunction>
+        </ModificationFunctionMapping>
+      </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="Productoes">
       <EntityTypeMapping TypeName="GymTECModel.Producto">
@@ -158,6 +149,22 @@
           <ScalarProperty Name="Nombre" ColumnName="Nombre" />
           <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
         </MappingFragment>
+      </EntityTypeMapping>
+      <EntityTypeMapping TypeName="GymTECModel.Puesto">
+        <ModificationFunctionMapping>
+          <InsertFunction FunctionName="GymTECModel.Store.insertJob">
+            <ScalarProperty Name="Descripcion" ParameterName="Descripcion" />
+            <ScalarProperty Name="Nombre" ParameterName="Nombre" />
+          </InsertFunction>
+          <UpdateFunction FunctionName="GymTECModel.Store.updateJob">
+            <ScalarProperty Name="Nombre" ParameterName="CurrentName" Version="Current" />
+            <ScalarProperty Name="Descripcion" ParameterName="Descripcion" Version="Current" />
+            <ScalarProperty Name="Nombre" ParameterName="Nombre" Version="Current" />
+          </UpdateFunction>
+          <DeleteFunction FunctionName="GymTECModel.Store.deleteJob">
+            <ScalarProperty Name="Nombre" ParameterName="Nombre" />
+          </DeleteFunction>
+        </ModificationFunctionMapping>
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="Sucursals">
@@ -240,6 +247,20 @@
           <ScalarProperty Name="Nombre" ColumnName="Nombre" />
         </MappingFragment>
       </EntityTypeMapping>
+      <EntityTypeMapping TypeName="GymTECModel.Tratamiento_Spa">
+        <ModificationFunctionMapping>
+          <InsertFunction FunctionName="GymTECModel.Store.insertTreatment">
+            <ScalarProperty Name="Nombre" ParameterName="Nombre" />
+          </InsertFunction>
+          <UpdateFunction FunctionName="GymTECModel.Store.updateTreatment">
+            <ScalarProperty Name="Id" ParameterName="CurrentId" Version="Current" />
+            <ScalarProperty Name="Nombre" ParameterName="Nombre" Version="Current" />
+          </UpdateFunction>
+          <DeleteFunction FunctionName="GymTECModel.Store.deleteTreatment">
+            <ScalarProperty Name="Id" ParameterName="Id" />
+          </DeleteFunction>
+        </ModificationFunctionMapping>
+      </EntityTypeMapping>
     </EntitySetMapping>
     <AssociationSetMapping Name="Producto_Sucursal" TypeName="GymTECModel.Producto_Sucursal" StoreEntitySet="Producto_Sucursal">
       <EndProperty Name="Producto">
@@ -261,10 +282,7 @@
     <FunctionImportMapping FunctionImportName="selectAllAdmins" FunctionName="GymTECModel.Store.selectAllAdmins" />
     <FunctionImportMapping FunctionImportName="getEmployeeById" FunctionName="GymTECModel.Store.getEmployeeById" />
     <FunctionImportMapping FunctionImportName="getEmployeeByMail" FunctionName="GymTECModel.Store.getEmployeeByMail" />
-    <FunctionImportMapping FunctionImportName="assignTokenAdmin" FunctionName="GymTECModel.Store.assignTokenAdmin" />
     <FunctionImportMapping FunctionImportName="assignTokenEmployee" FunctionName="GymTECModel.Store.assignTokenEmployee" />
-    <FunctionImportMapping FunctionImportName="getAdminByMail" FunctionName="GymTECModel.Store.getAdminByMail" />
-    <FunctionImportMapping FunctionImportName="insertAdmin" FunctionName="GymTECModel.Store.insertAdmin" />
     <FunctionImportMapping FunctionImportName="insertGym" FunctionName="GymTECModel.Store.insertGym" />
     <FunctionImportMapping FunctionImportName="selectAllGyms" FunctionName="GymTECModel.Store.selectAllGyms" />
     <FunctionImportMapping FunctionImportName="activateGymSpa" FunctionName="GymTECModel.Store.activateGymSpa" />
@@ -311,5 +329,20 @@
     <FunctionImportMapping FunctionImportName="getMachineType" FunctionName="GymTECModel.Store.getMachineType" />
     <FunctionImportMapping FunctionImportName="insertMachineType" FunctionName="GymTECModel.Store.insertMachineType" />
     <FunctionImportMapping FunctionImportName="updateMachineType" FunctionName="GymTECModel.Store.updateMachineType" />
+    <FunctionImportMapping FunctionImportName="deleteJob" FunctionName="GymTECModel.Store.deleteJob" />
+    <FunctionImportMapping FunctionImportName="getJob" FunctionName="GymTECModel.Store.getJob" />
+    <FunctionImportMapping FunctionImportName="gettAllJobs" FunctionName="GymTECModel.Store.gettAllJobs" />
+    <FunctionImportMapping FunctionImportName="insertJob" FunctionName="GymTECModel.Store.insertJob" />
+    <FunctionImportMapping FunctionImportName="updateJob" FunctionName="GymTECModel.Store.updateJob" />
+    <FunctionImportMapping FunctionImportName="deletePayroll" FunctionName="GymTECModel.Store.deletePayroll" />
+    <FunctionImportMapping FunctionImportName="getAllPayrolls" FunctionName="GymTECModel.Store.getAllPayrolls" />
+    <FunctionImportMapping FunctionImportName="getPayroll" FunctionName="GymTECModel.Store.getPayroll" />
+    <FunctionImportMapping FunctionImportName="insertPayRoll" FunctionName="GymTECModel.Store.insertPayRoll" />
+    <FunctionImportMapping FunctionImportName="updatePayRoll" FunctionName="GymTECModel.Store.updatePayRoll" />
+    <FunctionImportMapping FunctionImportName="deleteTreatment" FunctionName="GymTECModel.Store.deleteTreatment" />
+    <FunctionImportMapping FunctionImportName="getAllTreatments" FunctionName="GymTECModel.Store.getAllTreatments" />
+    <FunctionImportMapping FunctionImportName="getTreatment" FunctionName="GymTECModel.Store.getTreatment" />
+    <FunctionImportMapping FunctionImportName="insertTreatment" FunctionName="GymTECModel.Store.insertTreatment" />
+    <FunctionImportMapping FunctionImportName="updateTreatment" FunctionName="GymTECModel.Store.updateTreatment" />
   </EntityContainerMapping>
 </Mapping>

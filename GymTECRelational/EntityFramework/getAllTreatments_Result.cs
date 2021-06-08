@@ -10,11 +10,10 @@
 namespace GymTECRelational.EntityFramework
 {
     using System;
-    using System.Collections.Generic;
     
-    public partial class Planilla
+    public partial class getAllTreatments_Result
     {
+        public int Id { get; set; }
         public string Nombre { get; set; }
-        public string Descripcion { get; set; }
     }
 }

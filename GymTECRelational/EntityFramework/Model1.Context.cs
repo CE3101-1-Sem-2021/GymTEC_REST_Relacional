@@ -27,7 +27,6 @@ namespace GymTECRelational.EntityFramework
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<Administrador> Administradors { get; set; }
         public virtual DbSet<Clase> Clases { get; set; }
         public virtual DbSet<Cliente_Clase> Cliente_Clase { get; set; }
         public virtual DbSet<Direccion> Direccions { get; set; }
@@ -42,14 +41,14 @@ namespace GymTECRelational.EntityFramework
         public virtual DbSet<Tratamiento_Spa> Tratamiento_Spa { get; set; }
         public virtual DbSet<Sucursal_Telefono> Sucursal_Telefono { get; set; }
     
-        public virtual ObjectResult<Administrador> selectAllAdmins()
+        public virtual ObjectResult<Empleado> selectAllAdmins()
         {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Administrador>("selectAllAdmins");
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Empleado>("selectAllAdmins");
         }
     
-        public virtual ObjectResult<Administrador> selectAllAdmins(MergeOption mergeOption)
+        public virtual ObjectResult<Empleado> selectAllAdmins(MergeOption mergeOption)
         {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Administrador>("selectAllAdmins", mergeOption);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Empleado>("selectAllAdmins", mergeOption);
         }
     
         public virtual ObjectResult<Nullable<bool>> insertEmployee(string cedula, string puesto, string planilla, string distrito, string canton, string provincia, string sucursal, string nombre, string apellidos, Nullable<decimal> salario, string email, string contraseña, string salt, string token)
@@ -175,22 +174,13 @@ namespace GymTECRelational.EntityFramework
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("assignTokenEmployee", tokenParameter, idParameter);
         }
     
-        public virtual ObjectResult<Administrador> getAdminByMail(string email)
+        public virtual int getAdminByMail(string email)
         {
             var emailParameter = email != null ?
                 new ObjectParameter("Email", email) :
                 new ObjectParameter("Email", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Administrador>("getAdminByMail", emailParameter);
-        }
-    
-        public virtual ObjectResult<Administrador> getAdminByMail(string email, MergeOption mergeOption)
-        {
-            var emailParameter = email != null ?
-                new ObjectParameter("Email", email) :
-                new ObjectParameter("Email", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Administrador>("getAdminByMail", mergeOption, emailParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("getAdminByMail", emailParameter);
         }
     
         public virtual int insertAdmin(string email, string nombre, string apellidos, string contraseña, string salt, string token)
@@ -586,6 +576,199 @@ namespace GymTECRelational.EntityFramework
                 new ObjectParameter("Descripcion", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("updateMachineType", currentTypeNameParameter, nombreParameter, descripcionParameter);
+        }
+    
+        public virtual int deleteJob(string nombre)
+        {
+            var nombreParameter = nombre != null ?
+                new ObjectParameter("Nombre", nombre) :
+                new ObjectParameter("Nombre", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("deleteJob", nombreParameter);
+        }
+    
+        public virtual ObjectResult<Puesto> getJob(string nombre)
+        {
+            var nombreParameter = nombre != null ?
+                new ObjectParameter("Nombre", nombre) :
+                new ObjectParameter("Nombre", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Puesto>("getJob", nombreParameter);
+        }
+    
+        public virtual ObjectResult<Puesto> getJob(string nombre, MergeOption mergeOption)
+        {
+            var nombreParameter = nombre != null ?
+                new ObjectParameter("Nombre", nombre) :
+                new ObjectParameter("Nombre", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Puesto>("getJob", mergeOption, nombreParameter);
+        }
+    
+        public virtual ObjectResult<Puesto> gettAllJobs()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Puesto>("gettAllJobs");
+        }
+    
+        public virtual ObjectResult<Puesto> gettAllJobs(MergeOption mergeOption)
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Puesto>("gettAllJobs", mergeOption);
+        }
+    
+        public virtual int insertJob(string nombre, string descripcion)
+        {
+            var nombreParameter = nombre != null ?
+                new ObjectParameter("Nombre", nombre) :
+                new ObjectParameter("Nombre", typeof(string));
+    
+            var descripcionParameter = descripcion != null ?
+                new ObjectParameter("Descripcion", descripcion) :
+                new ObjectParameter("Descripcion", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("insertJob", nombreParameter, descripcionParameter);
+        }
+    
+        public virtual int updateJob(string currentName, string nombre, string descripcion)
+        {
+            var currentNameParameter = currentName != null ?
+                new ObjectParameter("CurrentName", currentName) :
+                new ObjectParameter("CurrentName", typeof(string));
+    
+            var nombreParameter = nombre != null ?
+                new ObjectParameter("Nombre", nombre) :
+                new ObjectParameter("Nombre", typeof(string));
+    
+            var descripcionParameter = descripcion != null ?
+                new ObjectParameter("Descripcion", descripcion) :
+                new ObjectParameter("Descripcion", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("updateJob", currentNameParameter, nombreParameter, descripcionParameter);
+        }
+    
+        public virtual int deletePayroll(string nombre)
+        {
+            var nombreParameter = nombre != null ?
+                new ObjectParameter("Nombre", nombre) :
+                new ObjectParameter("Nombre", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("deletePayroll", nombreParameter);
+        }
+    
+        public virtual ObjectResult<Planilla> getAllPayrolls()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Planilla>("getAllPayrolls");
+        }
+    
+        public virtual ObjectResult<Planilla> getAllPayrolls(MergeOption mergeOption)
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Planilla>("getAllPayrolls", mergeOption);
+        }
+    
+        public virtual ObjectResult<Planilla> getPayroll(string nombre)
+        {
+            var nombreParameter = nombre != null ?
+                new ObjectParameter("Nombre", nombre) :
+                new ObjectParameter("Nombre", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Planilla>("getPayroll", nombreParameter);
+        }
+    
+        public virtual ObjectResult<Planilla> getPayroll(string nombre, MergeOption mergeOption)
+        {
+            var nombreParameter = nombre != null ?
+                new ObjectParameter("Nombre", nombre) :
+                new ObjectParameter("Nombre", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Planilla>("getPayroll", mergeOption, nombreParameter);
+        }
+    
+        public virtual int insertPayRoll(string nombre, string descripcion)
+        {
+            var nombreParameter = nombre != null ?
+                new ObjectParameter("Nombre", nombre) :
+                new ObjectParameter("Nombre", typeof(string));
+    
+            var descripcionParameter = descripcion != null ?
+                new ObjectParameter("Descripcion", descripcion) :
+                new ObjectParameter("Descripcion", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("insertPayRoll", nombreParameter, descripcionParameter);
+        }
+    
+        public virtual int updatePayRoll(string currentName, string nombre, string descripcion)
+        {
+            var currentNameParameter = currentName != null ?
+                new ObjectParameter("CurrentName", currentName) :
+                new ObjectParameter("CurrentName", typeof(string));
+    
+            var nombreParameter = nombre != null ?
+                new ObjectParameter("Nombre", nombre) :
+                new ObjectParameter("Nombre", typeof(string));
+    
+            var descripcionParameter = descripcion != null ?
+                new ObjectParameter("Descripcion", descripcion) :
+                new ObjectParameter("Descripcion", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("updatePayRoll", currentNameParameter, nombreParameter, descripcionParameter);
+        }
+    
+        public virtual int deleteTreatment(Nullable<int> id)
+        {
+            var idParameter = id.HasValue ?
+                new ObjectParameter("Id", id) :
+                new ObjectParameter("Id", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("deleteTreatment", idParameter);
+        }
+    
+        public virtual ObjectResult<Tratamiento_Spa> getAllTreatments()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Tratamiento_Spa>("getAllTreatments");
+        }
+    
+        public virtual ObjectResult<Tratamiento_Spa> getAllTreatments(MergeOption mergeOption)
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Tratamiento_Spa>("getAllTreatments", mergeOption);
+        }
+    
+        public virtual ObjectResult<Tratamiento_Spa> getTreatment(Nullable<int> id)
+        {
+            var idParameter = id.HasValue ?
+                new ObjectParameter("Id", id) :
+                new ObjectParameter("Id", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Tratamiento_Spa>("getTreatment", idParameter);
+        }
+    
+        public virtual ObjectResult<Tratamiento_Spa> getTreatment(Nullable<int> id, MergeOption mergeOption)
+        {
+            var idParameter = id.HasValue ?
+                new ObjectParameter("Id", id) :
+                new ObjectParameter("Id", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Tratamiento_Spa>("getTreatment", mergeOption, idParameter);
+        }
+    
+        public virtual int insertTreatment(string nombre)
+        {
+            var nombreParameter = nombre != null ?
+                new ObjectParameter("Nombre", nombre) :
+                new ObjectParameter("Nombre", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("insertTreatment", nombreParameter);
+        }
+    
+        public virtual int updateTreatment(Nullable<int> currentId, string nombre)
+        {
+            var currentIdParameter = currentId.HasValue ?
+                new ObjectParameter("CurrentId", currentId) :
+                new ObjectParameter("CurrentId", typeof(int));
+    
+            var nombreParameter = nombre != null ?
+                new ObjectParameter("Nombre", nombre) :
+                new ObjectParameter("Nombre", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("updateTreatment", currentIdParameter, nombreParameter);
         }
     }
 }

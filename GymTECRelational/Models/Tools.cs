@@ -25,78 +25,44 @@ namespace GymTECRelational.Models
          * Entrada:Datos del nuevo usuario
          * Salida: Respuesta de tipo HTTP que indica si la operacion fue exitosa.
          */
-        public HttpResponseMessage registerRequest(Object user)
+        public HttpResponseMessage registerRequest(Empleado employee)
         {
             HttpResponseMessage response = null;
             
-            if (user is Empleado)
-            {
-                Empleado employee = (Empleado)user;
                 
-                if (context.Empleadoes.Any(o => o.Cedula == employee.Cedula))
-                {
-                    response = new HttpResponseMessage(HttpStatusCode.Conflict);
-                    response.Content = new StringContent("La cedula provista ya esta registrada!");
-                    return response;
-                }
-                if (context.Empleadoes.Any(o => o.Email == employee.Email))
-                {
-                    response = new HttpResponseMessage(HttpStatusCode.Conflict);
-                    response.Content = new StringContent("El correo porvisto ya esta registrado!");
-                    return response;
-                }
-                employee.Token = getToken();
-                List<string> cryptoComponents = md5Encryption(employee.Contraseña);
-
-                employee.Contraseña = cryptoComponents[0];
-                employee.Salt = cryptoComponents[1];
-
-                try
-                {
-                    context.Empleadoes.Add(employee);
-                    context.SaveChanges();
-                    response = new HttpResponseMessage(HttpStatusCode.OK);
-                    response.Content = new StringContent("Empleado registrado correctamente!");
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e.ToString());
-                    response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
-                    response.Content = new StringContent("Error inesperado!");
-
-                }
-            }
-            else if(user is Administrador)
+            if (context.Empleadoes.Any(o => o.Cedula == employee.Cedula))
             {
-                Administrador admin = (Administrador)user;
-                if (context.Administradors.Any(o => o.Email == admin.Email))
-                {
-                    response = new HttpResponseMessage(HttpStatusCode.Conflict);
-                    response.Content = new StringContent("El correo porvisto ya esta registrado!");
-                    return response;
-                }
-                admin.Token = getToken();
-                List<string> cryptoComponents = md5Encryption(admin.Contraseña);
+                response = new HttpResponseMessage(HttpStatusCode.Conflict);
+                response.Content = new StringContent("La cedula provista ya esta registrada!");
+                return response;
+            }
+            if (context.Empleadoes.Any(o => o.Email == employee.Email))
+            {
+                response = new HttpResponseMessage(HttpStatusCode.Conflict);
+                response.Content = new StringContent("El correo porvisto ya esta registrado!");
+                return response;
+            }
+            employee.Token = getToken();
+            List<string> cryptoComponents = md5Encryption(employee.Contraseña);
 
-                admin.Contraseña = cryptoComponents[0];
-                admin.Salt = cryptoComponents[1];
+            employee.Contraseña = cryptoComponents[0];
+            employee.Salt = cryptoComponents[1];
 
-                try
-                {
-                    context.Administradors.Add(admin);
-                    context.SaveChanges();
-                    response = new HttpResponseMessage(HttpStatusCode.OK);
-                    response.Content = new StringContent("Administrador registrado correctamente!");
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e.ToString());
-                    response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
-                    response.Content = new StringContent("Error inesperado!");
-
-                }
+            try
+            {
+                context.Empleadoes.Add(employee);
+                context.SaveChanges();
+                response = new HttpResponseMessage(HttpStatusCode.OK);
+                response.Content = new StringContent("Empleado registrado correctamente!");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+                response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
+                response.Content = new StringContent("Error inesperado!");
 
             }
+            
             return response;
             
         }
@@ -106,65 +72,42 @@ namespace GymTECRelational.Models
          * Entrada:Credenciales del usuario
          * Salida: Token para la sesion del usuario.
          */
-        public HttpResponseMessage loginRequest(Object credentials)
+        public HttpResponseMessage loginRequest(Empleado credentials)
         {
             HttpResponseMessage response = null;
-            if (credentials is Empleado)
+            
+
+            if (context.Empleadoes.Any(o => o.Email == credentials.Email))
             {
-                Empleado employeeCred = (Empleado)credentials;
-                if (context.Empleadoes.Any(o => o.Email == employeeCred.Email))
+
+                Empleado employee = context.getEmployeeByMail(credentials.Email).ToList<Empleado>()[0];
+
+                if (employee.Puesto == credentials.Puesto)
                 {
-
-                    Empleado employee = context.getEmployeeByMail(employeeCred.Email).ToList<Empleado>()[0];
-
-                    if (employee.Puesto == employeeCred.Puesto)
+                    if (employee.Puesto == "Sin Asignar")
                     {
-                        if (employee.Puesto == "Sin Asignar")
-                        {
-                            response = new HttpResponseMessage(HttpStatusCode.Conflict);
-                            response.Content = new StringContent("El empleado no tiene acceso al sistema");
-                            return response;
-                        }
-                        if (passwordVerifier(employeeCred.Contraseña, employee.Contraseña, employee.Salt))
-                        {
-                            var token = getToken();
-                            context.assignTokenEmployee(token, employee.Cedula);
-                            response = new HttpResponseMessage(HttpStatusCode.OK);
-                            response.Content = new StringContent(token);
-                            return response;
-                        }
+                        response = new HttpResponseMessage(HttpStatusCode.Conflict);
+                        response.Content = new StringContent("El empleado no tiene acceso al sistema");
+                        return response;
                     }
-                    response = new HttpResponseMessage(HttpStatusCode.Conflict);
-                    response.Content = new StringContent("El empleado no desempeña el puesto indicado");
-                    return response;
-
-                }
-                response = new HttpResponseMessage(HttpStatusCode.Conflict);
-                response.Content = new StringContent("Contraseña o correo incorrecto");
-                return response;
-            }
-            else if (credentials is Administrador)
-            {
-                Administrador adminCred = (Administrador)credentials;
-                if (context.Administradors.Any(o => o.Email == adminCred.Email))
-                {
-                    Administrador admin = context.getAdminByMail(adminCred.Email).ToList<Administrador>()[0];
-                    if(passwordVerifier(adminCred.Contraseña,admin.Contraseña,admin.Salt))
+                    if (passwordVerifier(credentials.Contraseña, employee.Contraseña, employee.Salt))
                     {
                         var token = getToken();
-                        context.assignTokenAdmin(token, admin.Id);
+                        context.assignTokenEmployee(token, employee.Cedula);
                         response = new HttpResponseMessage(HttpStatusCode.OK);
                         response.Content = new StringContent(token);
                         return response;
                     }
                 }
                 response = new HttpResponseMessage(HttpStatusCode.Conflict);
-                response.Content = new StringContent("Contraseña o correo incorrecto");
+                response.Content = new StringContent("El empleado no desempeña el puesto indicado");
                 return response;
+
             }
             response = new HttpResponseMessage(HttpStatusCode.Conflict);
-            response.Content = new StringContent("Tipo de usuario desconocido");
+            response.Content = new StringContent("Contraseña o correo incorrecto");
             return response;
+            
         }
         /*Metodo para crear un nuevo gimnasio.
          * 
@@ -551,6 +494,238 @@ namespace GymTECRelational.Models
             return response;
         }
 
+        /*Metodo para añadir un nuevo puesto de trabajo a la base de datos.
+        * 
+        * Entradas:Token del administrador que realiza la operacion,informacion del puesto de trabajo a agregar 
+        * Salidas:Respuesta de tipo HTTP que indica si la operacion fue exitosa.
+        */
+        public HttpResponseMessage createJob(Puesto job,string token)
+        {
+            HttpResponseMessage response = null;
+
+            if(tokenVerifier(token,"Admin"))
+            {
+
+                if(!context.Puestoes.Any(o=> o.Nombre==job.Nombre))
+                {
+                    try
+                    {
+                        context.Puestoes.Add(job);
+                        context.SaveChanges();
+                        response = new HttpResponseMessage(HttpStatusCode.OK);
+                        response.Content = new StringContent("Puesto agregado correctamente!");
+                        return response;
+                    }
+                    catch (Exception e)
+                    {
+                        response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
+                        response.Content = new StringContent("Error inesperado");
+                        return response;
+                    }
+                }
+                response = new HttpResponseMessage(HttpStatusCode.Conflict);
+                response.Content = new StringContent("El nombre del puesto que se quiere agregar ya se encuentra registrado");
+                return response;
+
+            }
+            response = new HttpResponseMessage(HttpStatusCode.Conflict);
+            response.Content = new StringContent("Token invalido");
+            return response;
+
+        }
+
+        /*Metodo para modificar un puesto de trabajo en la base de datos.
+      * 
+      * Entradas:Token del administrador que realiza la operacion,informacion actualizada del puesto de trabajo a moodificar,nombre actual del puesto de trabajo 
+      * Salidas:Respuesta de tipo HTTP que indica si la operacion fue exitosa.
+      */
+        public HttpResponseMessage updateJob(Puesto job, string token, string currentName)
+        {
+            HttpResponseMessage response = null;
+
+            if (tokenVerifier(token, "Admin"))
+            {
+                if (context.Puestoes.Any(o => o.Nombre == currentName))
+                {
+                    if (job.Nombre == currentName || !context.Puestoes.Any(o => o.Nombre == job.Nombre))
+                    {
+                        try
+                        {
+                            context.updateJob(currentName, job.Nombre, job.Descripcion);
+                            context.SaveChanges();
+                            response = new HttpResponseMessage(HttpStatusCode.OK);
+                            response.Content = new StringContent("Puesto modificado correctamente!");
+                            return response;
+                        }
+                        catch (Exception e)
+                        {
+                            response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
+                            response.Content = new StringContent("Error inesperado");
+                            return response;
+                        }
+                    }
+                    response = new HttpResponseMessage(HttpStatusCode.Conflict);
+                    response.Content = new StringContent("El nuevo nombre del puesto ya se encuentra registrado");
+                    return response;
+                }
+                response = new HttpResponseMessage(HttpStatusCode.Conflict);
+                response.Content = new StringContent("El puesto que se quiere modificar no se encuentra registrado");
+                return response;
+            }
+            response = new HttpResponseMessage(HttpStatusCode.Conflict);
+            response.Content = new StringContent("Token invalido");
+            return response;
+        }
+
+        /*Metodo para añadir una nueva planilla a la base de datos.
+        * 
+        * Entradas:Token del administrador que realiza la operacion,informacion de la planilla a agregar 
+        * Salidas:Respuesta de tipo HTTP que indica si la operacion fue exitosa.
+        */
+        public HttpResponseMessage createPayroll(Planilla payRoll, string token)
+        {
+            HttpResponseMessage response = null;
+
+            if (tokenVerifier(token, "Admin"))
+            {
+
+                if (!context.Planillas.Any(o => o.Nombre == payRoll.Nombre))
+                {
+                    try
+                    {
+                        context.Planillas.Add(payRoll);
+                        context.SaveChanges();
+                        response = new HttpResponseMessage(HttpStatusCode.OK);
+                        response.Content = new StringContent("Planilla agregada correctamente!");
+                        return response;
+                    }
+                    catch (Exception e)
+                    {
+                        response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
+                        response.Content = new StringContent("Error inesperado");
+                        return response;
+                    }
+                }
+                response = new HttpResponseMessage(HttpStatusCode.Conflict);
+                response.Content = new StringContent("El nombre de la planilla que se quiere agregar ya se encuentra registrado");
+                return response;
+
+            }
+            response = new HttpResponseMessage(HttpStatusCode.Conflict);
+            response.Content = new StringContent("Token invalido");
+            return response;
+
+        }
+
+        /*Metodo para modificar una planilla en la base de datos.
+        * 
+        * Entradas:Token del administrador que realiza la operacion,informacion actualizada de la planilla a modificar,nombre actual de la planilla 
+        * Salidas:Respuesta de tipo HTTP que indica si la operacion fue exitosa.
+        */
+        public HttpResponseMessage updatePayroll(Planilla payRoll, string token, string currentName)
+        {
+            HttpResponseMessage response = null;
+
+            if (tokenVerifier(token, "Admin"))
+            {
+                if (context.Planillas.Any(o => o.Nombre == currentName))
+                {
+                    if (payRoll.Nombre == currentName || !context.Planillas.Any(o => o.Nombre == payRoll.Nombre))
+                    {
+                        try
+                        {
+                            context.updatePayRoll(currentName, payRoll.Nombre, payRoll.Descripcion);
+                            context.SaveChanges();
+                            response = new HttpResponseMessage(HttpStatusCode.OK);
+                            response.Content = new StringContent("Planilla modificada correctamente!");
+                            return response;
+                        }
+                        catch (Exception e)
+                        {
+                            response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
+                            response.Content = new StringContent("Error inesperado");
+                            return response;
+                        }
+                    }
+                    response = new HttpResponseMessage(HttpStatusCode.Conflict);
+                    response.Content = new StringContent("El nuevo nombre de la planilla ya se encuentra registrado");
+                    return response;
+                }
+                response = new HttpResponseMessage(HttpStatusCode.Conflict);
+                response.Content = new StringContent("La planilla que se quiere modificar no se encuentra registrada");
+                return response;
+            }
+            response = new HttpResponseMessage(HttpStatusCode.Conflict);
+            response.Content = new StringContent("Token invalido");
+            return response;
+        }
+
+        /*Metodo para añadir un nuevo tratamiento a la base de datos.
+        * 
+        * Entradas:Token del administrador que realiza la operacion,informacion del tratamiento a agregar 
+        * Salidas:Respuesta de tipo HTTP que indica si la operacion fue exitosa.
+        */
+        public HttpResponseMessage createTreatment(Tratamiento_Spa treatment, string token)
+        {
+            HttpResponseMessage response = null;
+
+            if (tokenVerifier(token, "Admin"))
+            {
+
+                try
+                {
+                    context.Tratamiento_Spa.Add(treatment);
+                    context.SaveChanges();
+                    response = new HttpResponseMessage(HttpStatusCode.OK);
+                    response.Content = new StringContent("Tratamiento agregado correctamente!");
+                    return response;
+                }
+                catch (Exception e)
+                {
+                    response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
+                    response.Content = new StringContent("Error inesperado");
+                    return response;
+                }
+
+            }
+            response = new HttpResponseMessage(HttpStatusCode.Conflict);
+            response.Content = new StringContent("Token invalido");
+            return response;
+
+        }
+
+        /*Metodo para modificar un tratamiento en la base de datos.
+        * 
+        * Entradas:Token del administrador que realiza la operacion,informacion actualizada del tratamiento a modificar
+        * Salidas:Respuesta de tipo HTTP que indica si la operacion fue exitosa.
+        */
+        public HttpResponseMessage updateTreatment(Tratamiento_Spa treatment, string token)
+        {
+            HttpResponseMessage response = null;
+
+            if (tokenVerifier(token, "Admin"))
+            {
+                try
+                {
+                    context.updateTreatment(treatment.Id,treatment.Nombre);
+                    context.SaveChanges();
+                    response = new HttpResponseMessage(HttpStatusCode.OK);
+                    response.Content = new StringContent("Tratamiento modificado correctamente!");
+                    return response;
+                }
+                catch (Exception e)
+                {
+                    response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
+                    response.Content = new StringContent("Error inesperado");
+                    return response;
+                }
+                 
+            }
+            response = new HttpResponseMessage(HttpStatusCode.Conflict);
+            response.Content = new StringContent("Token invalido");
+            return response;
+        }
+
         /*Metodo para obtener un token unico.
          * 
          * Entradas:-
@@ -604,7 +779,7 @@ namespace GymTECRelational.Models
         {
             if(type.Equals("Admin"))
             {
-                return context.Administradors.Any(o => o.Token == token);
+                return context.Empleadoes.Any(o => o.Token == token && o.Puesto=="Administrador");
             }
             return context.Empleadoes.Any(o => o.Token == token);
         }
@@ -636,7 +811,19 @@ namespace GymTECRelational.Models
                         }
                         else if(table.Equals("Tipo_Equipo"))
                         {
-                        context.deleteMachineType(id);
+                            context.deleteMachineType(id);
+                        }
+                        else if(table.Equals("Puesto"))
+                        {
+                            context.deleteJob(id);
+                        }
+                        else if(table.Equals("Planilla"))
+                        {
+                            context.deletePayroll(id);
+                        }
+                        else if(table.Equals("Tratamiento_Spa"))
+                        {
+                            context.deleteTreatment(Convert.ToInt32(id));
                         }
                         else
                         {

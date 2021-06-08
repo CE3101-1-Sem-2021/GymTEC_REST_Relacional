@@ -14,13 +14,6 @@ namespace GymTECRelational.EntityFramework
     
     public partial class Empleado
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Empleado()
-        {
-            this.Clases = new HashSet<Clase>();
-            this.Sucursals = new HashSet<Sucursal>();
-        }
-    
         public string Cedula { get; set; }
         public string Puesto { get; set; }
         public string Planilla { get; set; }
@@ -35,14 +28,5 @@ namespace GymTECRelational.EntityFramework
         public string Contraseña { get; set; }
         public string Salt { get; set; }
         public string Token { get; set; }
-    
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Clase> Clases { get; set; }
-        public virtual Direccion Direccion { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Sucursal> Sucursals { get; set; }
-        public virtual Planilla Planilla1 { get; set; }
-        public virtual Puesto Puesto1 { get; set; }
-        public virtual Sucursal Sucursal1 { get; set; }
     }
 }

@@ -19,11 +19,11 @@ namespace GymTECRelational.Controllers
          * Entrada:-
          * Salida: Lista de administradores.
          */
-        public List<Administrador> Get()
+        public List<Empleado> Get()
         {
             using (GymTECEntities context =new GymTECEntities())
             {
-                return context.selectAllAdmins().ToList<Administrador>();
+                return context.selectAllAdmins().ToList<Empleado>();
             }
         }
 
@@ -33,20 +33,22 @@ namespace GymTECRelational.Controllers
             return "value";
         }
 
-        /*Metodo para realizar lass operaciones de registro y login de los administradores.
+        /*Metodo para realizar las operaciones de registro y login de los administradores.
          * 
          * Entrada:Datos del administrador,tipo de operacion a realizar
          * Salida: Respuesta de tipo HTTP que indica si la operacion fue exitosa.
          */
         [Route("api/Admin/{requestType}")]
-        public HttpResponseMessage Post([FromBody] Administrador admin, string requestType)
+        public HttpResponseMessage Post([FromBody] Empleado admin, string requestType)
         {
             if (requestType == "login")
             {
+                admin.Puesto = "Administrador";
                 return tools.loginRequest(admin);
             }
             else if (requestType == "register")
             {
+                admin.Puesto = "Administrador";
                 return tools.registerRequest(admin);
             }
             return Request.CreateResponse(HttpStatusCode.Conflict, "Operacion no reconocida");

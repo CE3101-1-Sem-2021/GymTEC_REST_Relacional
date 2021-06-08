@@ -66,7 +66,7 @@ namespace GymTECRelational.Controllers
 
         /*Metodo para modificar una maquina ya registrada.
         * 
-        * Entrada: Token del administrador que realiza la solicitud,datos de la maquina a registrar.
+        * Entrada: Token del administrador que realiza la solicitud,datos de la maquina a modificar.
         * Salida: Respuesta de tipo HTTP que indica si la operacion fue exitosa.
          */
         [Route("api/Maquina/updateMachine/{currentSerial}/{token}")]

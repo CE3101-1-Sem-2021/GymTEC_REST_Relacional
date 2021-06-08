@@ -10,9 +10,8 @@
 namespace GymTECRelational.EntityFramework
 {
     using System;
-    using System.Collections.Generic;
     
-    public partial class Planilla
+    public partial class getJob_Result
     {
         public string Nombre { get; set; }
         public string Descripcion { get; set; }
