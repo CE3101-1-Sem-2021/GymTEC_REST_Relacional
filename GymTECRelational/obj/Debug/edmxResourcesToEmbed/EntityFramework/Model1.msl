@@ -344,5 +344,41 @@
     <FunctionImportMapping FunctionImportName="getTreatment" FunctionName="GymTECModel.Store.getTreatment" />
     <FunctionImportMapping FunctionImportName="insertTreatment" FunctionName="GymTECModel.Store.insertTreatment" />
     <FunctionImportMapping FunctionImportName="updateTreatment" FunctionName="GymTECModel.Store.updateTreatment" />
+    <FunctionImportMapping FunctionImportName="createProduct" FunctionName="GymTECModel.Store.createProduct" />
+    <FunctionImportMapping FunctionImportName="createService" FunctionName="GymTECModel.Store.createService" />
+    <FunctionImportMapping FunctionImportName="deleteEmployee" FunctionName="GymTECModel.Store.deleteEmployee" />
+    <FunctionImportMapping FunctionImportName="deleteProduct" FunctionName="GymTECModel.Store.deleteProduct" />
+    <FunctionImportMapping FunctionImportName="deleteService" FunctionName="GymTECModel.Store.deleteService" />
+    <FunctionImportMapping FunctionImportName="getAllProducts" FunctionName="GymTECModel.Store.getAllProducts" />
+    <FunctionImportMapping FunctionImportName="getAllServices" FunctionName="GymTECModel.Store.getAllServices" />
+    <FunctionImportMapping FunctionImportName="getProduct" FunctionName="GymTECModel.Store.getProduct" />
+    <FunctionImportMapping FunctionImportName="getService" FunctionName="GymTECModel.Store.getService" />
+    <FunctionImportMapping FunctionImportName="selectAllEmployees" FunctionName="GymTECModel.Store.selectAllEmployees">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="GymTECModel.selectAllEmployees_Result">
+          <ScalarProperty Name="Cedula" ColumnName="Cedula" />
+          <ScalarProperty Name="Puesto" ColumnName="Puesto" />
+          <ScalarProperty Name="Planilla" ColumnName="Planilla" />
+          <ScalarProperty Name="Distrito" ColumnName="Distrito" />
+          <ScalarProperty Name="Canton" ColumnName="Canton" />
+          <ScalarProperty Name="Provincia" ColumnName="Provincia" />
+          <ScalarProperty Name="Sucursal" ColumnName="Sucursal" />
+          <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+          <ScalarProperty Name="Apellidos" ColumnName="Apellidos" />
+          <ScalarProperty Name="Salario" ColumnName="Salario" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="Contraseña" ColumnName="Contraseña" />
+          <ScalarProperty Name="Salt" ColumnName="Salt" />
+          <ScalarProperty Name="Token" ColumnName="Token" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="updateEmployee" FunctionName="GymTECModel.Store.updateEmployee" />
+    <FunctionImportMapping FunctionImportName="updateProduct" FunctionName="GymTECModel.Store.updateProduct" />
+    <FunctionImportMapping FunctionImportName="updateService" FunctionName="GymTECModel.Store.updateService" />
+    <FunctionImportMapping FunctionImportName="assignProduct" FunctionName="GymTECModel.Store.assignProduct" />
+    <FunctionImportMapping FunctionImportName="unsignProduct" FunctionName="GymTECModel.Store.unsignProduct" />
+    <FunctionImportMapping FunctionImportName="assignTreatment" FunctionName="GymTECModel.Store.assignTreatment" />
+    <FunctionImportMapping FunctionImportName="unsignTreatment" FunctionName="GymTECModel.Store.unsignTreatment" />
   </EntityContainerMapping>
 </Mapping>

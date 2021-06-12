@@ -109,6 +109,48 @@ namespace GymTECRelational.Models
             return response;
             
         }
+        
+
+        public HttpResponseMessage updateEmployee(string currentId,Empleado employee,string token)
+        {
+            HttpResponseMessage response = null;
+
+            if(tokenVerifier(token,"Admin"))
+            {
+                if(currentId==employee.Cedula||!context.Empleadoes.Any(o=>o.Cedula==employee.Cedula))
+                {
+                    Empleado temp = context.getEmployeeById(currentId).ToList()[0];
+                    if(temp.Email==employee.Email||!context.Empleadoes.Any(o=>employee.Email==employee.Email))
+                    {
+                        try
+                        {
+                            context.updateEmployee(currentId,employee.Cedula,employee.Puesto,employee.Planilla,employee.Distrito,employee.Canton,employee.Provincia,employee.Sucursal,employee.Nombre,employee.Apellidos,employee.Salario,employee.Email);
+                            context.SaveChanges();
+                            response = new HttpResponseMessage(HttpStatusCode.OK);
+                            response.Content = new StringContent("Empleado actualizado correctamente!");
+                            return response;
+                        }
+                        catch (Exception e)
+                        {
+                            Console.WriteLine(e.ToString());
+                            response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
+                            response.Content = new StringContent("Error inesperado!");
+                            return response;
+                        }
+                    }
+                    response = new HttpResponseMessage(HttpStatusCode.Conflict);
+                    response.Content = new StringContent("el nuevo correo ya se encuentra registrado por otro empleado");
+                    return response;
+                }
+                response = new HttpResponseMessage(HttpStatusCode.Conflict);
+                response.Content = new StringContent("La nueva cedula ya se encuentra registrada por otro empleado");
+                return response;
+            }
+            response = new HttpResponseMessage(HttpStatusCode.Conflict);
+            response.Content = new StringContent("Token invalido");
+            return response;
+        }
+
         /*Metodo para crear un nuevo gimnasio.
          * 
          * Entrada:Informacion del nuevo gimnasio,token del administrador que realiza el registro.
@@ -155,26 +197,22 @@ namespace GymTECRelational.Models
                 {
                     if(gymName==gym.Nombre||!context.Sucursals.Any(o=>o.Nombre==gym.Nombre))
                     {
-                        if(context.Direccions.Any(o=>o.Provincia==gym.Provincia)&& context.Direccions.Any(o => o.Canton == gym.Canton)&& context.Direccions.Any(o => o.Distrito == gym.Distrito))
+                        
+                        try
                         {
-                            try
-                            {
-                                context.updateGym(gymName,gym.Nombre,gym.Distrito,gym.Canton,gym.Provincia,gym.Fecha_Apertura,gym.Capacidad_Max,gym.Gerente);
-                                context.SaveChanges();
-                                response = new HttpResponseMessage(HttpStatusCode.OK);
-                                response.Content = new StringContent("Gimnasio actualizado correctamente!");
-                                return response;
-                            }
-                            catch(Exception e)
-                            {
-                                response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
-                                response.Content = new StringContent("Error inesperado");
-                                return response;
-                            }
+                            context.updateGym(gymName,gym.Nombre,gym.Distrito,gym.Canton,gym.Provincia,gym.Fecha_Apertura,gym.Capacidad_Max,gym.Gerente);
+                            context.SaveChanges();
+                            response = new HttpResponseMessage(HttpStatusCode.OK);
+                            response.Content = new StringContent("Gimnasio actualizado correctamente!");
+                            return response;
                         }
-                        response = new HttpResponseMessage(HttpStatusCode.Conflict);
-                        response.Content = new StringContent("La nueva direccion del gimnasio no esta registrada");
-                        return response;
+                        catch(Exception e)
+                        {
+                            response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
+                            response.Content = new StringContent("Error inesperado");
+                            return response;
+                        }
+                        
                     }
                     response = new HttpResponseMessage(HttpStatusCode.Conflict);
                     response.Content = new StringContent("El nuevo nombre que se le quiere asignar a la sucursal ya se encuentra registrado");
@@ -715,11 +753,311 @@ namespace GymTECRelational.Models
                 }
                 catch (Exception e)
                 {
+                    if(e.InnerException.Message.Split('\r')[0].Equals("defaultTreatmentModification"))
+                    {
+                        response = new HttpResponseMessage(HttpStatusCode.Conflict);
+                        response.Content = new StringContent("No es posible modificar los tratamientos por default");
+                        return response;
+                    }
+
                     response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
                     response.Content = new StringContent("Error inesperado");
                     return response;
                 }
                  
+            }
+            response = new HttpResponseMessage(HttpStatusCode.Conflict);
+            response.Content = new StringContent("Token invalido");
+            return response;
+        }
+
+
+        /*Metodo para asignar un tratamiento a una sede en especifico
+       * 
+       * Entradas:Token del administrador que realiza la operacion,identificador del tratamiento a asignar,sede a la que se le va a asignar
+       * Salidas:Respuesta de tipo HTTP que indica si la operacion fue exitosa.
+       */
+        public HttpResponseMessage assignTreatment(int treatmentId,string gymName,string token)
+        {
+            HttpResponseMessage response = null;
+
+            if(tokenVerifier(token,"Admin"))
+            {
+                if(!context.getTreatment(treatmentId).ToList()[0].Sucursal.Any(o=>o.Nombre==gymName))
+                {
+                    try
+                    {
+                        context.assignTreatment(treatmentId, gymName);
+                        context.SaveChanges();
+                        response = new HttpResponseMessage(HttpStatusCode.OK);
+                        response.Content = new StringContent("Tratamiento asignado correctamente!");
+                        return response;
+                    }
+                    catch (Exception e)
+                    {
+                        response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
+                        response.Content = new StringContent("Error inesperado");
+                        return response;
+                    }
+                }
+                response = new HttpResponseMessage(HttpStatusCode.Conflict);
+                response.Content = new StringContent("Este tratamiento ya se encuentra registrado en esta sede");
+                return response;
+            }
+            response = new HttpResponseMessage(HttpStatusCode.Conflict);
+            response.Content = new StringContent("Token invalido");
+            return response;
+        }
+
+        /*Metodo para desasignar un tratamiento de una sede en especifico
+        * 
+        * Entradas:Token del administrador que realiza la operacion,identificador del tratamiento a desasignar,sede a la que se le va a desasignar
+        * Salidas:Respuesta de tipo HTTP que indica si la operacion fue exitosa.
+        */
+        public HttpResponseMessage unsignTreatment(int treatmentId, string gymName, string token)
+        {
+            HttpResponseMessage response = null;
+
+            if (tokenVerifier(token, "Admin"))
+            {
+                if (context.getTreatment(treatmentId).ToList()[0].Sucursal.Any(o => o.Nombre == gymName))
+                {
+                    try
+                    {
+                        context.unsignTreatment(treatmentId, gymName);
+                        context.SaveChanges();
+                        response = new HttpResponseMessage(HttpStatusCode.OK);
+                        response.Content = new StringContent("Tratamiento desasignado correctamente!");
+                        return response;
+                    }
+                    catch (Exception e)
+                    {
+                        response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
+                        response.Content = new StringContent("Error inesperado");
+                        return response;
+                    }
+                }
+                response = new HttpResponseMessage(HttpStatusCode.Conflict);
+                response.Content = new StringContent("Este tratamiento no se encuentra registrado en esta sede");
+                return response;
+            }
+            response = new HttpResponseMessage(HttpStatusCode.Conflict);
+            response.Content = new StringContent("Token invalido");
+            return response;
+        }
+
+        /*Metodo para añadir un nuevo tipo de servicio a la base de datos.
+       * 
+       * Entradas:Token del administrador que realiza la operacion,informacion del tipo de servicio a agregar 
+       * Salidas:Respuesta de tipo HTTP que indica si la operacion fue exitosa.
+       */
+        public HttpResponseMessage createService(Tipo_Servicio service,string token)
+        {
+            HttpResponseMessage response = null;
+
+            if(tokenVerifier(token,"Admin"))
+            {
+                if(!context.Tipo_Servicio.Any(o=>o.Nombre==service.Nombre))
+                {
+                    try
+                    {
+                        context.Tipo_Servicio.Add(service);
+                        context.SaveChanges();
+                        response = new HttpResponseMessage(HttpStatusCode.OK);
+                        response.Content = new StringContent("Tipo de servicio agregado correctamente!");
+                        return response;
+                    }
+                    catch (Exception e)
+                    {
+                        response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
+                        response.Content = new StringContent("Error inesperado");
+                        return response;
+                    }
+                }
+                response = new HttpResponseMessage(HttpStatusCode.Conflict);
+                response.Content = new StringContent("El nombre del nuevo tipo de servicio ya se encuentra registrado");
+                return response;
+            }
+            response = new HttpResponseMessage(HttpStatusCode.Conflict);
+            response.Content = new StringContent("Token invalido");
+            return response;
+        }
+
+        /*Metodo para modificar un tipo de servicio en la base de datos.
+        * 
+        * Entradas:Token del administrador que realiza la operacion,informacion actualizada del tipo de servicio  a modificar
+        * Salidas:Respuesta de tipo HTTP que indica si la operacion fue exitosa.
+        */
+        public HttpResponseMessage updateService(string currentName,Tipo_Servicio service,string token)
+        {
+            HttpResponseMessage response = null;
+
+            if(tokenVerifier(token,"Admin"))
+            {
+
+                if(currentName==service.Nombre||!context.Tipo_Servicio.Any(o=>o.Nombre==service.Nombre))
+                {
+                    try
+                    {
+                        context.updateService(currentName,service.Nombre,service.Descripcion);
+                        context.SaveChanges();
+                        response = new HttpResponseMessage(HttpStatusCode.OK);
+                        response.Content = new StringContent("Servicio modificado correctamente!");
+                        return response;
+                    }
+                    catch (Exception e)
+                    {
+                        response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
+                        response.Content = new StringContent("Error inesperado");
+                        return response;
+                    }
+                }
+                response = new HttpResponseMessage(HttpStatusCode.Conflict);
+                response.Content = new StringContent("El nuevo nombre del servicio ya se encuentra registrado por otro servicio");
+                return response;
+
+            }
+            response = new HttpResponseMessage(HttpStatusCode.Conflict);
+            response.Content = new StringContent("Token invalido");
+            return response;
+
+        }
+
+
+        /*Metodo para añadir un nuevo producto a la base de datos.
+        * 
+        * Entradas:Token del administrador que realiza la operacion,informacion del producto a agregar 
+        * Salidas:Respuesta de tipo HTTP que indica si la operacion fue exitosa.
+        */
+        public HttpResponseMessage createProduct(Producto product,string token)
+        {
+            HttpResponseMessage response = null;
+            if(tokenVerifier(token,"Admin"))
+            {
+                if(!context.Productoes.Any(o=> o.Codigo_Barras==product.Codigo_Barras))
+                {
+                    try
+                    {
+                        context.Productoes.Add(product);
+                        context.SaveChanges();
+                        response = new HttpResponseMessage(HttpStatusCode.OK);
+                        response.Content = new StringContent("Producto agregado correctamente!");
+                        return response;
+                    }
+                    catch (Exception e)
+                    {
+                        response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
+                        response.Content = new StringContent("Error inesperado");
+                        return response;
+                    }
+                }
+                response = new HttpResponseMessage(HttpStatusCode.Conflict);
+                response.Content = new StringContent("El codigo de barras del nuevo producto ya se encuentra registrado");
+                return response;
+            }
+            response = new HttpResponseMessage(HttpStatusCode.Conflict);
+            response.Content = new StringContent("Token invalido");
+            return response;
+        }
+
+        /*Metodo para modificar un producto en la base de datos.
+        * 
+        * Entradas:Token del administrador que realiza la operacion,informacion actualizada del producto a modificar
+        * Salidas:Respuesta de tipo HTTP que indica si la operacion fue exitosa.
+        */
+        public HttpResponseMessage updateProduct(string currentCode, Producto product, string token)
+        {
+            HttpResponseMessage response = null;
+
+            if (tokenVerifier(token, "Admin"))
+            {
+
+                if (currentCode == product.Codigo_Barras ||!context.Productoes.Any(o => o.Codigo_Barras ==product.Codigo_Barras))
+                {
+                    try
+                    {
+                        context.updateProduct(currentCode,product.Codigo_Barras,product.Nombre,product.Descripcion,product.Costo);
+                        context.SaveChanges();
+                        response = new HttpResponseMessage(HttpStatusCode.OK);
+                        response.Content = new StringContent("Producto modificado correctamente!");
+                        return response;
+                    }
+                    catch (Exception e)
+                    {
+                        response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
+                        response.Content = new StringContent("Error inesperado");
+                        return response;
+                    }
+                }
+                response = new HttpResponseMessage(HttpStatusCode.Conflict);
+                response.Content = new StringContent("El nuevo codigo de barras ya se encuentra registrado por otro producto");
+                return response;
+
+            }
+            response = new HttpResponseMessage(HttpStatusCode.Conflict);
+            response.Content = new StringContent("Token invalido");
+            return response;
+
+        }
+
+        public HttpResponseMessage assignProduct(string barCode,string gymName,string token)
+        {
+            HttpResponseMessage response = null;
+
+            if(tokenVerifier(token,"Admin"))
+            {
+                if(!context.getProduct(barCode).ToList()[0].Sucursals.Any(o=>o.Nombre==gymName))
+                {
+                    try
+                    {
+                        context.assignProduct(barCode, gymName);
+                        context.SaveChanges();
+                        response = new HttpResponseMessage(HttpStatusCode.OK);
+                        response.Content = new StringContent("Producto asociado correctamente!");
+                        return response;
+                    }
+                    catch (Exception e)
+                    {
+                        response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
+                        response.Content = new StringContent("Error inesperado");
+                        return response;
+                    }
+                }
+                response = new HttpResponseMessage(HttpStatusCode.Conflict);
+                response.Content = new StringContent("El producto indicado ya se encuentra registrado en esta sucursal");
+                return response;
+            }
+            response = new HttpResponseMessage(HttpStatusCode.Conflict);
+            response.Content = new StringContent("Token invalido");
+            return response;
+        }
+
+        public HttpResponseMessage unsignProduct(string barCode, string gymName, string token)
+        {
+            HttpResponseMessage response = null;
+
+            if (tokenVerifier(token, "Admin"))
+            {
+                if (context.getProduct(barCode).ToList()[0].Sucursals.Any(o => o.Nombre == gymName))
+                {
+                    try
+                    {
+                        context.unsignProduct(barCode, gymName);
+                        context.SaveChanges();
+                        response = new HttpResponseMessage(HttpStatusCode.OK);
+                        response.Content = new StringContent("Producto desasociado correctamente!");
+                        return response;
+                    }
+                    catch (Exception e)
+                    {
+                        response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
+                        response.Content = new StringContent("Error inesperado");
+                        return response;
+                    }
+                }
+                response = new HttpResponseMessage(HttpStatusCode.Conflict);
+                response.Content = new StringContent("El producto indicado no se encuentra registrado en esta sucursal");
+                return response;
             }
             response = new HttpResponseMessage(HttpStatusCode.Conflict);
             response.Content = new StringContent("Token invalido");
@@ -801,6 +1139,10 @@ namespace GymTECRelational.Models
                         {
                            context.deleteGym(id);
                         }
+                        else if(table.Equals("Empleado"))
+                        {
+                            context.deleteEmployee(id);
+                        }
                         else if(table.Equals("SucursalTelefono"))
                         {
                             context.deletePhoneNumb(id);
@@ -821,9 +1163,38 @@ namespace GymTECRelational.Models
                         {
                             context.deletePayroll(id);
                         }
+                        else if(table.Equals("Tipo_Servicio"))
+                        {
+                            context.deleteService(id);
+                        }
+                        else if(table.Equals("Producto"))
+                        {
+                            context.deleteProduct(id);
+                        }
                         else if(table.Equals("Tratamiento_Spa"))
                         {
-                            context.deleteTreatment(Convert.ToInt32(id));
+                            try
+                            {
+                                context.deleteTreatment(Convert.ToInt32(id));
+                            }
+                            catch (Exception e)
+                            {
+                                if (e.InnerException.Message.Split('\r')[0].Equals("defaultTreatmentModification"))
+                                {
+                                    response = new HttpResponseMessage(HttpStatusCode.Conflict);
+                                    response.Content = new StringContent("No es posible eliminar los tratamientos por default");
+                                    return response;
+                                }
+                                else if (e.InnerException.Message.Split('\r')[0].Equals("assignedTreatment"))
+                                {
+                                    response = new HttpResponseMessage(HttpStatusCode.Conflict);
+                                    response.Content = new StringContent("No es posible eliminar un tratamiento que esta disponible en una sucursal");
+                                    return response;
+                                }
+                                response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
+                                response.Content = new StringContent("Error inesperado");
+                                return response;
+                            }
                         }
                         else
                         {

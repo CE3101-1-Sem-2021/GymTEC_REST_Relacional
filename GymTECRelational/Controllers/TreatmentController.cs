@@ -55,6 +55,22 @@ namespace GymTECRelational.Controllers
             return tools.createTreatment(treatment, token);
         }
 
+
+        [Route("api/Treatment/{type}/{treatmentId}/{gymName}/{token}")]
+        public HttpResponseMessage Post(string type,int treatmentId,string gymName,string token)
+        {
+            if (type.Equals("assignTreatment"))
+            {
+                return tools.assignTreatment(treatmentId,gymName,token);
+            }
+            else if(type.Equals("unsignTreatment"))
+            {
+                return tools.unsignTreatment(treatmentId,gymName,token);
+            }
+            return Request.CreateResponse(HttpStatusCode.Conflict, "Operacion desconocida");
+        }
+
+
         /*Metodo para modificar un tratamiento ya registrado.
         * 
         * Entrada: Token del administrador que realiza la solicitud,datos del tratamiento a modificar.

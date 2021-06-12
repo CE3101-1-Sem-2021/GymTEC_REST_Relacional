@@ -770,5 +770,274 @@ namespace GymTECRelational.EntityFramework
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("updateTreatment", currentIdParameter, nombreParameter);
         }
+    
+        public virtual int createProduct(string codigo_Barras, string nombre, string descripcion, Nullable<decimal> costo)
+        {
+            var codigo_BarrasParameter = codigo_Barras != null ?
+                new ObjectParameter("Codigo_Barras", codigo_Barras) :
+                new ObjectParameter("Codigo_Barras", typeof(string));
+    
+            var nombreParameter = nombre != null ?
+                new ObjectParameter("Nombre", nombre) :
+                new ObjectParameter("Nombre", typeof(string));
+    
+            var descripcionParameter = descripcion != null ?
+                new ObjectParameter("Descripcion", descripcion) :
+                new ObjectParameter("Descripcion", typeof(string));
+    
+            var costoParameter = costo.HasValue ?
+                new ObjectParameter("Costo", costo) :
+                new ObjectParameter("Costo", typeof(decimal));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("createProduct", codigo_BarrasParameter, nombreParameter, descripcionParameter, costoParameter);
+        }
+    
+        public virtual int createService(string nombre, string descripcion)
+        {
+            var nombreParameter = nombre != null ?
+                new ObjectParameter("Nombre", nombre) :
+                new ObjectParameter("Nombre", typeof(string));
+    
+            var descripcionParameter = descripcion != null ?
+                new ObjectParameter("Descripcion", descripcion) :
+                new ObjectParameter("Descripcion", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("createService", nombreParameter, descripcionParameter);
+        }
+    
+        public virtual int deleteEmployee(string cedula)
+        {
+            var cedulaParameter = cedula != null ?
+                new ObjectParameter("Cedula", cedula) :
+                new ObjectParameter("Cedula", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("deleteEmployee", cedulaParameter);
+        }
+    
+        public virtual int deleteProduct(string barCode)
+        {
+            var barCodeParameter = barCode != null ?
+                new ObjectParameter("BarCode", barCode) :
+                new ObjectParameter("BarCode", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("deleteProduct", barCodeParameter);
+        }
+    
+        public virtual int deleteService(string nombre)
+        {
+            var nombreParameter = nombre != null ?
+                new ObjectParameter("Nombre", nombre) :
+                new ObjectParameter("Nombre", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("deleteService", nombreParameter);
+        }
+    
+        public virtual ObjectResult<Producto> getAllProducts()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Producto>("getAllProducts");
+        }
+    
+        public virtual ObjectResult<Producto> getAllProducts(MergeOption mergeOption)
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Producto>("getAllProducts", mergeOption);
+        }
+    
+        public virtual ObjectResult<Tipo_Servicio> getAllServices()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Tipo_Servicio>("getAllServices");
+        }
+    
+        public virtual ObjectResult<Tipo_Servicio> getAllServices(MergeOption mergeOption)
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Tipo_Servicio>("getAllServices", mergeOption);
+        }
+    
+        public virtual ObjectResult<Producto> getProduct(string codigoBarras)
+        {
+            var codigoBarrasParameter = codigoBarras != null ?
+                new ObjectParameter("CodigoBarras", codigoBarras) :
+                new ObjectParameter("CodigoBarras", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Producto>("getProduct", codigoBarrasParameter);
+        }
+    
+        public virtual ObjectResult<Producto> getProduct(string codigoBarras, MergeOption mergeOption)
+        {
+            var codigoBarrasParameter = codigoBarras != null ?
+                new ObjectParameter("CodigoBarras", codigoBarras) :
+                new ObjectParameter("CodigoBarras", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Producto>("getProduct", mergeOption, codigoBarrasParameter);
+        }
+    
+        public virtual ObjectResult<Tipo_Servicio> getService(string nombre)
+        {
+            var nombreParameter = nombre != null ?
+                new ObjectParameter("Nombre", nombre) :
+                new ObjectParameter("Nombre", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Tipo_Servicio>("getService", nombreParameter);
+        }
+    
+        public virtual ObjectResult<Tipo_Servicio> getService(string nombre, MergeOption mergeOption)
+        {
+            var nombreParameter = nombre != null ?
+                new ObjectParameter("Nombre", nombre) :
+                new ObjectParameter("Nombre", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Tipo_Servicio>("getService", mergeOption, nombreParameter);
+        }
+    
+        public virtual ObjectResult<selectAllEmployees_Result> selectAllEmployees()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<selectAllEmployees_Result>("selectAllEmployees");
+        }
+    
+        public virtual int updateEmployee(string currentId, string cedula, string puesto, string planilla, string distrito, string canton, string provincia, string sucursal, string nombre, string apellidos, Nullable<decimal> salario, string email)
+        {
+            var currentIdParameter = currentId != null ?
+                new ObjectParameter("CurrentId", currentId) :
+                new ObjectParameter("CurrentId", typeof(string));
+    
+            var cedulaParameter = cedula != null ?
+                new ObjectParameter("Cedula", cedula) :
+                new ObjectParameter("Cedula", typeof(string));
+    
+            var puestoParameter = puesto != null ?
+                new ObjectParameter("Puesto", puesto) :
+                new ObjectParameter("Puesto", typeof(string));
+    
+            var planillaParameter = planilla != null ?
+                new ObjectParameter("Planilla", planilla) :
+                new ObjectParameter("Planilla", typeof(string));
+    
+            var distritoParameter = distrito != null ?
+                new ObjectParameter("Distrito", distrito) :
+                new ObjectParameter("Distrito", typeof(string));
+    
+            var cantonParameter = canton != null ?
+                new ObjectParameter("Canton", canton) :
+                new ObjectParameter("Canton", typeof(string));
+    
+            var provinciaParameter = provincia != null ?
+                new ObjectParameter("Provincia", provincia) :
+                new ObjectParameter("Provincia", typeof(string));
+    
+            var sucursalParameter = sucursal != null ?
+                new ObjectParameter("Sucursal", sucursal) :
+                new ObjectParameter("Sucursal", typeof(string));
+    
+            var nombreParameter = nombre != null ?
+                new ObjectParameter("Nombre", nombre) :
+                new ObjectParameter("Nombre", typeof(string));
+    
+            var apellidosParameter = apellidos != null ?
+                new ObjectParameter("Apellidos", apellidos) :
+                new ObjectParameter("Apellidos", typeof(string));
+    
+            var salarioParameter = salario.HasValue ?
+                new ObjectParameter("Salario", salario) :
+                new ObjectParameter("Salario", typeof(decimal));
+    
+            var emailParameter = email != null ?
+                new ObjectParameter("Email", email) :
+                new ObjectParameter("Email", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("updateEmployee", currentIdParameter, cedulaParameter, puestoParameter, planillaParameter, distritoParameter, cantonParameter, provinciaParameter, sucursalParameter, nombreParameter, apellidosParameter, salarioParameter, emailParameter);
+        }
+    
+        public virtual int updateProduct(string currentBarCode, string codigo_Barras, string nombre, string descripcion, Nullable<decimal> costo)
+        {
+            var currentBarCodeParameter = currentBarCode != null ?
+                new ObjectParameter("CurrentBarCode", currentBarCode) :
+                new ObjectParameter("CurrentBarCode", typeof(string));
+    
+            var codigo_BarrasParameter = codigo_Barras != null ?
+                new ObjectParameter("Codigo_Barras", codigo_Barras) :
+                new ObjectParameter("Codigo_Barras", typeof(string));
+    
+            var nombreParameter = nombre != null ?
+                new ObjectParameter("Nombre", nombre) :
+                new ObjectParameter("Nombre", typeof(string));
+    
+            var descripcionParameter = descripcion != null ?
+                new ObjectParameter("Descripcion", descripcion) :
+                new ObjectParameter("Descripcion", typeof(string));
+    
+            var costoParameter = costo.HasValue ?
+                new ObjectParameter("Costo", costo) :
+                new ObjectParameter("Costo", typeof(decimal));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("updateProduct", currentBarCodeParameter, codigo_BarrasParameter, nombreParameter, descripcionParameter, costoParameter);
+        }
+    
+        public virtual int updateService(string currentName, string nombre, string descripcion)
+        {
+            var currentNameParameter = currentName != null ?
+                new ObjectParameter("CurrentName", currentName) :
+                new ObjectParameter("CurrentName", typeof(string));
+    
+            var nombreParameter = nombre != null ?
+                new ObjectParameter("Nombre", nombre) :
+                new ObjectParameter("Nombre", typeof(string));
+    
+            var descripcionParameter = descripcion != null ?
+                new ObjectParameter("Descripcion", descripcion) :
+                new ObjectParameter("Descripcion", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("updateService", currentNameParameter, nombreParameter, descripcionParameter);
+        }
+    
+        public virtual int assignProduct(string barCode, string gymName)
+        {
+            var barCodeParameter = barCode != null ?
+                new ObjectParameter("BarCode", barCode) :
+                new ObjectParameter("BarCode", typeof(string));
+    
+            var gymNameParameter = gymName != null ?
+                new ObjectParameter("GymName", gymName) :
+                new ObjectParameter("GymName", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("assignProduct", barCodeParameter, gymNameParameter);
+        }
+    
+        public virtual int unsignProduct(string barCode, string gymName)
+        {
+            var barCodeParameter = barCode != null ?
+                new ObjectParameter("BarCode", barCode) :
+                new ObjectParameter("BarCode", typeof(string));
+    
+            var gymNameParameter = gymName != null ?
+                new ObjectParameter("GymName", gymName) :
+                new ObjectParameter("GymName", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("unsignProduct", barCodeParameter, gymNameParameter);
+        }
+    
+        public virtual int assignTreatment(Nullable<int> treatmentId, string gymName)
+        {
+            var treatmentIdParameter = treatmentId.HasValue ?
+                new ObjectParameter("treatmentId", treatmentId) :
+                new ObjectParameter("treatmentId", typeof(int));
+    
+            var gymNameParameter = gymName != null ?
+                new ObjectParameter("gymName", gymName) :
+                new ObjectParameter("gymName", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("assignTreatment", treatmentIdParameter, gymNameParameter);
+        }
+    
+        public virtual int unsignTreatment(Nullable<int> treatmentId, string gymName)
+        {
+            var treatmentIdParameter = treatmentId.HasValue ?
+                new ObjectParameter("treatmentId", treatmentId) :
+                new ObjectParameter("treatmentId", typeof(int));
+    
+            var gymNameParameter = gymName != null ?
+                new ObjectParameter("gymName", gymName) :
+                new ObjectParameter("gymName", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("unsignTreatment", treatmentIdParameter, gymNameParameter);
+        }
     }
 }

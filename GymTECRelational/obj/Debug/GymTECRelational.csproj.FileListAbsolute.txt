@@ -87,3 +87,7 @@ C:\Users\dcama\Desktop\GymTECRelationalREST\GymTECRelational\bin\Microsoft.CodeD
 C:\Users\dcama\Desktop\GymTECRelationalREST\GymTECRelational\obj\Debug\GymTECRelational.csproj.CopyComplete
 C:\Users\dcama\Desktop\GymTECRelationalREST\GymTECRelational\obj\Debug\GymTECRelational.dll
 C:\Users\dcama\Desktop\GymTECRelationalREST\GymTECRelational\obj\Debug\GymTECRelational.pdb
+C:\Users\dcama\Desktop\Temp\GymTECRelational\obj\Debug\GymTECRelational.csprojAssemblyReference.cache
+C:\Users\dcama\Desktop\Temp\GymTECRelational\obj\Debug\GymTECRelational.csproj.CoreCompileInputs.cache
+C:\Users\dcama\Desktop\Temp\GymTECRelational\obj\Debug\GymTECRelational.dll
+C:\Users\dcama\Desktop\Temp\GymTECRelational\obj\Debug\GymTECRelational.pdb

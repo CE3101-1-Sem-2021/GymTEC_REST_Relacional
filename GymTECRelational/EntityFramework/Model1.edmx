@@ -391,9 +391,30 @@
           <Parameter Name="Nombre" Type="varchar" Mode="In" />
           <Parameter Name="Telefono" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="assignProduct" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="BarCode" Type="varchar" Mode="In" />
+          <Parameter Name="GymName" Type="varchar" Mode="In" />
+        </Function>
         <Function Name="assignTokenEmployee" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Token" Type="varchar" Mode="In" />
           <Parameter Name="Id" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="assignTreatment" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="treatmentId" Type="int" Mode="In" />
+          <Parameter Name="gymName" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="createProduct" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Codigo_Barras" Type="varchar" Mode="In" />
+          <Parameter Name="Nombre" Type="varchar" Mode="In" />
+          <Parameter Name="Descripcion" Type="varchar" Mode="In" />
+          <Parameter Name="Costo" Type="numeric" Mode="In" />
+        </Function>
+        <Function Name="createService" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Nombre" Type="varchar" Mode="In" />
+          <Parameter Name="Descripcion" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="deleteEmployee" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Cedula" Type="varchar" Mode="In" />
         </Function>
         <Function Name="deleteGym" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Nombre" Type="varchar" Mode="In" />
@@ -413,6 +434,12 @@
         <Function Name="deletePhoneNumb" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Telefono" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="deleteProduct" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="BarCode" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="deleteService" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Nombre" Type="varchar" Mode="In" />
+        </Function>
         <Function Name="deleteTreatment" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Id" Type="int" Mode="In" />
         </Function>
@@ -422,6 +449,8 @@
         <Function Name="getAllPhoneNumbByGym" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Nombre" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="getAllProducts" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="getAllServices" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="getAllTreatments" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="getEmployeeById" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Cedula" Type="varchar" Mode="In" />
@@ -442,6 +471,12 @@
           <Parameter Name="TypeName" Type="varchar" Mode="In" />
         </Function>
         <Function Name="getPayroll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Nombre" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="getProduct" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CodigoBarras" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="getService" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Nombre" Type="varchar" Mode="In" />
         </Function>
         <Function Name="gettAllJobs" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
@@ -496,9 +531,32 @@
           <Parameter Name="Nombre" Type="varchar" Mode="In" />
         </Function>
         <Function Name="selectAllAdmins" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="selectAllEmployees" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="selectAllGyms" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="selectGym" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Nombre" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="unsignProduct" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="BarCode" Type="varchar" Mode="In" />
+          <Parameter Name="GymName" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="unsignTreatment" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="treatmentId" Type="int" Mode="In" />
+          <Parameter Name="gymName" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="updateEmployee" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CurrentId" Type="varchar" Mode="In" />
+          <Parameter Name="Cedula" Type="varchar" Mode="In" />
+          <Parameter Name="Puesto" Type="varchar" Mode="In" />
+          <Parameter Name="Planilla" Type="varchar" Mode="In" />
+          <Parameter Name="Distrito" Type="varchar" Mode="In" />
+          <Parameter Name="Canton" Type="varchar" Mode="In" />
+          <Parameter Name="Provincia" Type="varchar" Mode="In" />
+          <Parameter Name="Sucursal" Type="varchar" Mode="In" />
+          <Parameter Name="Nombre" Type="varchar" Mode="In" />
+          <Parameter Name="Apellidos" Type="varchar" Mode="In" />
+          <Parameter Name="Salario" Type="numeric" Mode="In" />
+          <Parameter Name="Email" Type="varchar" Mode="In" />
         </Function>
         <Function Name="updateGym" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Currentname" Type="varchar" Mode="In" />
@@ -537,6 +595,18 @@
           <Parameter Name="CurrentNumb" Type="varchar" Mode="In" />
           <Parameter Name="Nombre" Type="varchar" Mode="In" />
           <Parameter Name="Telefono" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="updateProduct" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CurrentBarCode" Type="varchar" Mode="In" />
+          <Parameter Name="Codigo_Barras" Type="varchar" Mode="In" />
+          <Parameter Name="Nombre" Type="varchar" Mode="In" />
+          <Parameter Name="Descripcion" Type="varchar" Mode="In" />
+          <Parameter Name="Costo" Type="numeric" Mode="In" />
+        </Function>
+        <Function Name="updateService" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CurrentName" Type="varchar" Mode="In" />
+          <Parameter Name="Nombre" Type="varchar" Mode="In" />
+          <Parameter Name="Descripcion" Type="varchar" Mode="In" />
         </Function>
         <Function Name="updateTreatment" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="CurrentId" Type="int" Mode="In" />
@@ -760,6 +830,7 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Nombre" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Sucursal" Relationship="GymTECModel.Tratamiento_Sucursal" FromRole="Tratamiento_Spa" ToRole="Sucursal" />
         </EntityType>
         <Association Name="FKClase_ClientClase">
           <End Role="Clase" Type="Self.Clase" Multiplicity="1">
@@ -1175,11 +1246,81 @@
           <Parameter Name="Id" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="insertTreatment">
-            <Parameter Name="Nombre" Mode="In" Type="String" />
+          <Parameter Name="Nombre" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="updateTreatment">
             <Parameter Name="CurrentId" Mode="In" Type="Int32" />
             <Parameter Name="Nombre" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="createProduct">
+            <Parameter Name="Codigo_Barras" Mode="In" Type="String" />
+            <Parameter Name="Nombre" Mode="In" Type="String" />
+            <Parameter Name="Descripcion" Mode="In" Type="String" />
+            <Parameter Name="Costo" Mode="In" Type="Decimal" />
+          </FunctionImport>
+          <FunctionImport Name="createService">
+            <Parameter Name="Nombre" Mode="In" Type="String" />
+            <Parameter Name="Descripcion" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="deleteEmployee">
+          <Parameter Name="Cedula" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="deleteProduct">
+          <Parameter Name="BarCode" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="deleteService">
+          <Parameter Name="Nombre" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="getAllProducts" EntitySet="Productoes" ReturnType="Collection(GymTECModel.Producto)" />
+          <FunctionImport Name="getAllServices" EntitySet="Tipo_Servicio" ReturnType="Collection(GymTECModel.Tipo_Servicio)" />
+          <FunctionImport Name="getProduct" EntitySet="Productoes" ReturnType="Collection(GymTECModel.Producto)">
+          <Parameter Name="CodigoBarras" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="getService" EntitySet="Tipo_Servicio" ReturnType="Collection(GymTECModel.Tipo_Servicio)">
+          <Parameter Name="Nombre" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="selectAllEmployees" ReturnType="Collection(GymTECModel.selectAllEmployees_Result)" />
+          <FunctionImport Name="updateEmployee">
+            <Parameter Name="CurrentId" Mode="In" Type="String" />
+            <Parameter Name="Cedula" Mode="In" Type="String" />
+            <Parameter Name="Puesto" Mode="In" Type="String" />
+            <Parameter Name="Planilla" Mode="In" Type="String" />
+            <Parameter Name="Distrito" Mode="In" Type="String" />
+            <Parameter Name="Canton" Mode="In" Type="String" />
+            <Parameter Name="Provincia" Mode="In" Type="String" />
+            <Parameter Name="Sucursal" Mode="In" Type="String" />
+            <Parameter Name="Nombre" Mode="In" Type="String" />
+            <Parameter Name="Apellidos" Mode="In" Type="String" />
+            <Parameter Name="Salario" Mode="In" Type="Decimal" />
+            <Parameter Name="Email" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="updateProduct">
+            <Parameter Name="CurrentBarCode" Mode="In" Type="String" />
+            <Parameter Name="Codigo_Barras" Mode="In" Type="String" />
+            <Parameter Name="Nombre" Mode="In" Type="String" />
+            <Parameter Name="Descripcion" Mode="In" Type="String" />
+            <Parameter Name="Costo" Mode="In" Type="Decimal" />
+          </FunctionImport>
+          <FunctionImport Name="updateService">
+            <Parameter Name="CurrentName" Mode="In" Type="String" />
+            <Parameter Name="Nombre" Mode="In" Type="String" />
+            <Parameter Name="Descripcion" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="assignProduct">
+            <Parameter Name="BarCode" Mode="In" Type="String" />
+            <Parameter Name="GymName" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="unsignProduct">
+            <Parameter Name="BarCode" Mode="In" Type="String" />
+            <Parameter Name="GymName" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="assignTreatment">
+            <Parameter Name="treatmentId" Mode="In" Type="Int32" />
+            <Parameter Name="gymName" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="unsignTreatment">
+            <Parameter Name="treatmentId" Mode="In" Type="Int32" />
+            <Parameter Name="gymName" Mode="In" Type="String" />
           </FunctionImport>
         </EntityContainer>
         <ComplexType Name="selectAllAdmins_Result">
@@ -1399,6 +1540,42 @@
         <ComplexType Name="getTreatment_Result">
           <Property Type="Int32" Name="Id" Nullable="false" />
           <Property Type="String" Name="Nombre" Nullable="false" MaxLength="25" />
+        </ComplexType>
+        <ComplexType Name="getAllProducts_Result">
+          <Property Type="String" Name="Codigo_Barras" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="Nombre" Nullable="false" MaxLength="25" />
+          <Property Type="String" Name="Descripcion" Nullable="false" MaxLength="300" />
+          <Property Type="Decimal" Name="Costo" Nullable="true" Precision="7" Scale="2" />
+        </ComplexType>
+        <ComplexType Name="getAllServices_Result">
+          <Property Type="String" Name="Nombre" Nullable="false" MaxLength="25" />
+          <Property Type="String" Name="Descripcion" Nullable="false" MaxLength="200" />
+        </ComplexType>
+        <ComplexType Name="getProduct_Result">
+          <Property Type="String" Name="Codigo_Barras" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="Nombre" Nullable="false" MaxLength="25" />
+          <Property Type="String" Name="Descripcion" Nullable="false" MaxLength="300" />
+          <Property Type="Decimal" Name="Costo" Nullable="true" Precision="7" Scale="2" />
+        </ComplexType>
+        <ComplexType Name="getService_Result">
+          <Property Type="String" Name="Nombre" Nullable="false" MaxLength="25" />
+          <Property Type="String" Name="Descripcion" Nullable="false" MaxLength="200" />
+        </ComplexType>
+        <ComplexType Name="selectAllEmployees_Result">
+          <Property Type="String" Name="Cedula" Nullable="false" MaxLength="20" />
+          <Property Type="String" Name="Puesto" Nullable="false" MaxLength="25" />
+          <Property Type="String" Name="Planilla" Nullable="false" MaxLength="25" />
+          <Property Type="String" Name="Distrito" Nullable="false" MaxLength="25" />
+          <Property Type="String" Name="Canton" Nullable="false" MaxLength="25" />
+          <Property Type="String" Name="Provincia" Nullable="false" MaxLength="25" />
+          <Property Type="String" Name="Sucursal" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="Nombre" Nullable="false" MaxLength="20" />
+          <Property Type="String" Name="Apellidos" Nullable="false" MaxLength="45" />
+          <Property Type="Decimal" Name="Salario" Nullable="false" Precision="7" Scale="2" />
+          <Property Type="String" Name="Email" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="Contraseña" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="Salt" Nullable="false" MaxLength="32" />
+          <Property Type="String" Name="Token" Nullable="false" MaxLength="32" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -1765,6 +1942,46 @@
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="insertTreatment" FunctionName="GymTECModel.Store.insertTreatment" />
           <FunctionImportMapping FunctionImportName="updateTreatment" FunctionName="GymTECModel.Store.updateTreatment" />
+          <FunctionImportMapping FunctionImportName="createProduct" FunctionName="GymTECModel.Store.createProduct" />
+          <FunctionImportMapping FunctionImportName="createService" FunctionName="GymTECModel.Store.createService" />
+          <FunctionImportMapping FunctionImportName="deleteEmployee" FunctionName="GymTECModel.Store.deleteEmployee" />
+          <FunctionImportMapping FunctionImportName="deleteProduct" FunctionName="GymTECModel.Store.deleteProduct" />
+          <FunctionImportMapping FunctionImportName="deleteService" FunctionName="GymTECModel.Store.deleteService" />
+          <FunctionImportMapping FunctionImportName="getAllProducts" FunctionName="GymTECModel.Store.getAllProducts">
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="getAllServices" FunctionName="GymTECModel.Store.getAllServices">
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="getProduct" FunctionName="GymTECModel.Store.getProduct">
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="getService" FunctionName="GymTECModel.Store.getService">
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="selectAllEmployees" FunctionName="GymTECModel.Store.selectAllEmployees">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="GymTECModel.selectAllEmployees_Result">
+                <ScalarProperty Name="Cedula" ColumnName="Cedula" />
+                <ScalarProperty Name="Puesto" ColumnName="Puesto" />
+                <ScalarProperty Name="Planilla" ColumnName="Planilla" />
+                <ScalarProperty Name="Distrito" ColumnName="Distrito" />
+                <ScalarProperty Name="Canton" ColumnName="Canton" />
+                <ScalarProperty Name="Provincia" ColumnName="Provincia" />
+                <ScalarProperty Name="Sucursal" ColumnName="Sucursal" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Apellidos" ColumnName="Apellidos" />
+                <ScalarProperty Name="Salario" ColumnName="Salario" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Contraseña" ColumnName="Contraseña" />
+                <ScalarProperty Name="Salt" ColumnName="Salt" />
+                <ScalarProperty Name="Token" ColumnName="Token" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="updateEmployee" FunctionName="GymTECModel.Store.updateEmployee" />
+          <FunctionImportMapping FunctionImportName="updateProduct" FunctionName="GymTECModel.Store.updateProduct" />
+          <FunctionImportMapping FunctionImportName="updateService" FunctionName="GymTECModel.Store.updateService" />
+          <FunctionImportMapping FunctionImportName="assignProduct" FunctionName="GymTECModel.Store.assignProduct" />
+          <FunctionImportMapping FunctionImportName="unsignProduct" FunctionName="GymTECModel.Store.unsignProduct" />
+          <FunctionImportMapping FunctionImportName="assignTreatment" FunctionName="GymTECModel.Store.assignTreatment" />
+          <FunctionImportMapping FunctionImportName="unsignTreatment" FunctionName="GymTECModel.Store.unsignTreatment" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

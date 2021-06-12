@@ -14,7 +14,16 @@ namespace GymTECRelational.EntityFramework
     
     public partial class Tratamiento_Spa
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Tratamiento_Spa()
+        {
+            this.Sucursal = new HashSet<Sucursal>();
+        }
+    
         public int Id { get; set; }
         public string Nombre { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Sucursal> Sucursal { get; set; }
     }
 }

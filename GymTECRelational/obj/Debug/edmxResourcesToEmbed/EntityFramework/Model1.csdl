@@ -129,6 +129,7 @@
     </Key>
     <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="Nombre" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="Sucursal" Relationship="GymTECModel.Tratamiento_Sucursal" FromRole="Tratamiento_Spa" ToRole="Sucursal" />
   </EntityType>
   <Association Name="FKClase_ClientClase">
     <End Role="Clase" Type="Self.Clase" Multiplicity="1">
@@ -550,6 +551,76 @@
       <Parameter Name="CurrentId" Mode="In" Type="Int32" />
       <Parameter Name="Nombre" Mode="In" Type="String" />
     </FunctionImport>
+    <FunctionImport Name="createProduct">
+      <Parameter Name="Codigo_Barras" Mode="In" Type="String" />
+      <Parameter Name="Nombre" Mode="In" Type="String" />
+      <Parameter Name="Descripcion" Mode="In" Type="String" />
+      <Parameter Name="Costo" Mode="In" Type="Decimal" />
+    </FunctionImport>
+    <FunctionImport Name="createService">
+      <Parameter Name="Nombre" Mode="In" Type="String" />
+      <Parameter Name="Descripcion" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="deleteEmployee">
+      <Parameter Name="Cedula" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="deleteProduct">
+      <Parameter Name="BarCode" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="deleteService">
+      <Parameter Name="Nombre" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="getAllProducts" EntitySet="Productoes" ReturnType="Collection(GymTECModel.Producto)" />
+    <FunctionImport Name="getAllServices" EntitySet="Tipo_Servicio" ReturnType="Collection(GymTECModel.Tipo_Servicio)" />
+    <FunctionImport Name="getProduct" EntitySet="Productoes" ReturnType="Collection(GymTECModel.Producto)">
+      <Parameter Name="CodigoBarras" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="getService" EntitySet="Tipo_Servicio" ReturnType="Collection(GymTECModel.Tipo_Servicio)">
+      <Parameter Name="Nombre" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="selectAllEmployees" ReturnType="Collection(GymTECModel.selectAllEmployees_Result)" />
+    <FunctionImport Name="updateEmployee">
+      <Parameter Name="CurrentId" Mode="In" Type="String" />
+      <Parameter Name="Cedula" Mode="In" Type="String" />
+      <Parameter Name="Puesto" Mode="In" Type="String" />
+      <Parameter Name="Planilla" Mode="In" Type="String" />
+      <Parameter Name="Distrito" Mode="In" Type="String" />
+      <Parameter Name="Canton" Mode="In" Type="String" />
+      <Parameter Name="Provincia" Mode="In" Type="String" />
+      <Parameter Name="Sucursal" Mode="In" Type="String" />
+      <Parameter Name="Nombre" Mode="In" Type="String" />
+      <Parameter Name="Apellidos" Mode="In" Type="String" />
+      <Parameter Name="Salario" Mode="In" Type="Decimal" />
+      <Parameter Name="Email" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="updateProduct">
+      <Parameter Name="CurrentBarCode" Mode="In" Type="String" />
+      <Parameter Name="Codigo_Barras" Mode="In" Type="String" />
+      <Parameter Name="Nombre" Mode="In" Type="String" />
+      <Parameter Name="Descripcion" Mode="In" Type="String" />
+      <Parameter Name="Costo" Mode="In" Type="Decimal" />
+    </FunctionImport>
+    <FunctionImport Name="updateService">
+      <Parameter Name="CurrentName" Mode="In" Type="String" />
+      <Parameter Name="Nombre" Mode="In" Type="String" />
+      <Parameter Name="Descripcion" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="assignProduct">
+      <Parameter Name="BarCode" Mode="In" Type="String" />
+      <Parameter Name="GymName" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="unsignProduct">
+      <Parameter Name="BarCode" Mode="In" Type="String" />
+      <Parameter Name="GymName" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="assignTreatment">
+      <Parameter Name="treatmentId" Mode="In" Type="Int32" />
+      <Parameter Name="gymName" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="unsignTreatment">
+      <Parameter Name="treatmentId" Mode="In" Type="Int32" />
+      <Parameter Name="gymName" Mode="In" Type="String" />
+    </FunctionImport>
   </EntityContainer>
   <ComplexType Name="selectAllAdmins_Result">
     <Property Type="Int32" Name="Id" Nullable="false" />
@@ -768,5 +839,41 @@
   <ComplexType Name="getTreatment_Result">
     <Property Type="Int32" Name="Id" Nullable="false" />
     <Property Type="String" Name="Nombre" Nullable="false" MaxLength="25" />
+  </ComplexType>
+  <ComplexType Name="getAllProducts_Result">
+    <Property Type="String" Name="Codigo_Barras" Nullable="false" MaxLength="50" />
+    <Property Type="String" Name="Nombre" Nullable="false" MaxLength="25" />
+    <Property Type="String" Name="Descripcion" Nullable="false" MaxLength="300" />
+    <Property Type="Decimal" Name="Costo" Nullable="true" Precision="7" Scale="2" />
+  </ComplexType>
+  <ComplexType Name="getAllServices_Result">
+    <Property Type="String" Name="Nombre" Nullable="false" MaxLength="25" />
+    <Property Type="String" Name="Descripcion" Nullable="false" MaxLength="200" />
+  </ComplexType>
+  <ComplexType Name="getProduct_Result">
+    <Property Type="String" Name="Codigo_Barras" Nullable="false" MaxLength="50" />
+    <Property Type="String" Name="Nombre" Nullable="false" MaxLength="25" />
+    <Property Type="String" Name="Descripcion" Nullable="false" MaxLength="300" />
+    <Property Type="Decimal" Name="Costo" Nullable="true" Precision="7" Scale="2" />
+  </ComplexType>
+  <ComplexType Name="getService_Result">
+    <Property Type="String" Name="Nombre" Nullable="false" MaxLength="25" />
+    <Property Type="String" Name="Descripcion" Nullable="false" MaxLength="200" />
+  </ComplexType>
+  <ComplexType Name="selectAllEmployees_Result">
+    <Property Type="String" Name="Cedula" Nullable="false" MaxLength="20" />
+    <Property Type="String" Name="Puesto" Nullable="false" MaxLength="25" />
+    <Property Type="String" Name="Planilla" Nullable="false" MaxLength="25" />
+    <Property Type="String" Name="Distrito" Nullable="false" MaxLength="25" />
+    <Property Type="String" Name="Canton" Nullable="false" MaxLength="25" />
+    <Property Type="String" Name="Provincia" Nullable="false" MaxLength="25" />
+    <Property Type="String" Name="Sucursal" Nullable="true" MaxLength="20" />
+    <Property Type="String" Name="Nombre" Nullable="false" MaxLength="20" />
+    <Property Type="String" Name="Apellidos" Nullable="false" MaxLength="45" />
+    <Property Type="Decimal" Name="Salario" Nullable="false" Precision="7" Scale="2" />
+    <Property Type="String" Name="Email" Nullable="false" MaxLength="50" />
+    <Property Type="String" Name="Contraseña" Nullable="false" MaxLength="50" />
+    <Property Type="String" Name="Salt" Nullable="false" MaxLength="32" />
+    <Property Type="String" Name="Token" Nullable="false" MaxLength="32" />
   </ComplexType>
 </Schema>
