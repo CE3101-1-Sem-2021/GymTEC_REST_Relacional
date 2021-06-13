@@ -307,6 +307,85 @@ namespace GymTECRelational.Models
             return response;
         }
 
+        /*Metodo para agregar un horario a un gimnasio.
+         * 
+         * Entradas:Horario a agregar,token del administrador que realiza la operacion
+         * Salidas:Respuesta de tipo HTTP que indica si la operacion fue exitosa.
+         */
+        public HttpResponseMessage addSchedule(Sucursal_Horario schedule,string token)
+        {
+            HttpResponseMessage response = null;
+            if(tokenVerifier(token,"Admin"))
+            {
+                if(!context.Sucursal_Horario.Any(o=>o.Dia==schedule.Dia&& o.Sucursal==schedule.Sucursal))
+                {
+                    try
+                    {
+                        context.Sucursal_Horario.Add(schedule);
+                        context.SaveChanges();
+                        response = new HttpResponseMessage(HttpStatusCode.OK);
+                        response.Content = new StringContent("Horario agregado correctamente!");
+                        return response;
+                    }
+                    catch (Exception e)
+                    {
+                        response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
+                        response.Content = new StringContent("Error inesperado");
+                        return response;
+                    }
+                }
+                response = new HttpResponseMessage(HttpStatusCode.Conflict);
+                response.Content = new StringContent("El horario para este dia ya se encuentra registrado");
+                return response;
+            }
+            response = new HttpResponseMessage(HttpStatusCode.Conflict);
+            response.Content = new StringContent("Token invalido");
+            return response;
+        }
+
+        /*Metodo para actualizar un numero de telefono de un gimnasio.
+         * 
+         * Entradas:Numero de telefono actual,token de quien realiza la solicitud,informacion actualizada del numero de telefono
+         * Salidas:Respuesta de tipo HTTP que indica si la operacion fue exitosa.
+         */
+        public HttpResponseMessage updateSchedule(string currentDay, Sucursal_Horario schedule,string token)
+        {
+            HttpResponseMessage response = null;
+            if (tokenVerifier(token, "Admin"))
+            {
+                if (schedule.Dia == currentDay || !context.Sucursal_Horario.Any(o => o.Dia ==schedule.Dia && o.Sucursal==schedule.Sucursal))
+                {
+                    if (context.Sucursals.Any(o => o.Nombre == schedule.Sucursal))
+                    {
+                        try
+                        {
+                            context.updateSchedule(currentDay,schedule.Dia,schedule.Sucursal,schedule.Hora_Apertura,schedule.Hora_Cierre);
+                            context.SaveChanges();
+                            response = new HttpResponseMessage(HttpStatusCode.OK);
+                            response.Content = new StringContent("Horario actualizado correctamente!");
+                            return response;
+                        }
+                        catch (Exception e)
+                        {
+                            response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
+                            response.Content = new StringContent("Error inesperado");
+                            return response;
+                        }
+                    }
+                    response = new HttpResponseMessage(HttpStatusCode.Conflict);
+                    response.Content = new StringContent("La sucursal a la que se le quiere asignar el nuevo horario no esta registrada");
+                    return response;
+                }
+                response = new HttpResponseMessage(HttpStatusCode.Conflict);
+                response.Content = new StringContent("Ya existe un horario asignado para este dia");
+                return response;
+
+            }
+            response = new HttpResponseMessage(HttpStatusCode.Conflict);
+            response.Content = new StringContent("Token invalido");
+            return response;
+        }
+
         /*Metodo para activar y desactivar la tienda y spa de un gimnasio en particular.
          * 
          * Entradas:Token del administrador que realiza la operacion,operacion a realizar,nombre del gimnasio
@@ -343,6 +422,149 @@ namespace GymTECRelational.Models
                 response.Content = new StringContent("La sucursal indicada no se encuentra registrada");
                 return response;
 
+            }
+            response = new HttpResponseMessage(HttpStatusCode.Conflict);
+            response.Content = new StringContent("Token invalido");
+            return response;
+        }
+
+        /*Metodo para copiar un gimnasio
+         * 
+         * Entrada:Token del administrador que realiza la solicitud,nombre del gimnasio que se quiere copiar
+         * Salida: Respuesta de tipo HTTP que indica si la operacion fue exitosa
+         */
+        public HttpResponseMessage copyGym(string gymName, string token)
+        {
+            HttpResponseMessage response = null;
+            if (tokenVerifier(token, "Admin"))
+            {
+                if (context.Sucursals.Any(o => o.Nombre == gymName))
+                {
+                    string newName = gymName;
+                    int ind = 1;
+                    while (context.Sucursals.Any(o => o.Nombre == newName))
+                    {
+                        newName = gymName + "_copia_" + ind.ToString();
+                        ind++;
+                    }
+                    Sucursal gymCopy = context.Sucursals.AsNoTracking().FirstOrDefault(m => m.Nombre == gymName);
+                    gymCopy.Nombre = newName;
+                    HttpResponseMessage temp = createGym(gymCopy, token);
+                    if (temp.StatusCode.Equals(HttpStatusCode.Conflict))
+                    {
+                        return temp;
+                    }
+                    List<Tratamiento_Spa> treatments = context.getTreatmentsByGym(gymName).ToList();
+                    foreach (Tratamiento_Spa treatment in treatments)
+                    {
+                        context.assignTreatment(treatment.Id, newName);
+                    }
+
+                    List<Producto> products = context.getProductsByGym(gymName).ToList();
+                    foreach (Producto product in products)
+                    {
+                        context.assignProduct(product.Codigo_Barras, newName);
+                    }
+
+                    List<Sucursal_Horario> schedules = context.getAllSchedulesByGym(gymName).ToList();
+                    foreach(Sucursal_Horario schedule in schedules)
+                    {
+                        schedule.Sucursal = newName;
+                        context.Sucursal_Horario.Add(schedule);
+                    }
+
+                    List<Clase> classes = context.getClassesByGym(gymName).ToList();
+                    foreach (Clase classInfo in classes)
+                    {
+                        classInfo.Instructor = null;
+                        classInfo.Sucursal = newName;
+                        createClass(classInfo, token);
+                    }
+
+                    response = new HttpResponseMessage(HttpStatusCode.OK);
+                    response.Content = new StringContent("Gimnasio copiado correctamente");
+                    return response;
+                }
+                response = new HttpResponseMessage(HttpStatusCode.Conflict);
+                response.Content = new StringContent("El gimnasio que se quiere copiar no se encuentra registrado en el sistema");
+                return response;
+
+            }
+            response = new HttpResponseMessage(HttpStatusCode.Conflict);
+            response.Content = new StringContent("Token invalido");
+            return response;
+        }
+
+        /*Metodo para agregar una clase a la base de datos.
+         * 
+         * Entradas:Token del administrador que realiza la operacion,informacion de la classe a agregar
+         * Salidas:Respuesta de tipo HTTP que indica si la operacion fue exitosa.
+         */
+        public HttpResponseMessage createClass(Clase classInfo,string token)
+        {
+            HttpResponseMessage response = null;
+
+            if(tokenVerifier(token,"Admin"))
+            {
+                try
+                {
+                    context.Clases.Add(classInfo);
+                    context.SaveChanges();
+                    response = new HttpResponseMessage(HttpStatusCode.OK);
+                    response.Content = new StringContent("Clase creada correctamente!");
+                    return response;
+                }
+                catch (Exception e)
+                {
+                    if (e.InnerException.InnerException.Message.Split('\r')[0].Equals("wrongSchedule"))
+                    {
+                        response = new HttpResponseMessage(HttpStatusCode.Conflict);
+                        response.Content = new StringContent("El horario de inicio de la clase debe ser menor al horario de finalizacion");
+                        return response;
+                    }
+                    Console.WriteLine(e.ToString());
+                    response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
+                    response.Content = new StringContent("Error inesperado!");
+                    return response;
+                }
+            }
+            response = new HttpResponseMessage(HttpStatusCode.Conflict);
+            response.Content = new StringContent("Token invalido");
+            return response;
+        }
+
+        /*Metodo para agregar una clase a la base de datos.
+         * 
+         * Entradas:Token del administrador que realiza la operacion,informacion de la classe a agregar
+         * Salidas:Respuesta de tipo HTTP que indica si la operacion fue exitosa.
+         */
+        public HttpResponseMessage updateClass(Clase classInfo, string token)
+        {
+            HttpResponseMessage response = null;
+
+            if (tokenVerifier(token, "Admin"))
+            {
+                try
+                {
+                    context.updateClass(classInfo.Id,classInfo.Hora_Inicio,classInfo.Fecha,classInfo.Tipo_Servicio,classInfo.Hora_Final,classInfo.Sucursal,classInfo.Instructor,classInfo.Modalidad,classInfo.Capacidad);
+                    context.SaveChanges();
+                    response = new HttpResponseMessage(HttpStatusCode.OK);
+                    response.Content = new StringContent("Clase actualizada correctamente!");
+                    return response;
+                }
+                catch (Exception e)
+                {
+                    if (e.InnerException.Message.Split('\r')[0].Equals("wrongSchedule"))
+                    {
+                        response = new HttpResponseMessage(HttpStatusCode.Conflict);
+                        response.Content = new StringContent("El horario de inicio de la clase no puede ser nas tarde que el horario de finalizacion");
+                        return response;
+                    }
+                    Console.WriteLine(e.ToString());
+                    response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
+                    response.Content = new StringContent("Error inesperado!");
+                    return response;
+                }
             }
             response = new HttpResponseMessage(HttpStatusCode.Conflict);
             response.Content = new StringContent("Token invalido");
@@ -999,7 +1221,11 @@ namespace GymTECRelational.Models
             return response;
 
         }
-
+        /*Metodo para asignar un producto a una sede en especifico
+        * 
+        * Entradas:Token del administrador que realiza la operacion,identificador del producto a asignar,sede a la que se le va a asignar
+        * Salidas:Respuesta de tipo HTTP que indica si la operacion fue exitosa.
+        */
         public HttpResponseMessage assignProduct(string barCode,string gymName,string token)
         {
             HttpResponseMessage response = null;
@@ -1032,6 +1258,12 @@ namespace GymTECRelational.Models
             return response;
         }
 
+
+        /*Metodo para desasignar un producto de una sede en especifico
+        * 
+        * Entradas:Token del administrador que realiza la operacion,identificador del producto a desasignar,sede a la que se le va a desasignar
+        * Salidas:Respuesta de tipo HTTP que indica si la operacion fue exitosa.
+        */
         public HttpResponseMessage unsignProduct(string barCode, string gymName, string token)
         {
             HttpResponseMessage response = null;
@@ -1122,12 +1354,14 @@ namespace GymTECRelational.Models
             return context.Empleadoes.Any(o => o.Token == token);
         }
 
+        
+
         /*Metodo para eliminar valores de la base de datos.
         * 
         * Entrada:Token de quien realiza la solicitud,tabla en la que se va a hacer la eliminacion,identificador de la fila
         * Salida: Respuesta de tipo HTTP que indica si la operacion fue exitosa
         */
-        public HttpResponseMessage deleteFromDatabaseOneKey(string token,string table,string id)
+        public HttpResponseMessage deleteFromDatabase(string token,string table,string key1,string key2)
         {
             HttpResponseMessage response = null;
 
@@ -1137,45 +1371,53 @@ namespace GymTECRelational.Models
                     {
                         if (table.Equals("Sucursal"))
                         {
-                           context.deleteGym(id);
+                           context.deleteGym(key1);
                         }
                         else if(table.Equals("Empleado"))
                         {
-                            context.deleteEmployee(id);
+                            context.deleteEmployee(key1);
                         }
                         else if(table.Equals("SucursalTelefono"))
                         {
-                            context.deletePhoneNumb(id);
+                            context.deletePhoneNumb(key1);
                         }
                         else if(table.Equals("Maquina"))
                         {
-                            context.deleteMachine(id);
+                            context.deleteMachine(key1);
                         }
                         else if(table.Equals("Tipo_Equipo"))
                         {
-                            context.deleteMachineType(id);
+                            context.deleteMachineType(key1);
                         }
                         else if(table.Equals("Puesto"))
                         {
-                            context.deleteJob(id);
+                            context.deleteJob(key1);
                         }
                         else if(table.Equals("Planilla"))
                         {
-                            context.deletePayroll(id);
+                            context.deletePayroll(key1);
                         }
                         else if(table.Equals("Tipo_Servicio"))
                         {
-                            context.deleteService(id);
+                            context.deleteService(key1);
                         }
                         else if(table.Equals("Producto"))
                         {
-                            context.deleteProduct(id);
+                            context.deleteProduct(key1);
+                        }
+                        else if(table.Equals("Clase"))
+                        {
+                            context.deleteClass(Convert.ToInt32(key1));
+                        }
+                        else if(table.Equals("SucursalHorario"))
+                        {
+                            context.deleteSchedule(key1, key2);
                         }
                         else if(table.Equals("Tratamiento_Spa"))
                         {
                             try
                             {
-                                context.deleteTreatment(Convert.ToInt32(id));
+                                context.deleteTreatment(Convert.ToInt32(key1));
                             }
                             catch (Exception e)
                             {

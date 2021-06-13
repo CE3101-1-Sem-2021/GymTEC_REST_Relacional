@@ -6,7 +6,6 @@
     <edmx:Diagrams>
       <Diagram DiagramId="31598ac8d80c45b48bdbf715b3593059" Name="Diagram1" ZoomLevel="114">
         <EntityTypeShape EntityType="GymTECModel.Clase" Width="1.5" PointX="5.25" PointY="4.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="GymTECModel.Cliente_Clase" Width="1.5" PointX="7.5" PointY="8.875" IsExpanded="true" />
         <EntityTypeShape EntityType="GymTECModel.Direccion" Width="1.5" PointX="0.75" PointY="4.875" IsExpanded="true" />
         <EntityTypeShape EntityType="GymTECModel.Empleado" Width="1.5" PointX="3" PointY="3.5" IsExpanded="true" />
         <EntityTypeShape EntityType="GymTECModel.Maquina" Width="1.5" PointX="10.5" PointY="4.75" IsExpanded="true" />
@@ -17,7 +16,6 @@
         <EntityTypeShape EntityType="GymTECModel.Tipo_Equipo" Width="1.5" PointX="8.25" PointY="1.125" IsExpanded="true" />
         <EntityTypeShape EntityType="GymTECModel.Tipo_Servicio" Width="1.5" PointX="3" PointY="1.125" IsExpanded="true" />
         <EntityTypeShape EntityType="GymTECModel.Tratamiento_Spa" Width="1.5" PointX="6" PointY="12.5" IsExpanded="true" />
-        <AssociationConnector Association="GymTECModel.FKClase_ClientClase" ManuallyRouted="false" />
         <AssociationConnector Association="GymTECModel.FKInstructor_Clase" ManuallyRouted="false" />
         <AssociationConnector Association="GymTECModel.FKSucursal_Clase" ManuallyRouted="false" />
         <AssociationConnector Association="GymTECModel.FKTipoServicio_Clase" ManuallyRouted="false" />
@@ -33,6 +31,10 @@
         <AssociationConnector Association="GymTECModel.Tratamiento_Sucursal" ManuallyRouted="false" />
         <EntityTypeShape EntityType="GymTECModel.Sucursal_Telefono" Width="1.5" PointX="10.5" PointY="1.5" />
         <AssociationConnector Association="GymTECModel.FKSucursal_Telefono" />
+        <EntityTypeShape EntityType="GymTECModel.Cliente_Clase" Width="1.5" PointX="7.5" PointY="8.125" />
+        <AssociationConnector Association="GymTECModel.FKClase_ClientClase" />
+        <EntityTypeShape EntityType="GymTECModel.Sucursal_Horario" Width="1.5" PointX="10.5" PointY="8.375" />
+        <AssociationConnector Association="GymTECModel.FKSucursal_Horario" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -10,16 +10,9 @@
 namespace GymTECRelational.EntityFramework
 {
     using System;
-    using System.Collections.Generic;
     
-    public partial class Clase
+    public partial class searchClasses1_Result
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Clase()
-        {
-            this.Cliente_Clase = new HashSet<Cliente_Clase>();
-        }
-    
         public int Id { get; set; }
         public Nullable<System.TimeSpan> Hora_Inicio { get; set; }
         public Nullable<System.DateTime> Fecha { get; set; }
@@ -29,8 +22,5 @@ namespace GymTECRelational.EntityFramework
         public string Instructor { get; set; }
         public string Modalidad { get; set; }
         public int Capacidad { get; set; }
-    
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Cliente_Clase> Cliente_Clase { get; set; }
     }
 }

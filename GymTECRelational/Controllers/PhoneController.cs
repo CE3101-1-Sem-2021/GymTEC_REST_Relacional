@@ -14,7 +14,7 @@ namespace GymTECRelational.Controllers
         Tools tools = new Tools();
         GymTECEntities context = new GymTECEntities();
 
-        [Route("api/Phone/{gymName}")]
+        [Route("api/Phone/getPhones/{gymName}/{token}")]
         public List<Sucursal_Telefono> Get(string gymName)
         {
             return context.getAllPhoneNumbByGym(gymName).ToList<Sucursal_Telefono>();
@@ -35,7 +35,7 @@ namespace GymTECRelational.Controllers
         [Route("api/Phone/deletePhone/{phoneNumber}/{token}")]
         public HttpResponseMessage Delete(string token,string phoneNumber)
         {
-            return tools.deleteFromDatabaseOneKey(token, "SucursalTelefono", phoneNumber);
+            return tools.deleteFromDatabase(token, "SucursalTelefono", phoneNumber,null);
         }
     }
 }

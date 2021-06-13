@@ -12,11 +12,13 @@ namespace GymTECRelational.EntityFramework
     using System;
     using System.Collections.Generic;
     
-    public partial class Cliente_Clase
+    public partial class Sucursal_Horario
     {
-        public int Id { get; set; }
-        public string Cliente { get; set; }
+        public string Dia { get; set; }
+        public string Sucursal { get; set; }
+        public Nullable<System.TimeSpan> Hora_Apertura { get; set; }
+        public Nullable<System.TimeSpan> Hora_Cierre { get; set; }
     
-        public virtual Clase Clase { get; set; }
+        public virtual Sucursal Sucursal1 { get; set; }
     }
 }

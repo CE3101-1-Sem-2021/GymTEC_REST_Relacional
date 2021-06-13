@@ -28,7 +28,6 @@ namespace GymTECRelational.EntityFramework
         }
     
         public virtual DbSet<Clase> Clases { get; set; }
-        public virtual DbSet<Cliente_Clase> Cliente_Clase { get; set; }
         public virtual DbSet<Direccion> Direccions { get; set; }
         public virtual DbSet<Empleado> Empleadoes { get; set; }
         public virtual DbSet<Maquina> Maquinas { get; set; }
@@ -40,6 +39,8 @@ namespace GymTECRelational.EntityFramework
         public virtual DbSet<Tipo_Servicio> Tipo_Servicio { get; set; }
         public virtual DbSet<Tratamiento_Spa> Tratamiento_Spa { get; set; }
         public virtual DbSet<Sucursal_Telefono> Sucursal_Telefono { get; set; }
+        public virtual DbSet<Cliente_Clase> Cliente_Clase { get; set; }
+        public virtual DbSet<Sucursal_Horario> Sucursal_Horario { get; set; }
     
         public virtual ObjectResult<Empleado> selectAllAdmins()
         {
@@ -1038,6 +1039,302 @@ namespace GymTECRelational.EntityFramework
                 new ObjectParameter("gymName", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("unsignTreatment", treatmentIdParameter, gymNameParameter);
+        }
+    
+        public virtual int deleteClass(Nullable<int> id)
+        {
+            var idParameter = id.HasValue ?
+                new ObjectParameter("Id", id) :
+                new ObjectParameter("Id", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("deleteClass", idParameter);
+        }
+    
+        public virtual ObjectResult<Clase> getAllClasses()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Clase>("getAllClasses");
+        }
+    
+        public virtual ObjectResult<Clase> getAllClasses(MergeOption mergeOption)
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Clase>("getAllClasses", mergeOption);
+        }
+    
+        public virtual ObjectResult<Clase> getClass(Nullable<int> id)
+        {
+            var idParameter = id.HasValue ?
+                new ObjectParameter("Id", id) :
+                new ObjectParameter("Id", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Clase>("getClass", idParameter);
+        }
+    
+        public virtual ObjectResult<Clase> getClass(Nullable<int> id, MergeOption mergeOption)
+        {
+            var idParameter = id.HasValue ?
+                new ObjectParameter("Id", id) :
+                new ObjectParameter("Id", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Clase>("getClass", mergeOption, idParameter);
+        }
+    
+        public virtual ObjectResult<Clase> getClassesByGym(string sucursal)
+        {
+            var sucursalParameter = sucursal != null ?
+                new ObjectParameter("Sucursal", sucursal) :
+                new ObjectParameter("Sucursal", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Clase>("getClassesByGym", sucursalParameter);
+        }
+    
+        public virtual ObjectResult<Clase> getClassesByGym(string sucursal, MergeOption mergeOption)
+        {
+            var sucursalParameter = sucursal != null ?
+                new ObjectParameter("Sucursal", sucursal) :
+                new ObjectParameter("Sucursal", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Clase>("getClassesByGym", mergeOption, sucursalParameter);
+        }
+    
+        public virtual int insertClass(Nullable<System.TimeSpan> hora_Inicio, Nullable<System.DateTime> fecha, string tipo_Servicio, Nullable<System.TimeSpan> hora_Final, string sucursal, string instructor, string modalidad, Nullable<int> capacidad)
+        {
+            var hora_InicioParameter = hora_Inicio.HasValue ?
+                new ObjectParameter("Hora_Inicio", hora_Inicio) :
+                new ObjectParameter("Hora_Inicio", typeof(System.TimeSpan));
+    
+            var fechaParameter = fecha.HasValue ?
+                new ObjectParameter("Fecha", fecha) :
+                new ObjectParameter("Fecha", typeof(System.DateTime));
+    
+            var tipo_ServicioParameter = tipo_Servicio != null ?
+                new ObjectParameter("Tipo_Servicio", tipo_Servicio) :
+                new ObjectParameter("Tipo_Servicio", typeof(string));
+    
+            var hora_FinalParameter = hora_Final.HasValue ?
+                new ObjectParameter("Hora_Final", hora_Final) :
+                new ObjectParameter("Hora_Final", typeof(System.TimeSpan));
+    
+            var sucursalParameter = sucursal != null ?
+                new ObjectParameter("Sucursal", sucursal) :
+                new ObjectParameter("Sucursal", typeof(string));
+    
+            var instructorParameter = instructor != null ?
+                new ObjectParameter("Instructor", instructor) :
+                new ObjectParameter("Instructor", typeof(string));
+    
+            var modalidadParameter = modalidad != null ?
+                new ObjectParameter("Modalidad", modalidad) :
+                new ObjectParameter("Modalidad", typeof(string));
+    
+            var capacidadParameter = capacidad.HasValue ?
+                new ObjectParameter("Capacidad", capacidad) :
+                new ObjectParameter("Capacidad", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("insertClass", hora_InicioParameter, fechaParameter, tipo_ServicioParameter, hora_FinalParameter, sucursalParameter, instructorParameter, modalidadParameter, capacidadParameter);
+        }
+    
+        public virtual int updateClass(Nullable<int> id, Nullable<System.TimeSpan> hora_Inicio, Nullable<System.DateTime> fecha, string tipo_Servicio, Nullable<System.TimeSpan> hora_Final, string sucursal, string instructor, string modalidad, Nullable<int> capacidad)
+        {
+            var idParameter = id.HasValue ?
+                new ObjectParameter("Id", id) :
+                new ObjectParameter("Id", typeof(int));
+    
+            var hora_InicioParameter = hora_Inicio.HasValue ?
+                new ObjectParameter("Hora_Inicio", hora_Inicio) :
+                new ObjectParameter("Hora_Inicio", typeof(System.TimeSpan));
+    
+            var fechaParameter = fecha.HasValue ?
+                new ObjectParameter("Fecha", fecha) :
+                new ObjectParameter("Fecha", typeof(System.DateTime));
+    
+            var tipo_ServicioParameter = tipo_Servicio != null ?
+                new ObjectParameter("Tipo_Servicio", tipo_Servicio) :
+                new ObjectParameter("Tipo_Servicio", typeof(string));
+    
+            var hora_FinalParameter = hora_Final.HasValue ?
+                new ObjectParameter("Hora_Final", hora_Final) :
+                new ObjectParameter("Hora_Final", typeof(System.TimeSpan));
+    
+            var sucursalParameter = sucursal != null ?
+                new ObjectParameter("Sucursal", sucursal) :
+                new ObjectParameter("Sucursal", typeof(string));
+    
+            var instructorParameter = instructor != null ?
+                new ObjectParameter("Instructor", instructor) :
+                new ObjectParameter("Instructor", typeof(string));
+    
+            var modalidadParameter = modalidad != null ?
+                new ObjectParameter("Modalidad", modalidad) :
+                new ObjectParameter("Modalidad", typeof(string));
+    
+            var capacidadParameter = capacidad.HasValue ?
+                new ObjectParameter("Capacidad", capacidad) :
+                new ObjectParameter("Capacidad", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("updateClass", idParameter, hora_InicioParameter, fechaParameter, tipo_ServicioParameter, hora_FinalParameter, sucursalParameter, instructorParameter, modalidadParameter, capacidadParameter);
+        }
+    
+        public virtual ObjectResult<Clase> searchClasses(Nullable<System.TimeSpan> hora_Inicio, Nullable<System.DateTime> fecha, string tipo_Servicio, Nullable<System.TimeSpan> hora_Final, string sucursal)
+        {
+            var hora_InicioParameter = hora_Inicio.HasValue ?
+                new ObjectParameter("Hora_Inicio", hora_Inicio) :
+                new ObjectParameter("Hora_Inicio", typeof(System.TimeSpan));
+    
+            var fechaParameter = fecha.HasValue ?
+                new ObjectParameter("Fecha", fecha) :
+                new ObjectParameter("Fecha", typeof(System.DateTime));
+    
+            var tipo_ServicioParameter = tipo_Servicio != null ?
+                new ObjectParameter("Tipo_Servicio", tipo_Servicio) :
+                new ObjectParameter("Tipo_Servicio", typeof(string));
+    
+            var hora_FinalParameter = hora_Final.HasValue ?
+                new ObjectParameter("Hora_Final", hora_Final) :
+                new ObjectParameter("Hora_Final", typeof(System.TimeSpan));
+    
+            var sucursalParameter = sucursal != null ?
+                new ObjectParameter("Sucursal", sucursal) :
+                new ObjectParameter("Sucursal", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Clase>("searchClasses", hora_InicioParameter, fechaParameter, tipo_ServicioParameter, hora_FinalParameter, sucursalParameter);
+        }
+    
+        public virtual ObjectResult<Clase> searchClasses(Nullable<System.TimeSpan> hora_Inicio, Nullable<System.DateTime> fecha, string tipo_Servicio, Nullable<System.TimeSpan> hora_Final, string sucursal, MergeOption mergeOption)
+        {
+            var hora_InicioParameter = hora_Inicio.HasValue ?
+                new ObjectParameter("Hora_Inicio", hora_Inicio) :
+                new ObjectParameter("Hora_Inicio", typeof(System.TimeSpan));
+    
+            var fechaParameter = fecha.HasValue ?
+                new ObjectParameter("Fecha", fecha) :
+                new ObjectParameter("Fecha", typeof(System.DateTime));
+    
+            var tipo_ServicioParameter = tipo_Servicio != null ?
+                new ObjectParameter("Tipo_Servicio", tipo_Servicio) :
+                new ObjectParameter("Tipo_Servicio", typeof(string));
+    
+            var hora_FinalParameter = hora_Final.HasValue ?
+                new ObjectParameter("Hora_Final", hora_Final) :
+                new ObjectParameter("Hora_Final", typeof(System.TimeSpan));
+    
+            var sucursalParameter = sucursal != null ?
+                new ObjectParameter("Sucursal", sucursal) :
+                new ObjectParameter("Sucursal", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Clase>("searchClasses", mergeOption, hora_InicioParameter, fechaParameter, tipo_ServicioParameter, hora_FinalParameter, sucursalParameter);
+        }
+    
+        public virtual ObjectResult<Tratamiento_Spa> getTreatmentsByGym(string sucursal)
+        {
+            var sucursalParameter = sucursal != null ?
+                new ObjectParameter("Sucursal", sucursal) :
+                new ObjectParameter("Sucursal", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Tratamiento_Spa>("getTreatmentsByGym", sucursalParameter);
+        }
+    
+        public virtual ObjectResult<Tratamiento_Spa> getTreatmentsByGym(string sucursal, MergeOption mergeOption)
+        {
+            var sucursalParameter = sucursal != null ?
+                new ObjectParameter("Sucursal", sucursal) :
+                new ObjectParameter("Sucursal", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Tratamiento_Spa>("getTreatmentsByGym", mergeOption, sucursalParameter);
+        }
+    
+        public virtual ObjectResult<Producto> getProductsByGym(string sucursal)
+        {
+            var sucursalParameter = sucursal != null ?
+                new ObjectParameter("Sucursal", sucursal) :
+                new ObjectParameter("Sucursal", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Producto>("getProductsByGym", sucursalParameter);
+        }
+    
+        public virtual ObjectResult<Producto> getProductsByGym(string sucursal, MergeOption mergeOption)
+        {
+            var sucursalParameter = sucursal != null ?
+                new ObjectParameter("Sucursal", sucursal) :
+                new ObjectParameter("Sucursal", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Producto>("getProductsByGym", mergeOption, sucursalParameter);
+        }
+    
+        public virtual int addSchedule(string dia, string sucursal, Nullable<System.TimeSpan> hora_Apertura, Nullable<System.TimeSpan> hora_Cierre)
+        {
+            var diaParameter = dia != null ?
+                new ObjectParameter("Dia", dia) :
+                new ObjectParameter("Dia", typeof(string));
+    
+            var sucursalParameter = sucursal != null ?
+                new ObjectParameter("Sucursal", sucursal) :
+                new ObjectParameter("Sucursal", typeof(string));
+    
+            var hora_AperturaParameter = hora_Apertura.HasValue ?
+                new ObjectParameter("Hora_Apertura", hora_Apertura) :
+                new ObjectParameter("Hora_Apertura", typeof(System.TimeSpan));
+    
+            var hora_CierreParameter = hora_Cierre.HasValue ?
+                new ObjectParameter("Hora_Cierre", hora_Cierre) :
+                new ObjectParameter("Hora_Cierre", typeof(System.TimeSpan));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("addSchedule", diaParameter, sucursalParameter, hora_AperturaParameter, hora_CierreParameter);
+        }
+    
+        public virtual int deleteSchedule(string dia, string sucursal)
+        {
+            var diaParameter = dia != null ?
+                new ObjectParameter("Dia", dia) :
+                new ObjectParameter("Dia", typeof(string));
+    
+            var sucursalParameter = sucursal != null ?
+                new ObjectParameter("Sucursal", sucursal) :
+                new ObjectParameter("Sucursal", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("deleteSchedule", diaParameter, sucursalParameter);
+        }
+    
+        public virtual ObjectResult<Sucursal_Horario> getAllSchedulesByGym(string nombre)
+        {
+            var nombreParameter = nombre != null ?
+                new ObjectParameter("Nombre", nombre) :
+                new ObjectParameter("Nombre", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sucursal_Horario>("getAllSchedulesByGym", nombreParameter);
+        }
+    
+        public virtual ObjectResult<Sucursal_Horario> getAllSchedulesByGym(string nombre, MergeOption mergeOption)
+        {
+            var nombreParameter = nombre != null ?
+                new ObjectParameter("Nombre", nombre) :
+                new ObjectParameter("Nombre", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sucursal_Horario>("getAllSchedulesByGym", mergeOption, nombreParameter);
+        }
+    
+        public virtual int updateSchedule(string currentDay, string dia, string sucursal, Nullable<System.TimeSpan> hora_Apertura, Nullable<System.TimeSpan> hora_Cierre)
+        {
+            var currentDayParameter = currentDay != null ?
+                new ObjectParameter("CurrentDay", currentDay) :
+                new ObjectParameter("CurrentDay", typeof(string));
+    
+            var diaParameter = dia != null ?
+                new ObjectParameter("Dia", dia) :
+                new ObjectParameter("Dia", typeof(string));
+    
+            var sucursalParameter = sucursal != null ?
+                new ObjectParameter("Sucursal", sucursal) :
+                new ObjectParameter("Sucursal", typeof(string));
+    
+            var hora_AperturaParameter = hora_Apertura.HasValue ?
+                new ObjectParameter("Hora_Apertura", hora_Apertura) :
+                new ObjectParameter("Hora_Apertura", typeof(System.TimeSpan));
+    
+            var hora_CierreParameter = hora_Cierre.HasValue ?
+                new ObjectParameter("Hora_Cierre", hora_Cierre) :
+                new ObjectParameter("Hora_Cierre", typeof(System.TimeSpan));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("updateSchedule", currentDayParameter, diaParameter, sucursalParameter, hora_AperturaParameter, hora_CierreParameter);
         }
     }
 }

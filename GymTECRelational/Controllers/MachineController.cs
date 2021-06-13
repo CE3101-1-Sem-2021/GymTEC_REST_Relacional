@@ -83,7 +83,7 @@ namespace GymTECRelational.Controllers
         [Route("api/Maquina/updateMachine/{serial}/{token}")]
         public HttpResponseMessage Delete(string serial,string token)
         {
-            return tools.deleteFromDatabaseOneKey(token, "Maquina", serial);
+            return tools.deleteFromDatabase(token, "Maquina", serial,null);
         }
     }
 }

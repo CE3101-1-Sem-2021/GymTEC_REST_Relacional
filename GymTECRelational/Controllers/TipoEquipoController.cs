@@ -74,7 +74,7 @@ namespace GymTECRelational.Controllers
         [Route("api/TipoEquipo/deleteMachineType/{typeName}/{token}")]
         public HttpResponseMessage Delete(string token,string typeName)
         {
-            return tools.deleteFromDatabaseOneKey(token, "Tipo_Equipo", typeName);
+            return tools.deleteFromDatabase(token, "Tipo_Equipo", typeName,null);
         }
     }
 }

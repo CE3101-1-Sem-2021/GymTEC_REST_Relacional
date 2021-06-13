@@ -22,12 +22,10 @@
         <EntityType Name="Cliente_Clase">
           <Key>
             <PropertyRef Name="Id" />
+            <PropertyRef Name="Cliente" />
           </Key>
           <Property Name="Id" Type="int" Nullable="false" />
-          <Property Name="Hora_Inicio_Clase" Type="time" Precision="7" />
-          <Property Name="Fecha_Clase" Type="date" />
-          <Property Name="Tipo_Clase" Type="varchar" MaxLength="25" />
-          <Property Name="Cliente" Type="varchar" MaxLength="20" />
+          <Property Name="Cliente" Type="varchar" MaxLength="20" Nullable="false" />
         </EntityType>
         <EntityType Name="Direccion">
           <Key>
@@ -113,6 +111,16 @@
           <Property Name="Tienda_Act" Type="bit" StoreGeneratedPattern="Computed" />
           <Property Name="Spa_Act" Type="bit" StoreGeneratedPattern="Computed" />
         </EntityType>
+        <EntityType Name="Sucursal_Horario">
+          <Key>
+            <PropertyRef Name="Dia" />
+            <PropertyRef Name="Sucursal" />
+          </Key>
+          <Property Name="Dia" Type="varchar" MaxLength="15" Nullable="false" />
+          <Property Name="Sucursal" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="Hora_Apertura" Type="time" Precision="0" />
+          <Property Name="Hora_Cierre" Type="time" Precision="0" />
+        </EntityType>
         <EntityType Name="Sucursal_Telefono">
           <Key>
             <PropertyRef Name="Telefono" />
@@ -153,7 +161,7 @@
           <End Role="Clase" Type="Self.Clase" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
-          <End Role="Cliente_Clase" Type="Self.Cliente_Clase" Multiplicity="0..1" />
+          <End Role="Cliente_Clase" Type="Self.Cliente_Clase" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Clase">
               <PropertyRef Name="Id" />
@@ -297,6 +305,20 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FKSucursal_Horario">
+          <End Role="Sucursal" Type="Self.Sucursal" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Sucursal_Horario" Type="Self.Sucursal_Horario" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Sucursal">
+              <PropertyRef Name="Nombre" />
+            </Principal>
+            <Dependent Role="Sucursal_Horario">
+              <PropertyRef Name="Sucursal" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FKSucursal_Maquina">
           <End Role="Sucursal" Type="Self.Sucursal" Multiplicity="0..1" />
           <End Role="Maquina" Type="Self.Maquina" Multiplicity="*" />
@@ -391,6 +413,12 @@
           <Parameter Name="Nombre" Type="varchar" Mode="In" />
           <Parameter Name="Telefono" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="addSchedule" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Dia" Type="varchar" Mode="In" />
+          <Parameter Name="Sucursal" Type="varchar" Mode="In" />
+          <Parameter Name="Hora_Apertura" Type="time" Mode="In" />
+          <Parameter Name="Hora_Cierre" Type="time" Mode="In" />
+        </Function>
         <Function Name="assignProduct" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="BarCode" Type="varchar" Mode="In" />
           <Parameter Name="GymName" Type="varchar" Mode="In" />
@@ -412,6 +440,9 @@
         <Function Name="createService" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Nombre" Type="varchar" Mode="In" />
           <Parameter Name="Descripcion" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="deleteClass" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Id" Type="int" Mode="In" />
         </Function>
         <Function Name="deleteEmployee" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Cedula" Type="varchar" Mode="In" />
@@ -437,12 +468,17 @@
         <Function Name="deleteProduct" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="BarCode" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="deleteSchedule" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Dia" Type="varchar" Mode="In" />
+          <Parameter Name="Sucursal" Type="varchar" Mode="In" />
+        </Function>
         <Function Name="deleteService" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Nombre" Type="varchar" Mode="In" />
         </Function>
         <Function Name="deleteTreatment" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Id" Type="int" Mode="In" />
         </Function>
+        <Function Name="getAllClasses" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="getAllMachines" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="getAllMachineTypes" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="getAllPayrolls" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
@@ -450,8 +486,17 @@
           <Parameter Name="Nombre" Type="varchar" Mode="In" />
         </Function>
         <Function Name="getAllProducts" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="getAllSchedulesByGym" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Nombre" Type="varchar" Mode="In" />
+        </Function>
         <Function Name="getAllServices" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="getAllTreatments" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="getClass" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="getClassesByGym" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Sucursal" Type="varchar" Mode="In" />
+        </Function>
         <Function Name="getEmployeeById" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Cedula" Type="varchar" Mode="In" />
         </Function>
@@ -476,12 +521,28 @@
         <Function Name="getProduct" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="CodigoBarras" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="getProductsByGym" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Sucursal" Type="varchar" Mode="In" />
+        </Function>
         <Function Name="getService" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Nombre" Type="varchar" Mode="In" />
         </Function>
         <Function Name="gettAllJobs" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="getTreatment" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="getTreatmentsByGym" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Sucursal" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="insertClass" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Hora_Inicio" Type="time" Mode="In" />
+          <Parameter Name="Fecha" Type="date" Mode="In" />
+          <Parameter Name="Tipo_Servicio" Type="varchar" Mode="In" />
+          <Parameter Name="Hora_Final" Type="time" Mode="In" />
+          <Parameter Name="Sucursal" Type="varchar" Mode="In" />
+          <Parameter Name="Instructor" Type="varchar" Mode="In" />
+          <Parameter Name="Modalidad" Type="varchar" Mode="In" />
+          <Parameter Name="Capacidad" Type="int" Mode="In" />
         </Function>
         <Function Name="insertEmployee" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Cedula" Type="varchar" Mode="In" />
@@ -530,6 +591,13 @@
         <Function Name="insertTreatment" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Nombre" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="searchClasses" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Hora_Inicio" Type="time" Mode="In" />
+          <Parameter Name="Fecha" Type="date" Mode="In" />
+          <Parameter Name="Tipo_Servicio" Type="varchar" Mode="In" />
+          <Parameter Name="Hora_Final" Type="time" Mode="In" />
+          <Parameter Name="Sucursal" Type="varchar" Mode="In" />
+        </Function>
         <Function Name="selectAllAdmins" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="selectAllEmployees" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="selectAllGyms" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
@@ -543,6 +611,17 @@
         <Function Name="unsignTreatment" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="treatmentId" Type="int" Mode="In" />
           <Parameter Name="gymName" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="updateClass" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Id" Type="int" Mode="In" />
+          <Parameter Name="Hora_Inicio" Type="time" Mode="In" />
+          <Parameter Name="Fecha" Type="date" Mode="In" />
+          <Parameter Name="Tipo_Servicio" Type="varchar" Mode="In" />
+          <Parameter Name="Hora_Final" Type="time" Mode="In" />
+          <Parameter Name="Sucursal" Type="varchar" Mode="In" />
+          <Parameter Name="Instructor" Type="varchar" Mode="In" />
+          <Parameter Name="Modalidad" Type="varchar" Mode="In" />
+          <Parameter Name="Capacidad" Type="int" Mode="In" />
         </Function>
         <Function Name="updateEmployee" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="CurrentId" Type="varchar" Mode="In" />
@@ -603,6 +682,13 @@
           <Parameter Name="Descripcion" Type="varchar" Mode="In" />
           <Parameter Name="Costo" Type="numeric" Mode="In" />
         </Function>
+        <Function Name="updateSchedule" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CurrentDay" Type="varchar" Mode="In" />
+          <Parameter Name="Dia" Type="varchar" Mode="In" />
+          <Parameter Name="Sucursal" Type="varchar" Mode="In" />
+          <Parameter Name="Hora_Apertura" Type="time" Mode="In" />
+          <Parameter Name="Hora_Cierre" Type="time" Mode="In" />
+        </Function>
         <Function Name="updateService" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="CurrentName" Type="varchar" Mode="In" />
           <Parameter Name="Nombre" Type="varchar" Mode="In" />
@@ -623,6 +709,7 @@
           <EntitySet Name="Producto_Sucursal" EntityType="Self.Producto_Sucursal" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Puesto" EntityType="Self.Puesto" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Sucursal" EntityType="Self.Sucursal" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Sucursal_Horario" EntityType="Self.Sucursal_Horario" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Sucursal_Telefono" EntityType="Self.Sucursal_Telefono" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Tipo_Equipo" EntityType="Self.Tipo_Equipo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Tipo_Servicio" EntityType="Self.Tipo_Servicio" Schema="dbo" store:Type="Tables" />
@@ -672,6 +759,10 @@
             <End Role="Sucursal" EntitySet="Sucursal" />
             <End Role="Empleado" EntitySet="Empleado" />
           </AssociationSet>
+          <AssociationSet Name="FKSucursal_Horario" Association="Self.FKSucursal_Horario">
+            <End Role="Sucursal" EntitySet="Sucursal" />
+            <End Role="Sucursal_Horario" EntitySet="Sucursal_Horario" />
+          </AssociationSet>
           <AssociationSet Name="FKSucursal_Maquina" Association="Self.FKSucursal_Maquina">
             <End Role="Sucursal" EntitySet="Sucursal" />
             <End Role="Maquina" EntitySet="Maquina" />
@@ -714,21 +805,7 @@
           <Property Name="Instructor" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="Modalidad" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Capacidad" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Cliente_Clase" Relationship="Self.FKClase_ClientClase" FromRole="Clase" ToRole="Cliente_Clase" />
-          <NavigationProperty Name="Empleado" Relationship="Self.FKInstructor_Clase" FromRole="Clase" ToRole="Empleado" />
-          <NavigationProperty Name="Sucursal1" Relationship="Self.FKSucursal_Clase" FromRole="Clase" ToRole="Sucursal" />
-          <NavigationProperty Name="Tipo_Servicio1" Relationship="Self.FKTipoServicio_Clase" FromRole="Clase" ToRole="Tipo_Servicio" />
-        </EntityType>
-        <EntityType Name="Cliente_Clase">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
-          <Property Name="Hora_Inicio_Clase" Type="Time" Precision="7" />
-          <Property Name="Fecha_Clase" Type="DateTime" Precision="0" />
-          <Property Name="Tipo_Clase" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
-          <Property Name="Cliente" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Clase" Relationship="Self.FKClase_ClientClase" FromRole="Cliente_Clase" ToRole="Clase" />
+          <NavigationProperty Name="Cliente_Clase" Relationship="GymTECModel.FKClase_ClientClase" FromRole="Clase" ToRole="Cliente_Clase" />
         </EntityType>
         <EntityType Name="Direccion">
           <Key>
@@ -808,6 +885,7 @@
           <Property Name="Gerente" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="Tienda_Act" Type="Boolean" annotation:StoreGeneratedPattern="Computed" />
           <Property Name="Spa_Act" Type="Boolean" annotation:StoreGeneratedPattern="Computed" />
+          <NavigationProperty Name="Sucursal_Horario" Relationship="GymTECModel.FKSucursal_Horario" FromRole="Sucursal" ToRole="Sucursal_Horario" />
         </EntityType>
         <EntityType Name="Tipo_Equipo">
           <Key>
@@ -832,20 +910,6 @@
           <Property Name="Nombre" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" />
           <NavigationProperty Name="Sucursal" Relationship="GymTECModel.Tratamiento_Sucursal" FromRole="Tratamiento_Spa" ToRole="Sucursal" />
         </EntityType>
-        <Association Name="FKClase_ClientClase">
-          <End Role="Clase" Type="Self.Clase" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="Cliente_Clase" Type="Self.Cliente_Clase" Multiplicity="0..1" />
-          <ReferentialConstraint>
-            <Principal Role="Clase">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Cliente_Clase">
-              <PropertyRef Name="Id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FKInstructor_Clase">
           <End Role="Empleado" Type="Self.Empleado" Multiplicity="0..1" />
           <End Role="Clase" Type="Self.Clase" Multiplicity="*" />
@@ -1002,7 +1066,6 @@
         </Association>
         <EntityContainer Name="GymTECEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Clases" EntityType="Self.Clase" />
-          <EntitySet Name="Cliente_Clase" EntityType="Self.Cliente_Clase" />
           <EntitySet Name="Direccions" EntityType="Self.Direccion" />
           <EntitySet Name="Empleadoes" EntityType="Self.Empleado" />
           <EntitySet Name="Maquinas" EntityType="Self.Maquina" />
@@ -1013,10 +1076,6 @@
           <EntitySet Name="Tipo_Equipo" EntityType="Self.Tipo_Equipo" />
           <EntitySet Name="Tipo_Servicio" EntityType="Self.Tipo_Servicio" />
           <EntitySet Name="Tratamiento_Spa" EntityType="Self.Tratamiento_Spa" />
-          <AssociationSet Name="FKClase_ClientClase" Association="Self.FKClase_ClientClase">
-            <End Role="Clase" EntitySet="Clases" />
-            <End Role="Cliente_Clase" EntitySet="Cliente_Clase" />
-          </AssociationSet>
           <AssociationSet Name="FKInstructor_Clase" Association="Self.FKInstructor_Clase">
             <End Role="Empleado" EntitySet="Empleadoes" />
             <End Role="Clase" EntitySet="Clases" />
@@ -1322,6 +1381,80 @@
             <Parameter Name="treatmentId" Mode="In" Type="Int32" />
             <Parameter Name="gymName" Mode="In" Type="String" />
           </FunctionImport>
+          <FunctionImport Name="deleteClass">
+          <Parameter Name="Id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="getAllClasses" EntitySet="Clases" ReturnType="Collection(GymTECModel.Clase)" />
+          <FunctionImport Name="getClass" EntitySet="Clases" ReturnType="Collection(GymTECModel.Clase)">
+          <Parameter Name="Id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="getClassesByGym" EntitySet="Clases" ReturnType="Collection(GymTECModel.Clase)">
+          <Parameter Name="Sucursal" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="insertClass">
+            <Parameter Name="Hora_Inicio" Mode="In" Type="Time" />
+            <Parameter Name="Fecha" Mode="In" Type="DateTime" />
+            <Parameter Name="Tipo_Servicio" Mode="In" Type="String" />
+            <Parameter Name="Hora_Final" Mode="In" Type="Time" />
+            <Parameter Name="Sucursal" Mode="In" Type="String" />
+            <Parameter Name="Instructor" Mode="In" Type="String" />
+            <Parameter Name="Modalidad" Mode="In" Type="String" />
+            <Parameter Name="Capacidad" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="updateClass">
+            <Parameter Name="Id" Mode="In" Type="Int32" />
+            <Parameter Name="Hora_Inicio" Mode="In" Type="Time" />
+            <Parameter Name="Fecha" Mode="In" Type="DateTime" />
+            <Parameter Name="Tipo_Servicio" Mode="In" Type="String" />
+            <Parameter Name="Hora_Final" Mode="In" Type="Time" />
+            <Parameter Name="Sucursal" Mode="In" Type="String" />
+            <Parameter Name="Instructor" Mode="In" Type="String" />
+            <Parameter Name="Modalidad" Mode="In" Type="String" />
+            <Parameter Name="Capacidad" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <EntitySet Name="Cliente_Clase" EntityType="GymTECModel.Cliente_Clase" />
+          <AssociationSet Name="FKClase_ClientClase" Association="GymTECModel.FKClase_ClientClase">
+            <End Role="Clase" EntitySet="Clases" />
+            <End Role="Cliente_Clase" EntitySet="Cliente_Clase" />
+          </AssociationSet>
+          <FunctionImport Name="searchClasses" EntitySet="Clases" ReturnType="Collection(GymTECModel.Clase)">
+            <Parameter Name="Hora_Inicio" Mode="In" Type="Time" />
+            <Parameter Name="Fecha" Mode="In" Type="DateTime" />
+            <Parameter Name="Tipo_Servicio" Mode="In" Type="String" />
+            <Parameter Name="Hora_Final" Mode="In" Type="Time" />
+            <Parameter Name="Sucursal" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="getTreatmentsByGym" EntitySet="Tratamiento_Spa" ReturnType="Collection(GymTECModel.Tratamiento_Spa)">
+          <Parameter Name="Sucursal" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="getProductsByGym" EntitySet="Productoes" ReturnType="Collection(GymTECModel.Producto)">
+          <Parameter Name="Sucursal" Mode="In" Type="String" />
+          </FunctionImport>
+          <EntitySet Name="Sucursal_Horario" EntityType="GymTECModel.Sucursal_Horario" />
+          <AssociationSet Name="FKSucursal_Horario" Association="GymTECModel.FKSucursal_Horario">
+            <End Role="Sucursal" EntitySet="Sucursals" />
+            <End Role="Sucursal_Horario" EntitySet="Sucursal_Horario" />
+          </AssociationSet>
+          <FunctionImport Name="addSchedule">
+            <Parameter Name="Dia" Mode="In" Type="String" />
+            <Parameter Name="Sucursal" Mode="In" Type="String" />
+            <Parameter Name="Hora_Apertura" Mode="In" Type="Time" />
+            <Parameter Name="Hora_Cierre" Mode="In" Type="Time" />
+          </FunctionImport>
+          <FunctionImport Name="deleteSchedule">
+            <Parameter Name="Dia" Mode="In" Type="String" />
+            <Parameter Name="Sucursal" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="getAllSchedulesByGym" EntitySet="Sucursal_Horario" ReturnType="Collection(GymTECModel.Sucursal_Horario)">
+            <Parameter Name="Nombre" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="updateSchedule">
+            <Parameter Name="CurrentDay" Mode="In" Type="String" />
+            <Parameter Name="Dia" Mode="In" Type="String" />
+            <Parameter Name="Sucursal" Mode="In" Type="String" />
+            <Parameter Name="Hora_Apertura" Mode="In" Type="Time" />
+            <Parameter Name="Hora_Cierre" Mode="In" Type="Time" />
+          </FunctionImport>
         </EntityContainer>
         <ComplexType Name="selectAllAdmins_Result">
           <Property Type="Int32" Name="Id" Nullable="false" />
@@ -1577,6 +1710,136 @@
           <Property Type="String" Name="Salt" Nullable="false" MaxLength="32" />
           <Property Type="String" Name="Token" Nullable="false" MaxLength="32" />
         </ComplexType>
+        <ComplexType Name="getAllClasses_Result">
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="Time" Name="Hora_Inicio" Nullable="true" />
+          <Property Type="DateTime" Name="Fecha" Nullable="true" />
+          <Property Type="String" Name="Tipo_Servicio" Nullable="false" MaxLength="25" />
+          <Property Type="Time" Name="Hora_Final" Nullable="false" />
+          <Property Type="String" Name="Sucursal" Nullable="false" MaxLength="20" />
+          <Property Type="String" Name="Instructor" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="Modalidad" Nullable="false" MaxLength="10" />
+          <Property Type="Int32" Name="Capacidad" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="getClass_Result">
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="Time" Name="Hora_Inicio" Nullable="true" />
+          <Property Type="DateTime" Name="Fecha" Nullable="true" />
+          <Property Type="String" Name="Tipo_Servicio" Nullable="false" MaxLength="25" />
+          <Property Type="Time" Name="Hora_Final" Nullable="false" />
+          <Property Type="String" Name="Sucursal" Nullable="false" MaxLength="20" />
+          <Property Type="String" Name="Instructor" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="Modalidad" Nullable="false" MaxLength="10" />
+          <Property Type="Int32" Name="Capacidad" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="getClassesByGym_Result">
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="Time" Name="Hora_Inicio" Nullable="true" />
+          <Property Type="DateTime" Name="Fecha" Nullable="true" />
+          <Property Type="String" Name="Tipo_Servicio" Nullable="false" MaxLength="25" />
+          <Property Type="Time" Name="Hora_Final" Nullable="false" />
+          <Property Type="String" Name="Sucursal" Nullable="false" MaxLength="20" />
+          <Property Type="String" Name="Instructor" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="Modalidad" Nullable="false" MaxLength="10" />
+          <Property Type="Int32" Name="Capacidad" Nullable="false" />
+        </ComplexType>
+        <EntityType Name="Cliente_Clase">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="Cliente" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Cliente" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Clase" Relationship="GymTECModel.FKClase_ClientClase" FromRole="Cliente_Clase" ToRole="Clase" />
+        </EntityType>
+        <Association Name="FKClase_ClientClase">
+          <End Type="GymTECModel.Clase" Role="Clase" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="GymTECModel.Cliente_Clase" Role="Cliente_Clase" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Clase">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Cliente_Clase">
+              <PropertyRef Name="Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <ComplexType Name="searchClasses1_Result">
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="Time" Name="Hora_Inicio" Nullable="true" />
+          <Property Type="DateTime" Name="Fecha" Nullable="true" />
+          <Property Type="String" Name="Tipo_Servicio" Nullable="false" MaxLength="25" />
+          <Property Type="Time" Name="Hora_Final" Nullable="false" />
+          <Property Type="String" Name="Sucursal" Nullable="false" MaxLength="20" />
+          <Property Type="String" Name="Instructor" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="Modalidad" Nullable="false" MaxLength="10" />
+          <Property Type="Int32" Name="Capacidad" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="searchClasses_Result">
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="Time" Name="Hora_Inicio" Nullable="true" />
+          <Property Type="DateTime" Name="Fecha" Nullable="true" />
+          <Property Type="String" Name="Tipo_Servicio" Nullable="false" MaxLength="25" />
+          <Property Type="Time" Name="Hora_Final" Nullable="false" />
+          <Property Type="String" Name="Sucursal" Nullable="false" MaxLength="20" />
+          <Property Type="String" Name="Instructor" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="Modalidad" Nullable="false" MaxLength="10" />
+          <Property Type="Int32" Name="Capacidad" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="getTreatmentsByGym_Result">
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="String" Name="Nombre" Nullable="false" MaxLength="25" />
+        </ComplexType>
+        <ComplexType Name="getProductsByGym_Result">
+          <Property Type="String" Name="Nombre" Nullable="false" MaxLength="20" />
+          <Property Type="String" Name="Distrito" Nullable="false" MaxLength="25" />
+          <Property Type="String" Name="Canton" Nullable="false" MaxLength="25" />
+          <Property Type="String" Name="Provincia" Nullable="false" MaxLength="25" />
+          <Property Type="DateTime" Name="Fecha_Apertura" Nullable="false" />
+          <Property Type="Int32" Name="Capacidad_Max" Nullable="false" />
+          <Property Type="String" Name="Gerente" Nullable="true" MaxLength="20" />
+          <Property Type="Boolean" Name="Tienda_Act" Nullable="true" />
+          <Property Type="Boolean" Name="Spa_Act" Nullable="true" />
+          <Property Type="String" Name="Codigo_Barras_Prod" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="Sucursal" Nullable="false" MaxLength="20" />
+          <Property Type="String" Name="Codigo_Barras" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="Nombre1" Nullable="false" MaxLength="25" />
+          <Property Type="String" Name="Descripcion" Nullable="false" MaxLength="300" />
+          <Property Type="Decimal" Name="Costo" Nullable="true" Precision="7" Scale="2" />
+        </ComplexType>
+        <EntityType Name="Sucursal_Horario">
+          <Key>
+            <PropertyRef Name="Dia" />
+            <PropertyRef Name="Sucursal" />
+          </Key>
+          <Property Name="Dia" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="Sucursal" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Hora_Apertura" Type="Time" Precision="0" />
+          <Property Name="Hora_Cierre" Type="Time" Precision="0" />
+          <NavigationProperty Name="Sucursal1" Relationship="GymTECModel.FKSucursal_Horario" FromRole="Sucursal_Horario" ToRole="Sucursal" />
+        </EntityType>
+        <Association Name="FKSucursal_Horario">
+          <End Type="GymTECModel.Sucursal" Role="Sucursal" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="GymTECModel.Sucursal_Horario" Role="Sucursal_Horario" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Sucursal">
+              <PropertyRef Name="Nombre" />
+            </Principal>
+            <Dependent Role="Sucursal_Horario">
+              <PropertyRef Name="Sucursal" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <ComplexType Name="getAllSchedulesByGym_Result">
+          <Property Type="String" Name="Dia" Nullable="false" MaxLength="15" />
+          <Property Type="String" Name="Sucursal" Nullable="false" MaxLength="20" />
+          <Property Type="Time" Name="Hora_Apertura" Nullable="true" />
+          <Property Type="Time" Name="Hora_Cierre" Nullable="true" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1595,17 +1858,6 @@
                 <ScalarProperty Name="Instructor" ColumnName="Instructor" />
                 <ScalarProperty Name="Modalidad" ColumnName="Modalidad" />
                 <ScalarProperty Name="Capacidad" ColumnName="Capacidad" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Cliente_Clase">
-            <EntityTypeMapping TypeName="GymTECModel.Cliente_Clase">
-              <MappingFragment StoreEntitySet="Cliente_Clase">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Hora_Inicio_Clase" ColumnName="Hora_Inicio_Clase" />
-                <ScalarProperty Name="Fecha_Clase" ColumnName="Fecha_Clase" />
-                <ScalarProperty Name="Tipo_Clase" ColumnName="Tipo_Clase" />
-                <ScalarProperty Name="Cliente" ColumnName="Cliente" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1982,6 +2234,65 @@
           <FunctionImportMapping FunctionImportName="unsignProduct" FunctionName="GymTECModel.Store.unsignProduct" />
           <FunctionImportMapping FunctionImportName="assignTreatment" FunctionName="GymTECModel.Store.assignTreatment" />
           <FunctionImportMapping FunctionImportName="unsignTreatment" FunctionName="GymTECModel.Store.unsignTreatment" />
+          <FunctionImportMapping FunctionImportName="deleteClass" FunctionName="GymTECModel.Store.deleteClass" />
+          <FunctionImportMapping FunctionImportName="getAllClasses" FunctionName="GymTECModel.Store.getAllClasses">
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="getClass" FunctionName="GymTECModel.Store.getClass">
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="getClassesByGym" FunctionName="GymTECModel.Store.getClassesByGym">
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="insertClass" FunctionName="GymTECModel.Store.insertClass" />
+          <FunctionImportMapping FunctionImportName="updateClass" FunctionName="GymTECModel.Store.updateClass" />
+          <EntitySetMapping Name="Cliente_Clase">
+            <EntityTypeMapping TypeName="GymTECModel.Cliente_Clase">
+              <MappingFragment StoreEntitySet="Cliente_Clase">
+                <ScalarProperty Name="Cliente" ColumnName="Cliente" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="searchClasses" FunctionName="GymTECModel.Store.searchClasses">
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="getTreatmentsByGym" FunctionName="GymTECModel.Store.getTreatmentsByGym">
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="getProductsByGym" FunctionName="GymTECModel.Store.getProductsByGym">
+          </FunctionImportMapping>
+          <EntitySetMapping Name="Sucursal_Horario">
+            <EntityTypeMapping TypeName="GymTECModel.Sucursal_Horario">
+              <MappingFragment StoreEntitySet="Sucursal_Horario">
+                <ScalarProperty Name="Hora_Cierre" ColumnName="Hora_Cierre" />
+                <ScalarProperty Name="Hora_Apertura" ColumnName="Hora_Apertura" />
+                <ScalarProperty Name="Sucursal" ColumnName="Sucursal" />
+                <ScalarProperty Name="Dia" ColumnName="Dia" />
+              </MappingFragment>
+            </EntityTypeMapping>
+            <EntityTypeMapping TypeName="GymTECModel.Sucursal_Horario">
+              <ModificationFunctionMapping>
+                <InsertFunction FunctionName="GymTECModel.Store.addSchedule">
+                  <ScalarProperty Name="Hora_Cierre" ParameterName="Hora_Cierre" />
+                  <ScalarProperty Name="Hora_Apertura" ParameterName="Hora_Apertura" />
+                  <ScalarProperty Name="Sucursal" ParameterName="Sucursal" />
+                  <ScalarProperty Name="Dia" ParameterName="Dia" />
+                </InsertFunction>
+                <UpdateFunction FunctionName="GymTECModel.Store.updateSchedule">
+                  <ScalarProperty Name="Dia" ParameterName="CurrentDay" Version="Current" />
+                  <ScalarProperty Name="Hora_Cierre" ParameterName="Hora_Cierre" Version="Current" />
+                  <ScalarProperty Name="Hora_Apertura" ParameterName="Hora_Apertura" Version="Current" />
+                  <ScalarProperty Name="Sucursal" ParameterName="Sucursal" Version="Current" />
+                  <ScalarProperty Name="Dia" ParameterName="Dia" Version="Current" />
+                </UpdateFunction>
+                <DeleteFunction FunctionName="GymTECModel.Store.deleteSchedule">
+                  <ScalarProperty Name="Sucursal" ParameterName="Sucursal" />
+                  <ScalarProperty Name="Dia" ParameterName="Dia" />
+                </DeleteFunction>
+              </ModificationFunctionMapping>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="addSchedule" FunctionName="GymTECModel.Store.addSchedule" />
+          <FunctionImportMapping FunctionImportName="deleteSchedule" FunctionName="GymTECModel.Store.deleteSchedule" />
+          <FunctionImportMapping FunctionImportName="getAllSchedulesByGym" FunctionName="GymTECModel.Store.getAllSchedulesByGym">
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="updateSchedule" FunctionName="GymTECModel.Store.updateSchedule" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

@@ -163,6 +163,7 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Controllers\ClassController.cs" />
     <Compile Include="Controllers\EmployeeController.cs" />
     <Compile Include="Controllers\GymController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -171,6 +172,7 @@
     <Compile Include="Controllers\PayrollController.cs" />
     <Compile Include="Controllers\PhoneController.cs" />
     <Compile Include="Controllers\PoductController.cs" />
+    <Compile Include="Controllers\ScheduleController.cs" />
     <Compile Include="Controllers\ServiceController.cs" />
     <Compile Include="Controllers\TipoEquipoController.cs" />
     <Compile Include="Controllers\TreatmentController.cs" />
@@ -190,6 +192,9 @@
     <Compile Include="EntityFramework\getAdminByMail_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="EntityFramework\getAllClasses_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="EntityFramework\getAllMachines_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -205,10 +210,19 @@
     <Compile Include="EntityFramework\getAllProducts_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="EntityFramework\getAllSchedulesByGym_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="EntityFramework\getAllServices_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="EntityFramework\getAllTreatments_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\getClassesByGym_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\getClass_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="EntityFramework\getEmployeeById_Result.cs">
@@ -241,6 +255,9 @@
     <Compile Include="EntityFramework\getPayroll_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="EntityFramework\getProductsByGym_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="EntityFramework\getProduct_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -248,6 +265,9 @@
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="EntityFramework\gettAllJobs_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\getTreatmentsByGym_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="EntityFramework\getTreatment_Result.cs">
@@ -280,6 +300,12 @@
     <Compile Include="EntityFramework\Puesto.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="EntityFramework\searchClasses1_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\searchClasses_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="EntityFramework\selectAllAdmins1_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -299,6 +325,9 @@
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="EntityFramework\Sucursal.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\Sucursal_Horario.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="EntityFramework\Sucursal_Telefono.cs">

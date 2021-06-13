@@ -20,15 +20,14 @@ namespace GymTECRelational.Controllers
          * Entrada:Token del administrador que hace la solicitud
          * Salida: Lista de los gimnasios registrados.
          */
-        [Route("api/Gym/{token}")]
-        public List<Sucursal> Get(string token)
+        [Route("api/Gym/getAllGyms/{token}")]
+        public HttpResponseMessage Get(string token)
         {
             if (tools.tokenVerifier(token,"Admin"))
             {
-                var lst=context.selectAllGyms().ToList<Sucursal>();
-                return lst;
+                return Request.CreateResponse(HttpStatusCode.OK, context.selectAllGyms().ToList<Sucursal>());
             }
-            return new List<Sucursal>();
+            return Request.CreateResponse(HttpStatusCode.Conflict,"Token invalido");
         }
 
         /*Metodo para obtener un gimnasioo ne particular por su nombre.
@@ -36,7 +35,7 @@ namespace GymTECRelational.Controllers
          * Entrada:Nombre del gimnsaio a solicitar,token del administrador que hacela solicitud.
          * Salida: Respuesta de tipo HTTP que indica si la operacion fue exitosa.
          */
-        [Route("api/Gym/{gymName}/{token}")]
+        [Route("api/Gym/getGym/{gymName}/{token}")]
         public HttpResponseMessage Get(string gymName,string token)
         {
             if(tools.tokenVerifier(token,"Admin"))
@@ -69,6 +68,16 @@ namespace GymTECRelational.Controllers
             return tools.gymSpecialsActivation(token, operation,state,gymName);
         }
 
+        /*Metodo para copiar un gimnasio
+         * 
+         * Entrada:Token del administrador que realiza la solicitud,nombre del gimnasio que se quiere copiar
+         * Salida: Respuesta de tipo HTTP que indica si la operacion fue exitosa
+         */
+        [Route("api/Gym/copyGym/{gymName}/{token}")]
+        public HttpResponseMessage Post(string gymName,string token)
+        {
+            return tools.copyGym(gymName, token);
+        }
         /*Metodo para actualizar la informacion de un gimnasio.
          * 
          * Entrada:Nombre del gimnasio que se quiere modificar,token de ladministrador que relaiza la solicitud,nueva informacion del gimnasio
@@ -88,7 +97,7 @@ namespace GymTECRelational.Controllers
         [Route("api/Gym/deleteGym/{gymName}/{token}")]
         public HttpResponseMessage Delete(string token,string gymName)
         {
-            return tools.deleteFromDatabaseOneKey(token, "Sucursal", gymName);
+            return tools.deleteFromDatabase(token, "Sucursal", gymName,null);
         }
     }
 }

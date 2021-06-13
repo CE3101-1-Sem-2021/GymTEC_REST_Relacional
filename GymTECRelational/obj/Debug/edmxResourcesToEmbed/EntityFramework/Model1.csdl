@@ -13,21 +13,7 @@
     <Property Name="Instructor" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
     <Property Name="Modalidad" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
     <Property Name="Capacidad" Type="Int32" Nullable="false" />
-    <NavigationProperty Name="Cliente_Clase" Relationship="Self.FKClase_ClientClase" FromRole="Clase" ToRole="Cliente_Clase" />
-    <NavigationProperty Name="Empleado" Relationship="Self.FKInstructor_Clase" FromRole="Clase" ToRole="Empleado" />
-    <NavigationProperty Name="Sucursal1" Relationship="Self.FKSucursal_Clase" FromRole="Clase" ToRole="Sucursal" />
-    <NavigationProperty Name="Tipo_Servicio1" Relationship="Self.FKTipoServicio_Clase" FromRole="Clase" ToRole="Tipo_Servicio" />
-  </EntityType>
-  <EntityType Name="Cliente_Clase">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="Int32" Nullable="false" />
-    <Property Name="Hora_Inicio_Clase" Type="Time" Precision="7" />
-    <Property Name="Fecha_Clase" Type="DateTime" Precision="0" />
-    <Property Name="Tipo_Clase" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
-    <Property Name="Cliente" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-    <NavigationProperty Name="Clase" Relationship="Self.FKClase_ClientClase" FromRole="Cliente_Clase" ToRole="Clase" />
+    <NavigationProperty Name="Cliente_Clase" Relationship="GymTECModel.FKClase_ClientClase" FromRole="Clase" ToRole="Cliente_Clase" />
   </EntityType>
   <EntityType Name="Direccion">
     <Key>
@@ -107,6 +93,7 @@
     <Property Name="Gerente" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
     <Property Name="Tienda_Act" Type="Boolean" annotation:StoreGeneratedPattern="Computed" />
     <Property Name="Spa_Act" Type="Boolean" annotation:StoreGeneratedPattern="Computed" />
+    <NavigationProperty Name="Sucursal_Horario" Relationship="GymTECModel.FKSucursal_Horario" FromRole="Sucursal" ToRole="Sucursal_Horario" />
   </EntityType>
   <EntityType Name="Tipo_Equipo">
     <Key>
@@ -131,20 +118,6 @@
     <Property Name="Nombre" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" />
     <NavigationProperty Name="Sucursal" Relationship="GymTECModel.Tratamiento_Sucursal" FromRole="Tratamiento_Spa" ToRole="Sucursal" />
   </EntityType>
-  <Association Name="FKClase_ClientClase">
-    <End Role="Clase" Type="Self.Clase" Multiplicity="1">
-      <OnDelete Action="Cascade" />
-    </End>
-    <End Role="Cliente_Clase" Type="Self.Cliente_Clase" Multiplicity="0..1" />
-    <ReferentialConstraint>
-      <Principal Role="Clase">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="Cliente_Clase">
-        <PropertyRef Name="Id" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="FKInstructor_Clase">
     <End Role="Empleado" Type="Self.Empleado" Multiplicity="0..1" />
     <End Role="Clase" Type="Self.Clase" Multiplicity="*" />
@@ -301,7 +274,6 @@
   </Association>
   <EntityContainer Name="GymTECEntities" annotation:LazyLoadingEnabled="true">
     <EntitySet Name="Clases" EntityType="Self.Clase" />
-    <EntitySet Name="Cliente_Clase" EntityType="Self.Cliente_Clase" />
     <EntitySet Name="Direccions" EntityType="Self.Direccion" />
     <EntitySet Name="Empleadoes" EntityType="Self.Empleado" />
     <EntitySet Name="Maquinas" EntityType="Self.Maquina" />
@@ -312,10 +284,6 @@
     <EntitySet Name="Tipo_Equipo" EntityType="Self.Tipo_Equipo" />
     <EntitySet Name="Tipo_Servicio" EntityType="Self.Tipo_Servicio" />
     <EntitySet Name="Tratamiento_Spa" EntityType="Self.Tratamiento_Spa" />
-    <AssociationSet Name="FKClase_ClientClase" Association="Self.FKClase_ClientClase">
-      <End Role="Clase" EntitySet="Clases" />
-      <End Role="Cliente_Clase" EntitySet="Cliente_Clase" />
-    </AssociationSet>
     <AssociationSet Name="FKInstructor_Clase" Association="Self.FKInstructor_Clase">
       <End Role="Empleado" EntitySet="Empleadoes" />
       <End Role="Clase" EntitySet="Clases" />
@@ -621,6 +589,80 @@
       <Parameter Name="treatmentId" Mode="In" Type="Int32" />
       <Parameter Name="gymName" Mode="In" Type="String" />
     </FunctionImport>
+    <FunctionImport Name="deleteClass">
+      <Parameter Name="Id" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="getAllClasses" EntitySet="Clases" ReturnType="Collection(GymTECModel.Clase)" />
+    <FunctionImport Name="getClass" EntitySet="Clases" ReturnType="Collection(GymTECModel.Clase)">
+      <Parameter Name="Id" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="getClassesByGym" EntitySet="Clases" ReturnType="Collection(GymTECModel.Clase)">
+      <Parameter Name="Sucursal" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="insertClass">
+      <Parameter Name="Hora_Inicio" Mode="In" Type="Time" />
+      <Parameter Name="Fecha" Mode="In" Type="DateTime" />
+      <Parameter Name="Tipo_Servicio" Mode="In" Type="String" />
+      <Parameter Name="Hora_Final" Mode="In" Type="Time" />
+      <Parameter Name="Sucursal" Mode="In" Type="String" />
+      <Parameter Name="Instructor" Mode="In" Type="String" />
+      <Parameter Name="Modalidad" Mode="In" Type="String" />
+      <Parameter Name="Capacidad" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="updateClass">
+      <Parameter Name="Id" Mode="In" Type="Int32" />
+      <Parameter Name="Hora_Inicio" Mode="In" Type="Time" />
+      <Parameter Name="Fecha" Mode="In" Type="DateTime" />
+      <Parameter Name="Tipo_Servicio" Mode="In" Type="String" />
+      <Parameter Name="Hora_Final" Mode="In" Type="Time" />
+      <Parameter Name="Sucursal" Mode="In" Type="String" />
+      <Parameter Name="Instructor" Mode="In" Type="String" />
+      <Parameter Name="Modalidad" Mode="In" Type="String" />
+      <Parameter Name="Capacidad" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <EntitySet Name="Cliente_Clase" EntityType="GymTECModel.Cliente_Clase" />
+    <AssociationSet Name="FKClase_ClientClase" Association="GymTECModel.FKClase_ClientClase">
+      <End Role="Clase" EntitySet="Clases" />
+      <End Role="Cliente_Clase" EntitySet="Cliente_Clase" />
+    </AssociationSet>
+    <FunctionImport Name="searchClasses" EntitySet="Clases" ReturnType="Collection(GymTECModel.Clase)">
+      <Parameter Name="Hora_Inicio" Mode="In" Type="Time" />
+      <Parameter Name="Fecha" Mode="In" Type="DateTime" />
+      <Parameter Name="Tipo_Servicio" Mode="In" Type="String" />
+      <Parameter Name="Hora_Final" Mode="In" Type="Time" />
+      <Parameter Name="Sucursal" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="getTreatmentsByGym" EntitySet="Tratamiento_Spa" ReturnType="Collection(GymTECModel.Tratamiento_Spa)">
+      <Parameter Name="Sucursal" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="getProductsByGym" EntitySet="Productoes" ReturnType="Collection(GymTECModel.Producto)">
+      <Parameter Name="Sucursal" Mode="In" Type="String" />
+    </FunctionImport>
+    <EntitySet Name="Sucursal_Horario" EntityType="GymTECModel.Sucursal_Horario" />
+    <AssociationSet Name="FKSucursal_Horario" Association="GymTECModel.FKSucursal_Horario">
+      <End Role="Sucursal" EntitySet="Sucursals" />
+      <End Role="Sucursal_Horario" EntitySet="Sucursal_Horario" />
+    </AssociationSet>
+    <FunctionImport Name="addSchedule">
+      <Parameter Name="Dia" Mode="In" Type="String" />
+      <Parameter Name="Sucursal" Mode="In" Type="String" />
+      <Parameter Name="Hora_Apertura" Mode="In" Type="Time" />
+      <Parameter Name="Hora_Cierre" Mode="In" Type="Time" />
+    </FunctionImport>
+    <FunctionImport Name="deleteSchedule">
+      <Parameter Name="Dia" Mode="In" Type="String" />
+      <Parameter Name="Sucursal" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="getAllSchedulesByGym" EntitySet="Sucursal_Horario" ReturnType="Collection(GymTECModel.Sucursal_Horario)">
+      <Parameter Name="Nombre" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="updateSchedule">
+      <Parameter Name="CurrentDay" Mode="In" Type="String" />
+      <Parameter Name="Dia" Mode="In" Type="String" />
+      <Parameter Name="Sucursal" Mode="In" Type="String" />
+      <Parameter Name="Hora_Apertura" Mode="In" Type="Time" />
+      <Parameter Name="Hora_Cierre" Mode="In" Type="Time" />
+    </FunctionImport>
   </EntityContainer>
   <ComplexType Name="selectAllAdmins_Result">
     <Property Type="Int32" Name="Id" Nullable="false" />
@@ -875,5 +917,135 @@
     <Property Type="String" Name="Contraseña" Nullable="false" MaxLength="50" />
     <Property Type="String" Name="Salt" Nullable="false" MaxLength="32" />
     <Property Type="String" Name="Token" Nullable="false" MaxLength="32" />
+  </ComplexType>
+  <ComplexType Name="getAllClasses_Result">
+    <Property Type="Int32" Name="Id" Nullable="false" />
+    <Property Type="Time" Name="Hora_Inicio" Nullable="true" />
+    <Property Type="DateTime" Name="Fecha" Nullable="true" />
+    <Property Type="String" Name="Tipo_Servicio" Nullable="false" MaxLength="25" />
+    <Property Type="Time" Name="Hora_Final" Nullable="false" />
+    <Property Type="String" Name="Sucursal" Nullable="false" MaxLength="20" />
+    <Property Type="String" Name="Instructor" Nullable="true" MaxLength="20" />
+    <Property Type="String" Name="Modalidad" Nullable="false" MaxLength="10" />
+    <Property Type="Int32" Name="Capacidad" Nullable="false" />
+  </ComplexType>
+  <ComplexType Name="getClass_Result">
+    <Property Type="Int32" Name="Id" Nullable="false" />
+    <Property Type="Time" Name="Hora_Inicio" Nullable="true" />
+    <Property Type="DateTime" Name="Fecha" Nullable="true" />
+    <Property Type="String" Name="Tipo_Servicio" Nullable="false" MaxLength="25" />
+    <Property Type="Time" Name="Hora_Final" Nullable="false" />
+    <Property Type="String" Name="Sucursal" Nullable="false" MaxLength="20" />
+    <Property Type="String" Name="Instructor" Nullable="true" MaxLength="20" />
+    <Property Type="String" Name="Modalidad" Nullable="false" MaxLength="10" />
+    <Property Type="Int32" Name="Capacidad" Nullable="false" />
+  </ComplexType>
+  <ComplexType Name="getClassesByGym_Result">
+    <Property Type="Int32" Name="Id" Nullable="false" />
+    <Property Type="Time" Name="Hora_Inicio" Nullable="true" />
+    <Property Type="DateTime" Name="Fecha" Nullable="true" />
+    <Property Type="String" Name="Tipo_Servicio" Nullable="false" MaxLength="25" />
+    <Property Type="Time" Name="Hora_Final" Nullable="false" />
+    <Property Type="String" Name="Sucursal" Nullable="false" MaxLength="20" />
+    <Property Type="String" Name="Instructor" Nullable="true" MaxLength="20" />
+    <Property Type="String" Name="Modalidad" Nullable="false" MaxLength="10" />
+    <Property Type="Int32" Name="Capacidad" Nullable="false" />
+  </ComplexType>
+  <EntityType Name="Cliente_Clase">
+    <Key>
+      <PropertyRef Name="Id" />
+      <PropertyRef Name="Cliente" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" />
+    <Property Name="Cliente" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Clase" Relationship="GymTECModel.FKClase_ClientClase" FromRole="Cliente_Clase" ToRole="Clase" />
+  </EntityType>
+  <Association Name="FKClase_ClientClase">
+    <End Type="GymTECModel.Clase" Role="Clase" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="GymTECModel.Cliente_Clase" Role="Cliente_Clase" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Clase">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Cliente_Clase">
+        <PropertyRef Name="Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <ComplexType Name="searchClasses1_Result">
+    <Property Type="Int32" Name="Id" Nullable="false" />
+    <Property Type="Time" Name="Hora_Inicio" Nullable="true" />
+    <Property Type="DateTime" Name="Fecha" Nullable="true" />
+    <Property Type="String" Name="Tipo_Servicio" Nullable="false" MaxLength="25" />
+    <Property Type="Time" Name="Hora_Final" Nullable="false" />
+    <Property Type="String" Name="Sucursal" Nullable="false" MaxLength="20" />
+    <Property Type="String" Name="Instructor" Nullable="true" MaxLength="20" />
+    <Property Type="String" Name="Modalidad" Nullable="false" MaxLength="10" />
+    <Property Type="Int32" Name="Capacidad" Nullable="false" />
+  </ComplexType>
+  <ComplexType Name="searchClasses_Result">
+    <Property Type="Int32" Name="Id" Nullable="false" />
+    <Property Type="Time" Name="Hora_Inicio" Nullable="true" />
+    <Property Type="DateTime" Name="Fecha" Nullable="true" />
+    <Property Type="String" Name="Tipo_Servicio" Nullable="false" MaxLength="25" />
+    <Property Type="Time" Name="Hora_Final" Nullable="false" />
+    <Property Type="String" Name="Sucursal" Nullable="false" MaxLength="20" />
+    <Property Type="String" Name="Instructor" Nullable="true" MaxLength="20" />
+    <Property Type="String" Name="Modalidad" Nullable="false" MaxLength="10" />
+    <Property Type="Int32" Name="Capacidad" Nullable="false" />
+  </ComplexType>
+  <ComplexType Name="getTreatmentsByGym_Result">
+    <Property Type="Int32" Name="Id" Nullable="false" />
+    <Property Type="String" Name="Nombre" Nullable="false" MaxLength="25" />
+  </ComplexType>
+  <ComplexType Name="getProductsByGym_Result">
+    <Property Type="String" Name="Nombre" Nullable="false" MaxLength="20" />
+    <Property Type="String" Name="Distrito" Nullable="false" MaxLength="25" />
+    <Property Type="String" Name="Canton" Nullable="false" MaxLength="25" />
+    <Property Type="String" Name="Provincia" Nullable="false" MaxLength="25" />
+    <Property Type="DateTime" Name="Fecha_Apertura" Nullable="false" />
+    <Property Type="Int32" Name="Capacidad_Max" Nullable="false" />
+    <Property Type="String" Name="Gerente" Nullable="true" MaxLength="20" />
+    <Property Type="Boolean" Name="Tienda_Act" Nullable="true" />
+    <Property Type="Boolean" Name="Spa_Act" Nullable="true" />
+    <Property Type="String" Name="Codigo_Barras_Prod" Nullable="false" MaxLength="50" />
+    <Property Type="String" Name="Sucursal" Nullable="false" MaxLength="20" />
+    <Property Type="String" Name="Codigo_Barras" Nullable="false" MaxLength="50" />
+    <Property Type="String" Name="Nombre1" Nullable="false" MaxLength="25" />
+    <Property Type="String" Name="Descripcion" Nullable="false" MaxLength="300" />
+    <Property Type="Decimal" Name="Costo" Nullable="true" Precision="7" Scale="2" />
+  </ComplexType>
+  <EntityType Name="Sucursal_Horario">
+    <Key>
+      <PropertyRef Name="Dia" />
+      <PropertyRef Name="Sucursal" />
+    </Key>
+    <Property Name="Dia" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
+    <Property Name="Sucursal" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="Hora_Apertura" Type="Time" Precision="0" />
+    <Property Name="Hora_Cierre" Type="Time" Precision="0" />
+    <NavigationProperty Name="Sucursal1" Relationship="GymTECModel.FKSucursal_Horario" FromRole="Sucursal_Horario" ToRole="Sucursal" />
+  </EntityType>
+  <Association Name="FKSucursal_Horario">
+    <End Type="GymTECModel.Sucursal" Role="Sucursal" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="GymTECModel.Sucursal_Horario" Role="Sucursal_Horario" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Sucursal">
+        <PropertyRef Name="Nombre" />
+      </Principal>
+      <Dependent Role="Sucursal_Horario">
+        <PropertyRef Name="Sucursal" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <ComplexType Name="getAllSchedulesByGym_Result">
+    <Property Type="String" Name="Dia" Nullable="false" MaxLength="15" />
+    <Property Type="String" Name="Sucursal" Nullable="false" MaxLength="20" />
+    <Property Type="Time" Name="Hora_Apertura" Nullable="true" />
+    <Property Type="Time" Name="Hora_Cierre" Nullable="true" />
   </ComplexType>
 </Schema>

@@ -77,7 +77,7 @@ namespace GymTECRelational.Controllers
         [Route("api/Service/deleteService/{id}/{token}")]
         public HttpResponseMessage Delete(string token, string id)
         {
-            return tools.deleteFromDatabaseOneKey(token, "Tipo_Servicio", id);
+            return tools.deleteFromDatabase(token, "Tipo_Servicio", id,null);
         }
     }
 }

@@ -17,12 +17,10 @@
   <EntityType Name="Cliente_Clase">
     <Key>
       <PropertyRef Name="Id" />
+      <PropertyRef Name="Cliente" />
     </Key>
     <Property Name="Id" Type="int" Nullable="false" />
-    <Property Name="Hora_Inicio_Clase" Type="time" Precision="7" />
-    <Property Name="Fecha_Clase" Type="date" />
-    <Property Name="Tipo_Clase" Type="varchar" MaxLength="25" />
-    <Property Name="Cliente" Type="varchar" MaxLength="20" />
+    <Property Name="Cliente" Type="varchar" MaxLength="20" Nullable="false" />
   </EntityType>
   <EntityType Name="Direccion">
     <Key>
@@ -108,6 +106,16 @@
     <Property Name="Tienda_Act" Type="bit" StoreGeneratedPattern="Computed" />
     <Property Name="Spa_Act" Type="bit" StoreGeneratedPattern="Computed" />
   </EntityType>
+  <EntityType Name="Sucursal_Horario">
+    <Key>
+      <PropertyRef Name="Dia" />
+      <PropertyRef Name="Sucursal" />
+    </Key>
+    <Property Name="Dia" Type="varchar" MaxLength="15" Nullable="false" />
+    <Property Name="Sucursal" Type="varchar" MaxLength="20" Nullable="false" />
+    <Property Name="Hora_Apertura" Type="time" Precision="0" />
+    <Property Name="Hora_Cierre" Type="time" Precision="0" />
+  </EntityType>
   <EntityType Name="Sucursal_Telefono">
     <Key>
       <PropertyRef Name="Telefono" />
@@ -148,7 +156,7 @@
     <End Role="Clase" Type="Self.Clase" Multiplicity="1">
       <OnDelete Action="Cascade" />
     </End>
-    <End Role="Cliente_Clase" Type="Self.Cliente_Clase" Multiplicity="0..1" />
+    <End Role="Cliente_Clase" Type="Self.Cliente_Clase" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="Clase">
         <PropertyRef Name="Id" />
@@ -292,6 +300,20 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FKSucursal_Horario">
+    <End Role="Sucursal" Type="Self.Sucursal" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Sucursal_Horario" Type="Self.Sucursal_Horario" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Sucursal">
+        <PropertyRef Name="Nombre" />
+      </Principal>
+      <Dependent Role="Sucursal_Horario">
+        <PropertyRef Name="Sucursal" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FKSucursal_Maquina">
     <End Role="Sucursal" Type="Self.Sucursal" Multiplicity="0..1" />
     <End Role="Maquina" Type="Self.Maquina" Multiplicity="*" />
@@ -386,6 +408,12 @@
     <Parameter Name="Nombre" Type="varchar" Mode="In" />
     <Parameter Name="Telefono" Type="varchar" Mode="In" />
   </Function>
+  <Function Name="addSchedule" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="Dia" Type="varchar" Mode="In" />
+    <Parameter Name="Sucursal" Type="varchar" Mode="In" />
+    <Parameter Name="Hora_Apertura" Type="time" Mode="In" />
+    <Parameter Name="Hora_Cierre" Type="time" Mode="In" />
+  </Function>
   <Function Name="assignProduct" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="BarCode" Type="varchar" Mode="In" />
     <Parameter Name="GymName" Type="varchar" Mode="In" />
@@ -407,6 +435,9 @@
   <Function Name="createService" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="Nombre" Type="varchar" Mode="In" />
     <Parameter Name="Descripcion" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="deleteClass" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="Id" Type="int" Mode="In" />
   </Function>
   <Function Name="deleteEmployee" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="Cedula" Type="varchar" Mode="In" />
@@ -432,12 +463,17 @@
   <Function Name="deleteProduct" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="BarCode" Type="varchar" Mode="In" />
   </Function>
+  <Function Name="deleteSchedule" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="Dia" Type="varchar" Mode="In" />
+    <Parameter Name="Sucursal" Type="varchar" Mode="In" />
+  </Function>
   <Function Name="deleteService" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="Nombre" Type="varchar" Mode="In" />
   </Function>
   <Function Name="deleteTreatment" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="Id" Type="int" Mode="In" />
   </Function>
+  <Function Name="getAllClasses" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
   <Function Name="getAllMachines" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
   <Function Name="getAllMachineTypes" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
   <Function Name="getAllPayrolls" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
@@ -445,8 +481,17 @@
     <Parameter Name="Nombre" Type="varchar" Mode="In" />
   </Function>
   <Function Name="getAllProducts" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="getAllSchedulesByGym" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="Nombre" Type="varchar" Mode="In" />
+  </Function>
   <Function Name="getAllServices" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
   <Function Name="getAllTreatments" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="getClass" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="Id" Type="int" Mode="In" />
+  </Function>
+  <Function Name="getClassesByGym" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="Sucursal" Type="varchar" Mode="In" />
+  </Function>
   <Function Name="getEmployeeById" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="Cedula" Type="varchar" Mode="In" />
   </Function>
@@ -471,12 +516,28 @@
   <Function Name="getProduct" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="CodigoBarras" Type="varchar" Mode="In" />
   </Function>
+  <Function Name="getProductsByGym" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="Sucursal" Type="varchar" Mode="In" />
+  </Function>
   <Function Name="getService" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="Nombre" Type="varchar" Mode="In" />
   </Function>
   <Function Name="gettAllJobs" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
   <Function Name="getTreatment" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="Id" Type="int" Mode="In" />
+  </Function>
+  <Function Name="getTreatmentsByGym" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="Sucursal" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="insertClass" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="Hora_Inicio" Type="time" Mode="In" />
+    <Parameter Name="Fecha" Type="date" Mode="In" />
+    <Parameter Name="Tipo_Servicio" Type="varchar" Mode="In" />
+    <Parameter Name="Hora_Final" Type="time" Mode="In" />
+    <Parameter Name="Sucursal" Type="varchar" Mode="In" />
+    <Parameter Name="Instructor" Type="varchar" Mode="In" />
+    <Parameter Name="Modalidad" Type="varchar" Mode="In" />
+    <Parameter Name="Capacidad" Type="int" Mode="In" />
   </Function>
   <Function Name="insertEmployee" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="Cedula" Type="varchar" Mode="In" />
@@ -525,6 +586,13 @@
   <Function Name="insertTreatment" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="Nombre" Type="varchar" Mode="In" />
   </Function>
+  <Function Name="searchClasses" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="Hora_Inicio" Type="time" Mode="In" />
+    <Parameter Name="Fecha" Type="date" Mode="In" />
+    <Parameter Name="Tipo_Servicio" Type="varchar" Mode="In" />
+    <Parameter Name="Hora_Final" Type="time" Mode="In" />
+    <Parameter Name="Sucursal" Type="varchar" Mode="In" />
+  </Function>
   <Function Name="selectAllAdmins" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
   <Function Name="selectAllEmployees" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
   <Function Name="selectAllGyms" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
@@ -538,6 +606,17 @@
   <Function Name="unsignTreatment" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="treatmentId" Type="int" Mode="In" />
     <Parameter Name="gymName" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="updateClass" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="Id" Type="int" Mode="In" />
+    <Parameter Name="Hora_Inicio" Type="time" Mode="In" />
+    <Parameter Name="Fecha" Type="date" Mode="In" />
+    <Parameter Name="Tipo_Servicio" Type="varchar" Mode="In" />
+    <Parameter Name="Hora_Final" Type="time" Mode="In" />
+    <Parameter Name="Sucursal" Type="varchar" Mode="In" />
+    <Parameter Name="Instructor" Type="varchar" Mode="In" />
+    <Parameter Name="Modalidad" Type="varchar" Mode="In" />
+    <Parameter Name="Capacidad" Type="int" Mode="In" />
   </Function>
   <Function Name="updateEmployee" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="CurrentId" Type="varchar" Mode="In" />
@@ -598,6 +677,13 @@
     <Parameter Name="Descripcion" Type="varchar" Mode="In" />
     <Parameter Name="Costo" Type="numeric" Mode="In" />
   </Function>
+  <Function Name="updateSchedule" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="CurrentDay" Type="varchar" Mode="In" />
+    <Parameter Name="Dia" Type="varchar" Mode="In" />
+    <Parameter Name="Sucursal" Type="varchar" Mode="In" />
+    <Parameter Name="Hora_Apertura" Type="time" Mode="In" />
+    <Parameter Name="Hora_Cierre" Type="time" Mode="In" />
+  </Function>
   <Function Name="updateService" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="CurrentName" Type="varchar" Mode="In" />
     <Parameter Name="Nombre" Type="varchar" Mode="In" />
@@ -618,6 +704,7 @@
     <EntitySet Name="Producto_Sucursal" EntityType="Self.Producto_Sucursal" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Puesto" EntityType="Self.Puesto" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Sucursal" EntityType="Self.Sucursal" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Sucursal_Horario" EntityType="Self.Sucursal_Horario" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Sucursal_Telefono" EntityType="Self.Sucursal_Telefono" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Tipo_Equipo" EntityType="Self.Tipo_Equipo" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Tipo_Servicio" EntityType="Self.Tipo_Servicio" Schema="dbo" store:Type="Tables" />
@@ -666,6 +753,10 @@
     <AssociationSet Name="FKSucursal_Empleado" Association="Self.FKSucursal_Empleado">
       <End Role="Sucursal" EntitySet="Sucursal" />
       <End Role="Empleado" EntitySet="Empleado" />
+    </AssociationSet>
+    <AssociationSet Name="FKSucursal_Horario" Association="Self.FKSucursal_Horario">
+      <End Role="Sucursal" EntitySet="Sucursal" />
+      <End Role="Sucursal_Horario" EntitySet="Sucursal_Horario" />
     </AssociationSet>
     <AssociationSet Name="FKSucursal_Maquina" Association="Self.FKSucursal_Maquina">
       <End Role="Sucursal" EntitySet="Sucursal" />

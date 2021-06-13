@@ -16,17 +16,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="Cliente_Clase">
-      <EntityTypeMapping TypeName="GymTECModel.Cliente_Clase">
-        <MappingFragment StoreEntitySet="Cliente_Clase">
-          <ScalarProperty Name="Id" ColumnName="Id" />
-          <ScalarProperty Name="Hora_Inicio_Clase" ColumnName="Hora_Inicio_Clase" />
-          <ScalarProperty Name="Fecha_Clase" ColumnName="Fecha_Clase" />
-          <ScalarProperty Name="Tipo_Clase" ColumnName="Tipo_Clase" />
-          <ScalarProperty Name="Cliente" ColumnName="Cliente" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="Direccions">
       <EntityTypeMapping TypeName="GymTECModel.Direccion">
         <MappingFragment StoreEntitySet="Direccion">
@@ -380,5 +369,57 @@
     <FunctionImportMapping FunctionImportName="unsignProduct" FunctionName="GymTECModel.Store.unsignProduct" />
     <FunctionImportMapping FunctionImportName="assignTreatment" FunctionName="GymTECModel.Store.assignTreatment" />
     <FunctionImportMapping FunctionImportName="unsignTreatment" FunctionName="GymTECModel.Store.unsignTreatment" />
+    <FunctionImportMapping FunctionImportName="deleteClass" FunctionName="GymTECModel.Store.deleteClass" />
+    <FunctionImportMapping FunctionImportName="getAllClasses" FunctionName="GymTECModel.Store.getAllClasses" />
+    <FunctionImportMapping FunctionImportName="getClass" FunctionName="GymTECModel.Store.getClass" />
+    <FunctionImportMapping FunctionImportName="getClassesByGym" FunctionName="GymTECModel.Store.getClassesByGym" />
+    <FunctionImportMapping FunctionImportName="insertClass" FunctionName="GymTECModel.Store.insertClass" />
+    <FunctionImportMapping FunctionImportName="updateClass" FunctionName="GymTECModel.Store.updateClass" />
+    <EntitySetMapping Name="Cliente_Clase">
+      <EntityTypeMapping TypeName="GymTECModel.Cliente_Clase">
+        <MappingFragment StoreEntitySet="Cliente_Clase">
+          <ScalarProperty Name="Cliente" ColumnName="Cliente" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="searchClasses" FunctionName="GymTECModel.Store.searchClasses" />
+    <FunctionImportMapping FunctionImportName="getTreatmentsByGym" FunctionName="GymTECModel.Store.getTreatmentsByGym" />
+    <FunctionImportMapping FunctionImportName="getProductsByGym" FunctionName="GymTECModel.Store.getProductsByGym" />
+    <EntitySetMapping Name="Sucursal_Horario">
+      <EntityTypeMapping TypeName="GymTECModel.Sucursal_Horario">
+        <MappingFragment StoreEntitySet="Sucursal_Horario">
+          <ScalarProperty Name="Hora_Cierre" ColumnName="Hora_Cierre" />
+          <ScalarProperty Name="Hora_Apertura" ColumnName="Hora_Apertura" />
+          <ScalarProperty Name="Sucursal" ColumnName="Sucursal" />
+          <ScalarProperty Name="Dia" ColumnName="Dia" />
+        </MappingFragment>
+      </EntityTypeMapping>
+      <EntityTypeMapping TypeName="GymTECModel.Sucursal_Horario">
+        <ModificationFunctionMapping>
+          <InsertFunction FunctionName="GymTECModel.Store.addSchedule">
+            <ScalarProperty Name="Hora_Cierre" ParameterName="Hora_Cierre" />
+            <ScalarProperty Name="Hora_Apertura" ParameterName="Hora_Apertura" />
+            <ScalarProperty Name="Sucursal" ParameterName="Sucursal" />
+            <ScalarProperty Name="Dia" ParameterName="Dia" />
+          </InsertFunction>
+          <UpdateFunction FunctionName="GymTECModel.Store.updateSchedule">
+            <ScalarProperty Name="Dia" ParameterName="CurrentDay" Version="Current" />
+            <ScalarProperty Name="Hora_Cierre" ParameterName="Hora_Cierre" Version="Current" />
+            <ScalarProperty Name="Hora_Apertura" ParameterName="Hora_Apertura" Version="Current" />
+            <ScalarProperty Name="Sucursal" ParameterName="Sucursal" Version="Current" />
+            <ScalarProperty Name="Dia" ParameterName="Dia" Version="Current" />
+          </UpdateFunction>
+          <DeleteFunction FunctionName="GymTECModel.Store.deleteSchedule">
+            <ScalarProperty Name="Sucursal" ParameterName="Sucursal" />
+            <ScalarProperty Name="Dia" ParameterName="Dia" />
+          </DeleteFunction>
+        </ModificationFunctionMapping>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="addSchedule" FunctionName="GymTECModel.Store.addSchedule" />
+    <FunctionImportMapping FunctionImportName="deleteSchedule" FunctionName="GymTECModel.Store.deleteSchedule" />
+    <FunctionImportMapping FunctionImportName="getAllSchedulesByGym" FunctionName="GymTECModel.Store.getAllSchedulesByGym" />
+    <FunctionImportMapping FunctionImportName="updateSchedule" FunctionName="GymTECModel.Store.updateSchedule" />
   </EntityContainerMapping>
 </Mapping>
