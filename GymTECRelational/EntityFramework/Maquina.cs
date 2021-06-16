@@ -19,5 +19,6 @@ namespace GymTECRelational.EntityFramework
         public string Sucursal { get; set; }
         public string Marca { get; set; }
         public decimal Costo { get; set; }
+        public string imageURL { get; set; }
     }
 }

@@ -14,12 +14,6 @@ namespace GymTECRelational.EntityFramework
     
     public partial class Sucursal
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Sucursal()
-        {
-            this.Sucursal_Horario = new HashSet<Sucursal_Horario>();
-        }
-    
         public string Nombre { get; set; }
         public string Distrito { get; set; }
         public string Canton { get; set; }
@@ -29,8 +23,6 @@ namespace GymTECRelational.EntityFramework
         public string Gerente { get; set; }
         public Nullable<bool> Tienda_Act { get; set; }
         public Nullable<bool> Spa_Act { get; set; }
-    
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Sucursal_Horario> Sucursal_Horario { get; set; }
+        public string imageURL { get; set; }
     }
 }

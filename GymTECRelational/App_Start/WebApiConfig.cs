@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
 
+
 namespace GymTECRelational
 {
     public static class WebApiConfig
@@ -10,6 +11,8 @@ namespace GymTECRelational
         public static void Register(HttpConfiguration config)
         {
             // Web API configuration and services
+            var enableCorsAttribute = new System.Web.Http.Cors.EnableCorsAttribute("*", "Origin,Content-Type,Accept", "GET,PUT,POST,DELETE,OPTIONS");
+            config.EnableCors(enableCorsAttribute);
 
             // Web API routes
             config.MapHttpAttributeRoutes();

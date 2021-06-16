@@ -22,7 +22,7 @@ namespace GymTECRelational.Controllers
         [Route("api/TipoEquipo/getAllMachineTypes/{token}")]
         public HttpResponseMessage Get(string token)
         {
-            if (tools.tokenVerifier(token, "Admin"))
+            if (tools.tokenVerifier(token, "Administrador"))
             {
                 return Request.CreateResponse(HttpStatusCode.OK,context.getAllMachineTypes().ToList<Tipo_Equipo>());
             }
@@ -37,7 +37,7 @@ namespace GymTECRelational.Controllers
         [Route("api/TipoEquipo/getMachineType/{type}/{token}")]
         public HttpResponseMessage Get(string type, string token)
         {
-            if (tools.tokenVerifier(token, "Admin"))
+            if (tools.tokenVerifier(token, "Administrador"))
             {
                 return Request.CreateResponse(HttpStatusCode.OK, context.getMachineType(type).ToList<Tipo_Equipo>());
             }

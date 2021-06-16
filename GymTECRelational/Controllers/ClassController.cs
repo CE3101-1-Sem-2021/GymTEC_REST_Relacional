@@ -24,7 +24,7 @@ namespace GymTECRelational.Controllers
         [Route("api/Class/getAllClasses/{token}")]
         public HttpResponseMessage Get(string token)
         {
-            if (tools.tokenVerifier(token, "Admin"))
+            if (tools.tokenVerifier(token, "Administrador")||tools.tokenVerifier(token,"Instructor"))
             {
                 return Request.CreateResponse(HttpStatusCode.OK, context.getAllClasses().ToList());
             }
@@ -40,7 +40,7 @@ namespace GymTECRelational.Controllers
         [Route("api/Class/getClass/{id}/{token}")]
         public HttpResponseMessage Get(int id, string token)
         {
-            if (tools.tokenVerifier(token, "Admin"))
+            if (tools.tokenVerifier(token, "Administrador")|| tools.tokenVerifier(token, "Instructor"))
             {
                 return Request.CreateResponse(HttpStatusCode.OK, context.getClass(id).ToList());
             }
@@ -56,10 +56,26 @@ namespace GymTECRelational.Controllers
         public HttpResponseMessage Get([FromBody]Clase classInfo, string token)
         {
             
-            if (tools.tokenVerifier(token, "Admin"))
+            if (tools.tokenVerifier(token, "Administrador")|| tools.tokenVerifier(token, "Instructor"))
             {
+                if(classInfo.Fecha== new DateTime(1,1,1,0,0,0))
+                {
+                    if (classInfo.Hora_Final == new TimeSpan(0, 0, 0))
+                    {
+                        if (classInfo.Hora_Inicio == new TimeSpan(0, 0, 0))
+                        {
+                            return Request.CreateResponse(HttpStatusCode.OK, context.searchClasses(null, null, classInfo.Tipo_Servicio, null, classInfo.Sucursal).ToList());
+                        }
+                        return Request.CreateResponse(HttpStatusCode.OK, context.searchClasses(classInfo.Hora_Inicio,null, classInfo.Tipo_Servicio, null, classInfo.Sucursal).ToList());
+                    }
+                    return Request.CreateResponse(HttpStatusCode.OK, context.searchClasses(classInfo.Hora_Inicio, null, classInfo.Tipo_Servicio, classInfo.Hora_Final, classInfo.Sucursal));
+                }
                 if (classInfo.Hora_Final == new TimeSpan(0, 0, 0))
                 {
+                    if (classInfo.Hora_Inicio == new TimeSpan(0, 0, 0))
+                    {
+                        return Request.CreateResponse(HttpStatusCode.OK, context.searchClasses(null, classInfo.Fecha, classInfo.Tipo_Servicio, null, classInfo.Sucursal).ToList());
+                    }
                     return Request.CreateResponse(HttpStatusCode.OK, context.searchClasses(classInfo.Hora_Inicio, classInfo.Fecha, classInfo.Tipo_Servicio,null, classInfo.Sucursal).ToList());
                 }
                 return Request.CreateResponse(HttpStatusCode.OK,context.searchClasses(classInfo.Hora_Inicio,classInfo.Fecha,classInfo.Tipo_Servicio,classInfo.Hora_Final,classInfo.Sucursal));
@@ -76,6 +92,27 @@ namespace GymTECRelational.Controllers
         public HttpResponseMessage Post([FromBody] Clase classInfo, string token)
         {
             return tools.createClass(classInfo, token);
+        }
+
+        /*Metodo para copiar el calendario de la semana actual a una semana en el futuro.
+         * 
+         * Entradas:Token del administrador que realiza la operacion,nombre de la sucursal,cantidad de semanas que se adelantara el calendario
+         * Salidas:Respuesta de tipo HTTP que indica si la operacion fue exitosa.
+         */
+        [Route("api/Class/copySchedule/{weekAdvantage}/{gymName}/{token}")]
+        public HttpResponseMessage Post(int weekAdvantage, string gymName,string token)
+        {
+            return tools.copyWeekSchedule(weekAdvantage, gymName, token);
+        }
+        /*Metodo para inscribirse en uan clase.
+         * 
+         * Entradas:Identificador de la clase, identificador del cliente
+         * Salidas:Respuesta de tipo HTTP que indica si la operacion fue exitosa.
+         */
+        [Route("api/Class/classRegister/{classId}/{clientId}")]
+        public HttpResponseMessage Post(int classId,string clientId )
+        {
+            return tools.registerClass(classId, clientId);
         }
 
         /*Metodo para actualizar la informacion de una clase.
@@ -98,6 +135,18 @@ namespace GymTECRelational.Controllers
         public HttpResponseMessage Delete(string token, string id)
         {
             return tools.deleteFromDatabase(token, "Clase", id,null);
+        }
+
+        /*Metodo para desinscribirse en una clase.
+         * 
+         * Entradas:Identificador de la clase, identificador del cliente
+         * Salidas:Respuesta de tipo HTTP que indica si la operacion fue exitosa.
+         */
+        [Route("api/Class/classUnRegister/{classId}/{clientId}")]
+        public HttpResponseMessage Delete(int classId, string clientId)
+        {
+            context.unregisterClass(clientId,classId);
+            return Request.CreateResponse(HttpStatusCode.OK, "Se ha desinscrito de la clase correctamente");
         }
     }
 }

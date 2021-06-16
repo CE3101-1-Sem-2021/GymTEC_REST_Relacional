@@ -606,16 +606,6 @@ namespace GymTECRelational.EntityFramework
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Puesto>("getJob", mergeOption, nombreParameter);
         }
     
-        public virtual ObjectResult<Puesto> gettAllJobs()
-        {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Puesto>("gettAllJobs");
-        }
-    
-        public virtual ObjectResult<Puesto> gettAllJobs(MergeOption mergeOption)
-        {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Puesto>("gettAllJobs", mergeOption);
-        }
-    
         public virtual int insertJob(string nombre, string descripcion)
         {
             var nombreParameter = nombre != null ?
@@ -1174,56 +1164,6 @@ namespace GymTECRelational.EntityFramework
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("updateClass", idParameter, hora_InicioParameter, fechaParameter, tipo_ServicioParameter, hora_FinalParameter, sucursalParameter, instructorParameter, modalidadParameter, capacidadParameter);
         }
     
-        public virtual ObjectResult<Clase> searchClasses(Nullable<System.TimeSpan> hora_Inicio, Nullable<System.DateTime> fecha, string tipo_Servicio, Nullable<System.TimeSpan> hora_Final, string sucursal)
-        {
-            var hora_InicioParameter = hora_Inicio.HasValue ?
-                new ObjectParameter("Hora_Inicio", hora_Inicio) :
-                new ObjectParameter("Hora_Inicio", typeof(System.TimeSpan));
-    
-            var fechaParameter = fecha.HasValue ?
-                new ObjectParameter("Fecha", fecha) :
-                new ObjectParameter("Fecha", typeof(System.DateTime));
-    
-            var tipo_ServicioParameter = tipo_Servicio != null ?
-                new ObjectParameter("Tipo_Servicio", tipo_Servicio) :
-                new ObjectParameter("Tipo_Servicio", typeof(string));
-    
-            var hora_FinalParameter = hora_Final.HasValue ?
-                new ObjectParameter("Hora_Final", hora_Final) :
-                new ObjectParameter("Hora_Final", typeof(System.TimeSpan));
-    
-            var sucursalParameter = sucursal != null ?
-                new ObjectParameter("Sucursal", sucursal) :
-                new ObjectParameter("Sucursal", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Clase>("searchClasses", hora_InicioParameter, fechaParameter, tipo_ServicioParameter, hora_FinalParameter, sucursalParameter);
-        }
-    
-        public virtual ObjectResult<Clase> searchClasses(Nullable<System.TimeSpan> hora_Inicio, Nullable<System.DateTime> fecha, string tipo_Servicio, Nullable<System.TimeSpan> hora_Final, string sucursal, MergeOption mergeOption)
-        {
-            var hora_InicioParameter = hora_Inicio.HasValue ?
-                new ObjectParameter("Hora_Inicio", hora_Inicio) :
-                new ObjectParameter("Hora_Inicio", typeof(System.TimeSpan));
-    
-            var fechaParameter = fecha.HasValue ?
-                new ObjectParameter("Fecha", fecha) :
-                new ObjectParameter("Fecha", typeof(System.DateTime));
-    
-            var tipo_ServicioParameter = tipo_Servicio != null ?
-                new ObjectParameter("Tipo_Servicio", tipo_Servicio) :
-                new ObjectParameter("Tipo_Servicio", typeof(string));
-    
-            var hora_FinalParameter = hora_Final.HasValue ?
-                new ObjectParameter("Hora_Final", hora_Final) :
-                new ObjectParameter("Hora_Final", typeof(System.TimeSpan));
-    
-            var sucursalParameter = sucursal != null ?
-                new ObjectParameter("Sucursal", sucursal) :
-                new ObjectParameter("Sucursal", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Clase>("searchClasses", mergeOption, hora_InicioParameter, fechaParameter, tipo_ServicioParameter, hora_FinalParameter, sucursalParameter);
-        }
-    
         public virtual ObjectResult<Tratamiento_Spa> getTreatmentsByGym(string sucursal)
         {
             var sucursalParameter = sucursal != null ?
@@ -1335,6 +1275,128 @@ namespace GymTECRelational.EntityFramework
                 new ObjectParameter("Hora_Cierre", typeof(System.TimeSpan));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("updateSchedule", currentDayParameter, diaParameter, sucursalParameter, hora_AperturaParameter, hora_CierreParameter);
+        }
+    
+        public virtual ObjectResult<Clase> searchClasses(Nullable<System.TimeSpan> hora_Inicio, Nullable<System.DateTime> fecha, string tipo_Servicio, Nullable<System.TimeSpan> hora_Final, string sucursal)
+        {
+            var hora_InicioParameter = hora_Inicio.HasValue ?
+                new ObjectParameter("Hora_Inicio", hora_Inicio) :
+                new ObjectParameter("Hora_Inicio", typeof(System.TimeSpan));
+    
+            var fechaParameter = fecha.HasValue ?
+                new ObjectParameter("Fecha", fecha) :
+                new ObjectParameter("Fecha", typeof(System.DateTime));
+    
+            var tipo_ServicioParameter = tipo_Servicio != null ?
+                new ObjectParameter("Tipo_Servicio", tipo_Servicio) :
+                new ObjectParameter("Tipo_Servicio", typeof(string));
+    
+            var hora_FinalParameter = hora_Final.HasValue ?
+                new ObjectParameter("Hora_Final", hora_Final) :
+                new ObjectParameter("Hora_Final", typeof(System.TimeSpan));
+    
+            var sucursalParameter = sucursal != null ?
+                new ObjectParameter("Sucursal", sucursal) :
+                new ObjectParameter("Sucursal", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Clase>("searchClasses", hora_InicioParameter, fechaParameter, tipo_ServicioParameter, hora_FinalParameter, sucursalParameter);
+        }
+    
+        public virtual ObjectResult<Clase> searchClasses(Nullable<System.TimeSpan> hora_Inicio, Nullable<System.DateTime> fecha, string tipo_Servicio, Nullable<System.TimeSpan> hora_Final, string sucursal, MergeOption mergeOption)
+        {
+            var hora_InicioParameter = hora_Inicio.HasValue ?
+                new ObjectParameter("Hora_Inicio", hora_Inicio) :
+                new ObjectParameter("Hora_Inicio", typeof(System.TimeSpan));
+    
+            var fechaParameter = fecha.HasValue ?
+                new ObjectParameter("Fecha", fecha) :
+                new ObjectParameter("Fecha", typeof(System.DateTime));
+    
+            var tipo_ServicioParameter = tipo_Servicio != null ?
+                new ObjectParameter("Tipo_Servicio", tipo_Servicio) :
+                new ObjectParameter("Tipo_Servicio", typeof(string));
+    
+            var hora_FinalParameter = hora_Final.HasValue ?
+                new ObjectParameter("Hora_Final", hora_Final) :
+                new ObjectParameter("Hora_Final", typeof(System.TimeSpan));
+    
+            var sucursalParameter = sucursal != null ?
+                new ObjectParameter("Sucursal", sucursal) :
+                new ObjectParameter("Sucursal", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Clase>("searchClasses", mergeOption, hora_InicioParameter, fechaParameter, tipo_ServicioParameter, hora_FinalParameter, sucursalParameter);
+        }
+    
+        public virtual ObjectResult<calculatePayment_Result> calculatePayment(string sucursal)
+        {
+            var sucursalParameter = sucursal != null ?
+                new ObjectParameter("Sucursal", sucursal) :
+                new ObjectParameter("Sucursal", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<calculatePayment_Result>("calculatePayment", sucursalParameter);
+        }
+    
+        public virtual int generatePayment(string sucursal)
+        {
+            var sucursalParameter = sucursal != null ?
+                new ObjectParameter("Sucursal", sucursal) :
+                new ObjectParameter("Sucursal", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("generatePayment", sucursalParameter);
+        }
+    
+        public virtual ObjectResult<Empleado> getAdminById(string id)
+        {
+            var idParameter = id != null ?
+                new ObjectParameter("Id", id) :
+                new ObjectParameter("Id", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Empleado>("getAdminById", idParameter);
+        }
+    
+        public virtual ObjectResult<Empleado> getAdminById(string id, MergeOption mergeOption)
+        {
+            var idParameter = id != null ?
+                new ObjectParameter("Id", id) :
+                new ObjectParameter("Id", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Empleado>("getAdminById", mergeOption, idParameter);
+        }
+    
+        public virtual ObjectResult<Puesto> getAllJobs()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Puesto>("getAllJobs");
+        }
+    
+        public virtual ObjectResult<Puesto> getAllJobs(MergeOption mergeOption)
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Puesto>("getAllJobs", mergeOption);
+        }
+    
+        public virtual int registerClass(string clientId, Nullable<int> classId)
+        {
+            var clientIdParameter = clientId != null ?
+                new ObjectParameter("clientId", clientId) :
+                new ObjectParameter("clientId", typeof(string));
+    
+            var classIdParameter = classId.HasValue ?
+                new ObjectParameter("classId", classId) :
+                new ObjectParameter("classId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("registerClass", clientIdParameter, classIdParameter);
+        }
+    
+        public virtual int unregisterClass(string clientId, Nullable<int> classId)
+        {
+            var clientIdParameter = clientId != null ?
+                new ObjectParameter("clientId", clientId) :
+                new ObjectParameter("clientId", typeof(string));
+    
+            var classIdParameter = classId.HasValue ?
+                new ObjectParameter("classId", classId) :
+                new ObjectParameter("classId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("unregisterClass", clientIdParameter, classIdParameter);
         }
     }
 }

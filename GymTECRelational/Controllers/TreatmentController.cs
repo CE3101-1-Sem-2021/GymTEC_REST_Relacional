@@ -22,7 +22,7 @@ namespace GymTECRelational.Controllers
         [Route("api/Treatment/getAllTreatments/{token}")]
         public HttpResponseMessage Get(string token)
         {
-            if (tools.tokenVerifier(token, "Admin"))
+            if (tools.tokenVerifier(token, "Administrador")||tools.tokenVerifier(token,"Dependiente Spa"))
             {
                 return Request.CreateResponse(HttpStatusCode.OK, context.getAllTreatments().ToList<Tratamiento_Spa>());
             }
@@ -37,7 +37,7 @@ namespace GymTECRelational.Controllers
         [Route("api/Treatment/getTreatment/{treatmentId}/{token}")]
         public HttpResponseMessage Get(int treatmentId, string token)
         {
-            if (tools.tokenVerifier(token, "Admin"))
+            if (tools.tokenVerifier(token, "Administrador") || tools.tokenVerifier(token, "Dependiente Spa"))
             {
                 return Request.CreateResponse(HttpStatusCode.OK, context.getTreatment(treatmentId).ToList<Tratamiento_Spa>());
             }

@@ -28,6 +28,8 @@
     <EntitySetMapping Name="Empleadoes">
       <EntityTypeMapping TypeName="GymTECModel.Empleado">
         <MappingFragment StoreEntitySet="Empleado">
+          <ScalarProperty Name="Horas_Trabajadas" ColumnName="Horas_Trabajadas" />
+          <ScalarProperty Name="imageURL" ColumnName="imageURL" />
           <ScalarProperty Name="Cedula" ColumnName="Cedula" />
           <ScalarProperty Name="Puesto" ColumnName="Puesto" />
           <ScalarProperty Name="Planilla" ColumnName="Planilla" />
@@ -68,6 +70,7 @@
     <EntitySetMapping Name="Maquinas">
       <EntityTypeMapping TypeName="GymTECModel.Maquina">
         <MappingFragment StoreEntitySet="Maquina">
+          <ScalarProperty Name="imageURL" ColumnName="imageURL" />
           <ScalarProperty Name="Serial" ColumnName="Serial" />
           <ScalarProperty Name="Tipo_Equipo" ColumnName="Tipo_Equipo" />
           <ScalarProperty Name="Sucursal" ColumnName="Sucursal" />
@@ -101,6 +104,7 @@
     <EntitySetMapping Name="Planillas">
       <EntityTypeMapping TypeName="GymTECModel.Planilla">
         <MappingFragment StoreEntitySet="Planilla">
+          <ScalarProperty Name="imageURL" ColumnName="imageURL" />
           <ScalarProperty Name="Nombre" ColumnName="Nombre" />
           <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
         </MappingFragment>
@@ -125,6 +129,7 @@
     <EntitySetMapping Name="Productoes">
       <EntityTypeMapping TypeName="GymTECModel.Producto">
         <MappingFragment StoreEntitySet="Producto">
+          <ScalarProperty Name="imageURL" ColumnName="imageURL" />
           <ScalarProperty Name="Codigo_Barras" ColumnName="Codigo_Barras" />
           <ScalarProperty Name="Nombre" ColumnName="Nombre" />
           <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
@@ -135,6 +140,7 @@
     <EntitySetMapping Name="Puestoes">
       <EntityTypeMapping TypeName="GymTECModel.Puesto">
         <MappingFragment StoreEntitySet="Puesto">
+          <ScalarProperty Name="imageURL" ColumnName="imageURL" />
           <ScalarProperty Name="Nombre" ColumnName="Nombre" />
           <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
         </MappingFragment>
@@ -159,6 +165,7 @@
     <EntitySetMapping Name="Sucursals">
       <EntityTypeMapping TypeName="GymTECModel.Sucursal">
         <MappingFragment StoreEntitySet="Sucursal">
+          <ScalarProperty Name="imageURL" ColumnName="imageURL" />
           <ScalarProperty Name="Nombre" ColumnName="Nombre" />
           <ScalarProperty Name="Distrito" ColumnName="Distrito" />
           <ScalarProperty Name="Canton" ColumnName="Canton" />
@@ -200,6 +207,7 @@
     <EntitySetMapping Name="Tipo_Equipo">
       <EntityTypeMapping TypeName="GymTECModel.Tipo_Equipo">
         <MappingFragment StoreEntitySet="Tipo_Equipo">
+          <ScalarProperty Name="imageURL" ColumnName="imageURL" />
           <ScalarProperty Name="Nombre" ColumnName="Nombre" />
           <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
         </MappingFragment>
@@ -224,6 +232,7 @@
     <EntitySetMapping Name="Tipo_Servicio">
       <EntityTypeMapping TypeName="GymTECModel.Tipo_Servicio">
         <MappingFragment StoreEntitySet="Tipo_Servicio">
+          <ScalarProperty Name="imageURL" ColumnName="imageURL" />
           <ScalarProperty Name="Nombre" ColumnName="Nombre" />
           <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
         </MappingFragment>
@@ -232,6 +241,7 @@
     <EntitySetMapping Name="Tratamiento_Spa">
       <EntityTypeMapping TypeName="GymTECModel.Tratamiento_Spa">
         <MappingFragment StoreEntitySet="Tratamiento_Spa">
+          <ScalarProperty Name="imageURL" ColumnName="imageURL" />
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="Nombre" ColumnName="Nombre" />
         </MappingFragment>
@@ -320,7 +330,6 @@
     <FunctionImportMapping FunctionImportName="updateMachineType" FunctionName="GymTECModel.Store.updateMachineType" />
     <FunctionImportMapping FunctionImportName="deleteJob" FunctionName="GymTECModel.Store.deleteJob" />
     <FunctionImportMapping FunctionImportName="getJob" FunctionName="GymTECModel.Store.getJob" />
-    <FunctionImportMapping FunctionImportName="gettAllJobs" FunctionName="GymTECModel.Store.gettAllJobs" />
     <FunctionImportMapping FunctionImportName="insertJob" FunctionName="GymTECModel.Store.insertJob" />
     <FunctionImportMapping FunctionImportName="updateJob" FunctionName="GymTECModel.Store.updateJob" />
     <FunctionImportMapping FunctionImportName="deletePayroll" FunctionName="GymTECModel.Store.deletePayroll" />
@@ -383,7 +392,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <FunctionImportMapping FunctionImportName="searchClasses" FunctionName="GymTECModel.Store.searchClasses" />
     <FunctionImportMapping FunctionImportName="getTreatmentsByGym" FunctionName="GymTECModel.Store.getTreatmentsByGym" />
     <FunctionImportMapping FunctionImportName="getProductsByGym" FunctionName="GymTECModel.Store.getProductsByGym" />
     <EntitySetMapping Name="Sucursal_Horario">
@@ -421,5 +429,22 @@
     <FunctionImportMapping FunctionImportName="deleteSchedule" FunctionName="GymTECModel.Store.deleteSchedule" />
     <FunctionImportMapping FunctionImportName="getAllSchedulesByGym" FunctionName="GymTECModel.Store.getAllSchedulesByGym" />
     <FunctionImportMapping FunctionImportName="updateSchedule" FunctionName="GymTECModel.Store.updateSchedule" />
+    <FunctionImportMapping FunctionImportName="searchClasses" FunctionName="GymTECModel.Store.searchClasses" />
+    <FunctionImportMapping FunctionImportName="calculatePayment" FunctionName="GymTECModel.Store.calculatePayment">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="GymTECModel.calculatePayment_Result">
+          <ScalarProperty Name="Cedula" ColumnName="Cedula" />
+          <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+          <ScalarProperty Name="Planilla" ColumnName="Planilla" />
+          <ScalarProperty Name="Unidades" ColumnName="Unidades" />
+          <ScalarProperty Name="Monto" ColumnName="Monto" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="generatePayment" FunctionName="GymTECModel.Store.generatePayment" />
+    <FunctionImportMapping FunctionImportName="getAdminById" FunctionName="GymTECModel.Store.getAdminById" />
+    <FunctionImportMapping FunctionImportName="getAllJobs" FunctionName="GymTECModel.Store.getAllJobs" />
+    <FunctionImportMapping FunctionImportName="registerClass" FunctionName="GymTECModel.Store.registerClass" />
+    <FunctionImportMapping FunctionImportName="unregisterClass" FunctionName="GymTECModel.Store.unregisterClass" />
   </EntityContainerMapping>
 </Mapping>

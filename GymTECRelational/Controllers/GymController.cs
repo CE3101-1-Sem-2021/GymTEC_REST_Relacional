@@ -23,7 +23,7 @@ namespace GymTECRelational.Controllers
         [Route("api/Gym/getAllGyms/{token}")]
         public HttpResponseMessage Get(string token)
         {
-            if (tools.tokenVerifier(token,"Admin"))
+            if (tools.tokenVerifier(token,"Administrador"))
             {
                 return Request.CreateResponse(HttpStatusCode.OK, context.selectAllGyms().ToList<Sucursal>());
             }
@@ -38,7 +38,7 @@ namespace GymTECRelational.Controllers
         [Route("api/Gym/getGym/{gymName}/{token}")]
         public HttpResponseMessage Get(string gymName,string token)
         {
-            if(tools.tokenVerifier(token,"Admin"))
+            if(tools.tokenVerifier(token,"Administrador"))
             {
                 return Request.CreateResponse(HttpStatusCode.OK,context.selectGym(gymName).ToList<Sucursal>());
             }

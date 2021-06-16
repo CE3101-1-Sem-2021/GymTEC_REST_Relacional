@@ -18,7 +18,5 @@ namespace GymTECRelational.EntityFramework
         public string Sucursal { get; set; }
         public Nullable<System.TimeSpan> Hora_Apertura { get; set; }
         public Nullable<System.TimeSpan> Hora_Cierre { get; set; }
-    
-        public virtual Sucursal Sucursal1 { get; set; }
     }
 }

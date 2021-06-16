@@ -16,5 +16,6 @@ namespace GymTECRelational.EntityFramework
     {
         public string Nombre { get; set; }
         public string Descripcion { get; set; }
+        public string imageURL { get; set; }
     }
 }

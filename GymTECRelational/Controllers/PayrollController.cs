@@ -23,7 +23,7 @@ namespace GymTECRelational.Controllers
         [Route("api/Payroll/getAllPayrolls/{token}")]
         public HttpResponseMessage Get(string token)
         {
-            if (tools.tokenVerifier(token, "Admin"))
+            if (tools.tokenVerifier(token, "Administrador"))
             {
                 return Request.CreateResponse(HttpStatusCode.OK, context.getAllPayrolls().ToList<Planilla>());
             }
@@ -38,9 +38,24 @@ namespace GymTECRelational.Controllers
         [Route("api/Payroll/getPayroll/{payrollName}/{token}")]
         public HttpResponseMessage Get(string payRollName, string token)
         {
-            if (tools.tokenVerifier(token, "Admin"))
+            if (tools.tokenVerifier(token, "Administrador"))
             {
                 return Request.CreateResponse(HttpStatusCode.OK, context.getPayroll(payRollName).ToList<Planilla>());
+            }
+            return Request.CreateResponse(HttpStatusCode.Conflict, "Token invalido");
+        }
+
+        /*Metodo para generar los pagos que se deben hacer a los empleados
+        * 
+        * Entrada: Token del administrador que realiza la solicitud,nombre de la sucursal a la que se va a generar la lista de pagos.
+        * Salida: Planilla solicitada.
+        */
+        [Route("api/Payroll/generatePayments/{dummy}/{gymName}/{token}")]
+        public HttpResponseMessage Get(int dummy,string gymName, string token)
+        {
+            if (tools.tokenVerifier(token, "Administrador"))
+            {
+                return Request.CreateResponse(HttpStatusCode.OK,context.calculatePayment(gymName).ToList());
             }
             return Request.CreateResponse(HttpStatusCode.Conflict, "Token invalido");
         }

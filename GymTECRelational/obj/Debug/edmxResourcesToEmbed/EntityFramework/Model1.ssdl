@@ -5,8 +5,8 @@
       <PropertyRef Name="Id" />
     </Key>
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="Hora_Inicio" Type="time" Precision="0" />
-    <Property Name="Fecha" Type="date" />
+    <Property Name="Hora_Inicio" Type="time" Precision="0" Nullable="false" />
+    <Property Name="Fecha" Type="date" Nullable="false" />
     <Property Name="Tipo_Servicio" Type="varchar" MaxLength="25" Nullable="false" />
     <Property Name="Hora_Final" Type="time" Precision="0" Nullable="false" />
     <Property Name="Sucursal" Type="varchar" MaxLength="20" Nullable="false" />
@@ -50,6 +50,8 @@
     <Property Name="Contraseña" Type="varchar" MaxLength="50" Nullable="false" />
     <Property Name="Salt" Type="varchar" MaxLength="32" Nullable="false" />
     <Property Name="Token" Type="varchar" MaxLength="32" Nullable="false" />
+    <Property Name="imageURL" Type="varchar" MaxLength="500" />
+    <Property Name="Horas_Trabajadas" Type="numeric" Precision="5" Scale="2" />
   </EntityType>
   <EntityType Name="Maquina">
     <Key>
@@ -60,6 +62,7 @@
     <Property Name="Sucursal" Type="varchar" MaxLength="20" />
     <Property Name="Marca" Type="varchar" MaxLength="30" Nullable="false" />
     <Property Name="Costo" Type="numeric" Precision="7" Scale="2" Nullable="false" />
+    <Property Name="imageURL" Type="varchar" MaxLength="500" />
   </EntityType>
   <EntityType Name="Planilla">
     <Key>
@@ -67,6 +70,7 @@
     </Key>
     <Property Name="Nombre" Type="varchar" MaxLength="25" Nullable="false" />
     <Property Name="Descripcion" Type="varchar" MaxLength="200" Nullable="false" />
+    <Property Name="imageURL" Type="varchar" MaxLength="500" />
   </EntityType>
   <EntityType Name="Producto">
     <Key>
@@ -76,6 +80,7 @@
     <Property Name="Nombre" Type="varchar" MaxLength="25" Nullable="false" />
     <Property Name="Descripcion" Type="varchar" MaxLength="300" Nullable="false" />
     <Property Name="Costo" Type="numeric" Precision="7" Scale="2" />
+    <Property Name="imageURL" Type="varchar" MaxLength="500" />
   </EntityType>
   <EntityType Name="Producto_Sucursal">
     <Key>
@@ -91,6 +96,7 @@
     </Key>
     <Property Name="Nombre" Type="varchar" MaxLength="25" Nullable="false" />
     <Property Name="Descripcion" Type="varchar" MaxLength="200" Nullable="false" />
+    <Property Name="imageURL" Type="varchar" MaxLength="500" />
   </EntityType>
   <EntityType Name="Sucursal">
     <Key>
@@ -105,6 +111,7 @@
     <Property Name="Gerente" Type="varchar" MaxLength="20" />
     <Property Name="Tienda_Act" Type="bit" StoreGeneratedPattern="Computed" />
     <Property Name="Spa_Act" Type="bit" StoreGeneratedPattern="Computed" />
+    <Property Name="imageURL" Type="varchar" MaxLength="500" />
   </EntityType>
   <EntityType Name="Sucursal_Horario">
     <Key>
@@ -129,6 +136,7 @@
     </Key>
     <Property Name="Nombre" Type="varchar" MaxLength="25" Nullable="false" />
     <Property Name="Descripcion" Type="varchar" MaxLength="200" Nullable="false" />
+    <Property Name="imageURL" Type="varchar" MaxLength="500" />
   </EntityType>
   <EntityType Name="Tipo_Servicio">
     <Key>
@@ -136,6 +144,7 @@
     </Key>
     <Property Name="Nombre" Type="varchar" MaxLength="25" Nullable="false" />
     <Property Name="Descripcion" Type="varchar" MaxLength="200" Nullable="false" />
+    <Property Name="imageURL" Type="varchar" MaxLength="500" />
   </EntityType>
   <EntityType Name="Tratamiento_Spa">
     <Key>
@@ -143,6 +152,7 @@
     </Key>
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="Nombre" Type="varchar" MaxLength="25" Nullable="false" />
+    <Property Name="imageURL" Type="varchar" MaxLength="500" />
   </EntityType>
   <EntityType Name="Tratamiento_Sucursal">
     <Key>
@@ -426,6 +436,9 @@
     <Parameter Name="treatmentId" Type="int" Mode="In" />
     <Parameter Name="gymName" Type="varchar" Mode="In" />
   </Function>
+  <Function Name="calculatePayment" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="Sucursal" Type="varchar" Mode="In" />
+  </Function>
   <Function Name="createProduct" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="Codigo_Barras" Type="varchar" Mode="In" />
     <Parameter Name="Nombre" Type="varchar" Mode="In" />
@@ -473,7 +486,14 @@
   <Function Name="deleteTreatment" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="Id" Type="int" Mode="In" />
   </Function>
+  <Function Name="generatePayment" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="Sucursal" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="getAdminById" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="Id" Type="varchar" Mode="In" />
+  </Function>
   <Function Name="getAllClasses" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="getAllJobs" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
   <Function Name="getAllMachines" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
   <Function Name="getAllMachineTypes" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
   <Function Name="getAllPayrolls" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
@@ -522,7 +542,6 @@
   <Function Name="getService" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="Nombre" Type="varchar" Mode="In" />
   </Function>
-  <Function Name="gettAllJobs" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
   <Function Name="getTreatment" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="Id" Type="int" Mode="In" />
   </Function>
@@ -586,6 +605,10 @@
   <Function Name="insertTreatment" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="Nombre" Type="varchar" Mode="In" />
   </Function>
+  <Function Name="registerClass" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="clientId" Type="varchar" Mode="In" />
+    <Parameter Name="classId" Type="int" Mode="In" />
+  </Function>
   <Function Name="searchClasses" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="Hora_Inicio" Type="time" Mode="In" />
     <Parameter Name="Fecha" Type="date" Mode="In" />
@@ -598,6 +621,10 @@
   <Function Name="selectAllGyms" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
   <Function Name="selectGym" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="Nombre" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="unregisterClass" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="clientId" Type="varchar" Mode="In" />
+    <Parameter Name="classId" Type="int" Mode="In" />
   </Function>
   <Function Name="unsignProduct" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="BarCode" Type="varchar" Mode="In" />

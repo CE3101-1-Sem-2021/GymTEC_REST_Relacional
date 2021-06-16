@@ -24,11 +24,11 @@ namespace GymTECRelational.Controllers
         [Route("api/Job/getAllJobs/{token}")]
         public HttpResponseMessage Get(string token)
         {
-            if (tools.tokenVerifier(token, "Admin"))
+            if (tools.tokenVerifier(token, "Administrador"))
             {
-                return Request.CreateResponse(HttpStatusCode.OK,context.gettAllJobs().ToList<Puesto>());
+                return Request.CreateResponse(HttpStatusCode.OK,context.getAllJobs().ToList<Puesto>());
             }
-            return Request.CreateResponse(HttpStatusCode.Conflict, "Token invalido");
+            return Request.CreateResponse(HttpStatusCode.Conflict, "Acceso Denegado");
         }
 
         /*Metodo para obtener un puesto registrado.
@@ -39,7 +39,7 @@ namespace GymTECRelational.Controllers
         [Route("api/Job/getJob/{jobName}/{token}")]
         public HttpResponseMessage Get(string jobName,string token)
         {
-            if (tools.tokenVerifier(token, "Admin"))
+            if (tools.tokenVerifier(token, "Administrador"))
             {
                 return Request.CreateResponse(HttpStatusCode.OK, context.getJob(jobName).ToList<Puesto>());
             }

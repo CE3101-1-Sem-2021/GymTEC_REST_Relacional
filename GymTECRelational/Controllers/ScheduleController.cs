@@ -17,7 +17,7 @@ namespace GymTECRelational.Controllers
         [Route("api/Schedule/getSchedules/{gymName}/{token}")]
         public HttpResponseMessage Get(string gymName,string token)
         {
-            if (tools.tokenVerifier(token, "Admin"))
+            if (tools.tokenVerifier(token, "Administrador"))
             {
                 return Request.CreateResponse(HttpStatusCode.OK, context.getAllSchedulesByGym(gymName).ToList());
             }

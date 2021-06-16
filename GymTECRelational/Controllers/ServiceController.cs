@@ -24,7 +24,7 @@ namespace GymTECRelational.Controllers
         [Route("api/Service/getAllServices/{token}")]
         public HttpResponseMessage Get(string token)
         {
-            if (tools.tokenVerifier(token, "Admin"))
+            if (tools.tokenVerifier(token, "Administrador"))
             {
                 return Request.CreateResponse(HttpStatusCode.OK, context.getAllServices().ToList());
             }
@@ -40,7 +40,7 @@ namespace GymTECRelational.Controllers
         [Route("api/Service/getService/{id}/{token}")]
         public HttpResponseMessage Get(string id, string token)
         {
-            if (tools.tokenVerifier(token, "Admin"))
+            if (tools.tokenVerifier(token, "Administrador"))
             {
                 return Request.CreateResponse(HttpStatusCode.OK, context.getService(id).ToList());
             }

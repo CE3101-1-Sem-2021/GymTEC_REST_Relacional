@@ -28,5 +28,7 @@ namespace GymTECRelational.EntityFramework
         public string Contraseña { get; set; }
         public string Salt { get; set; }
         public string Token { get; set; }
+        public string imageURL { get; set; }
+        public Nullable<decimal> Horas_Trabajadas { get; set; }
     }
 }

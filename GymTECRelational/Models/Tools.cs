@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -115,7 +116,7 @@ namespace GymTECRelational.Models
         {
             HttpResponseMessage response = null;
 
-            if(tokenVerifier(token,"Admin"))
+            if(tokenVerifier(token,"Administrador")||selfTokenVerifier(token,currentId))
             {
                 if(currentId==employee.Cedula||!context.Empleadoes.Any(o=>o.Cedula==employee.Cedula))
                 {
@@ -159,7 +160,7 @@ namespace GymTECRelational.Models
         public HttpResponseMessage createGym(Sucursal gym,string token)
         {
             HttpResponseMessage response = null;
-            if (tokenVerifier(token,"Admin"))
+            if (tokenVerifier(token,"Administrador"))
             {
                 if (!context.Sucursals.Any(o => o.Nombre == gym.Nombre))
                 {
@@ -191,7 +192,7 @@ namespace GymTECRelational.Models
         {
             HttpResponseMessage response = null;
 
-            if (tokenVerifier(token, "Admin"))
+            if (tokenVerifier(token, "Administrador"))
             {
                 if (context.Sucursals.Any(o => o.Nombre == gymName))
                 {
@@ -236,7 +237,7 @@ namespace GymTECRelational.Models
         public HttpResponseMessage addPhoneNumber(Sucursal_Telefono phoneNumb,string token)
         {
             HttpResponseMessage response = null;
-            if(tokenVerifier(token,"Admin"))
+            if(tokenVerifier(token,"Administrador"))
             {
                 if(!context.Sucursal_Telefono.Any(o=> o.Telefono==phoneNumb.Telefono))
                 {
@@ -272,7 +273,7 @@ namespace GymTECRelational.Models
         public HttpResponseMessage updatePhoneNumber(string currentNumber,string token,Sucursal_Telefono phoneNumb)
         {
             HttpResponseMessage response = null;
-            if(tokenVerifier(token,"Admin"))
+            if(tokenVerifier(token,"Administrador"))
             {
                 if(phoneNumb.Telefono==currentNumber||!context.Sucursal_Telefono.Any(o=>o.Telefono==phoneNumb.Telefono))
                 {
@@ -315,7 +316,7 @@ namespace GymTECRelational.Models
         public HttpResponseMessage addSchedule(Sucursal_Horario schedule,string token)
         {
             HttpResponseMessage response = null;
-            if(tokenVerifier(token,"Admin"))
+            if(tokenVerifier(token,"Administrador"))
             {
                 if(!context.Sucursal_Horario.Any(o=>o.Dia==schedule.Dia&& o.Sucursal==schedule.Sucursal))
                 {
@@ -329,8 +330,15 @@ namespace GymTECRelational.Models
                     }
                     catch (Exception e)
                     {
+                        if (e.InnerException.InnerException.Message.Split('\r')[0].Equals("wrongSchedule"))
+                        {
+                            response = new HttpResponseMessage(HttpStatusCode.Conflict);
+                            response.Content = new StringContent("El horario de apertura no puede ser mayor al de cierre");
+                            return response;
+                        }
+                        Console.WriteLine(e.ToString());
                         response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
-                        response.Content = new StringContent("Error inesperado");
+                        response.Content = new StringContent("Error inesperado!");
                         return response;
                     }
                 }
@@ -351,7 +359,7 @@ namespace GymTECRelational.Models
         public HttpResponseMessage updateSchedule(string currentDay, Sucursal_Horario schedule,string token)
         {
             HttpResponseMessage response = null;
-            if (tokenVerifier(token, "Admin"))
+            if (tokenVerifier(token, "Administrador"))
             {
                 if (schedule.Dia == currentDay || !context.Sucursal_Horario.Any(o => o.Dia ==schedule.Dia && o.Sucursal==schedule.Sucursal))
                 {
@@ -367,8 +375,15 @@ namespace GymTECRelational.Models
                         }
                         catch (Exception e)
                         {
+                            if (e.InnerException.Message.Split('\r')[0].Equals("wrongSchedule"))
+                            {
+                                response = new HttpResponseMessage(HttpStatusCode.Conflict);
+                                response.Content = new StringContent("El horario de apertura no puede ser mayor al de cierre");
+                                return response;
+                            }
+                            Console.WriteLine(e.ToString());
                             response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
-                            response.Content = new StringContent("Error inesperado");
+                            response.Content = new StringContent("Error inesperado!");
                             return response;
                         }
                     }
@@ -395,7 +410,7 @@ namespace GymTECRelational.Models
         {
             HttpResponseMessage response = null;
 
-            if(tokenVerifier(token,"Admin"))
+            if(tokenVerifier(token,"Administrador"))
             {
                 if(context.Sucursals.Any(o=>o.Nombre==gymName))
                 {
@@ -436,7 +451,7 @@ namespace GymTECRelational.Models
         public HttpResponseMessage copyGym(string gymName, string token)
         {
             HttpResponseMessage response = null;
-            if (tokenVerifier(token, "Admin"))
+            if (tokenVerifier(token, "Administrador"))
             {
                 if (context.Sucursals.Any(o => o.Nombre == gymName))
                 {
@@ -466,7 +481,7 @@ namespace GymTECRelational.Models
                         context.assignProduct(product.Codigo_Barras, newName);
                     }
 
-                    List<Sucursal_Horario> schedules = context.getAllSchedulesByGym(gymName).ToList();
+                    List<Sucursal_Horario> schedules = context.Sucursal_Horario.AsNoTracking().Where(m=>m.Sucursal==gymName).ToList();
                     foreach(Sucursal_Horario schedule in schedules)
                     {
                         schedule.Sucursal = newName;
@@ -504,29 +519,41 @@ namespace GymTECRelational.Models
         {
             HttpResponseMessage response = null;
 
-            if(tokenVerifier(token,"Admin"))
+            if(tokenVerifier(token,"Administrador")||tokenVerifier(token,"Instructor"))
             {
-                try
+                if(classInfo.Hora_Inicio==classInfo.Hora_Final)
                 {
-                    context.Clases.Add(classInfo);
-                    context.SaveChanges();
-                    response = new HttpResponseMessage(HttpStatusCode.OK);
-                    response.Content = new StringContent("Clase creada correctamente!");
+                    response = new HttpResponseMessage(HttpStatusCode.Conflict);
+                    response.Content = new StringContent("Las horas de inicio y finalizacion no pueden ser las mismas");
                     return response;
                 }
-                catch (Exception e)
+                if (classDayScheduleVerifier(classInfo))
                 {
-                    if (e.InnerException.InnerException.Message.Split('\r')[0].Equals("wrongSchedule"))
+                    try
                     {
-                        response = new HttpResponseMessage(HttpStatusCode.Conflict);
-                        response.Content = new StringContent("El horario de inicio de la clase debe ser menor al horario de finalizacion");
+                        context.Clases.Add(classInfo);
+                        context.SaveChanges();
+                        response = new HttpResponseMessage(HttpStatusCode.OK);
+                        response.Content = new StringContent("Clase creada correctamente!");
                         return response;
                     }
-                    Console.WriteLine(e.ToString());
-                    response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
-                    response.Content = new StringContent("Error inesperado!");
-                    return response;
+                    catch (Exception e)
+                    {
+                        if (e.InnerException.InnerException.Message.Split('\r')[0].Equals("wrongSchedule"))
+                        {
+                            response = new HttpResponseMessage(HttpStatusCode.Conflict);
+                            response.Content = new StringContent("El horario de inicio de la clase debe ser menor al horario de finalizacion");
+                            return response;
+                        }
+                        Console.WriteLine(e.ToString());
+                        response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
+                        response.Content = new StringContent("Error inesperado!");
+                        return response;
+                    }
                 }
+                response = new HttpResponseMessage(HttpStatusCode.Conflict);
+                response.Content = new StringContent("La fecha de la clase no calza en el horario del gimnasio");
+                return response;
             }
             response = new HttpResponseMessage(HttpStatusCode.Conflict);
             response.Content = new StringContent("Token invalido");
@@ -542,29 +569,88 @@ namespace GymTECRelational.Models
         {
             HttpResponseMessage response = null;
 
-            if (tokenVerifier(token, "Admin"))
+            if (tokenVerifier(token, "Administrador")||tokenVerifier(token,"Instructor"))
             {
-                try
+                if (classDayScheduleVerifier(classInfo))
                 {
-                    context.updateClass(classInfo.Id,classInfo.Hora_Inicio,classInfo.Fecha,classInfo.Tipo_Servicio,classInfo.Hora_Final,classInfo.Sucursal,classInfo.Instructor,classInfo.Modalidad,classInfo.Capacidad);
-                    context.SaveChanges();
-                    response = new HttpResponseMessage(HttpStatusCode.OK);
-                    response.Content = new StringContent("Clase actualizada correctamente!");
-                    return response;
-                }
-                catch (Exception e)
-                {
-                    if (e.InnerException.Message.Split('\r')[0].Equals("wrongSchedule"))
+                    try
                     {
-                        response = new HttpResponseMessage(HttpStatusCode.Conflict);
-                        response.Content = new StringContent("El horario de inicio de la clase no puede ser nas tarde que el horario de finalizacion");
+                        context.updateClass(classInfo.Id, classInfo.Hora_Inicio, classInfo.Fecha, classInfo.Tipo_Servicio, classInfo.Hora_Final, classInfo.Sucursal, classInfo.Instructor, classInfo.Modalidad, classInfo.Capacidad);
+                        context.SaveChanges();
+                        response = new HttpResponseMessage(HttpStatusCode.OK);
+                        response.Content = new StringContent("Clase actualizada correctamente!");
                         return response;
                     }
-                    Console.WriteLine(e.ToString());
-                    response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
-                    response.Content = new StringContent("Error inesperado!");
-                    return response;
+                    catch (Exception e)
+                    {
+                        if (e.InnerException.Message.Split('\r')[0].Equals("wrongSchedule"))
+                        {
+                            response = new HttpResponseMessage(HttpStatusCode.Conflict);
+                            response.Content = new StringContent("El horario de inicio de la clase no puede ser nas tarde que el horario de finalizacion");
+                            return response;
+                        }
+                        Console.WriteLine(e.ToString());
+                        response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
+                        response.Content = new StringContent("Error inesperado!");
+                        return response;
+                    }
                 }
+                response = new HttpResponseMessage(HttpStatusCode.Conflict);
+                response.Content = new StringContent("La fecha de la clase no calza en el horario del gimnasio");
+                return response;
+            }
+            response = new HttpResponseMessage(HttpStatusCode.Conflict);
+            response.Content = new StringContent("Token invalido");
+            return response;
+        }
+
+        /*Metodo para inscribirse en uan clase.
+         * 
+         * Entradas:Identificador de la clase, identificador del cliente
+         * Salidas:Respuesta de tipo HTTP que indica si la operacion fue exitosa.
+         */
+        public HttpResponseMessage registerClass(int classId,string clientId)
+        {
+            HttpResponseMessage response = null;
+            Clase classInfo = context.getClass(classId).ToList()[0];
+            if(!context.Cliente_Clase.Any(o=>o.Id==classId&&o.Cliente==clientId))
+            {
+                context.registerClass(clientId, classId);
+
+                response = new HttpResponseMessage(HttpStatusCode.OK);
+                response.Content = new StringContent("Inscripcion realizada correctamente");
+                return response;
+            }
+            response = new HttpResponseMessage(HttpStatusCode.Conflict);
+            response.Content = new StringContent("El cliente ya se encuentra registrado en esta clase");
+            return response;
+        }
+
+
+        /*Metodo para copiar el calendario de la semana actual a una semana en el futuro.
+         * 
+         * Entradas:Token del administrador que realiza la operacion,nombre de la sucursal,cantidad de semanas que se adelantara el calendario
+         * Salidas:Respuesta de tipo HTTP que indica si la operacion fue exitosa.
+         */
+        public HttpResponseMessage copyWeekSchedule(int weekadvantage,string gymName,string token)
+        {
+            HttpResponseMessage response = null;
+            if(tokenVerifier(token,"Administrador")||tokenVerifier(token,"Instructor"))
+            {
+                DayOfWeek weekBeginning = DayOfWeek.Monday;
+                DateTime initialDate = DateTime.Now.AddDays(-1 * ((7 + (DateTime.Now.DayOfWeek - weekBeginning)) % 7)).Date;
+                DateTime finalDate = initialDate.AddDays(6).Date;
+                List<Clase> clases=context.Clases.Where(m=>m.Sucursal==gymName && (m.Fecha>=initialDate && m.Fecha<=finalDate)).ToList();
+                foreach(Clase classInfo in clases)
+                {
+                    classInfo.Fecha = classInfo.Fecha.AddDays(7*weekadvantage).Date;
+                    createClass(classInfo,token);
+                }
+                response = new HttpResponseMessage(HttpStatusCode.OK);
+                response.Content = new StringContent("Calendario semanal copiado correctamente");
+                return response;
+
+
             }
             response = new HttpResponseMessage(HttpStatusCode.Conflict);
             response.Content = new StringContent("Token invalido");
@@ -579,7 +665,7 @@ namespace GymTECRelational.Models
         public HttpResponseMessage createMachine(Maquina machine,string token)
         {
             HttpResponseMessage response = null;
-            if(tokenVerifier(token,"Admin"))
+            if(tokenVerifier(token,"Administrador"))
             {
                 if(!context.Maquinas.Any(o=>o.Serial==machine.Serial))
                 {
@@ -627,7 +713,7 @@ namespace GymTECRelational.Models
         public HttpResponseMessage updateMachine(Maquina machine,string token,string currentSerial)
         {
             HttpResponseMessage response = null;
-            if(tokenVerifier(token,"Admin"))
+            if(tokenVerifier(token,"Administrador"))
             {
                 if (context.Maquinas.Any(o => o.Serial == currentSerial))
                 {
@@ -683,7 +769,7 @@ namespace GymTECRelational.Models
         {
             HttpResponseMessage response = null;
 
-            if(tokenVerifier(token,"Admin"))
+            if(tokenVerifier(token,"Administrador"))
             {
                 if(!context.Tipo_Equipo.Any(o=> o.Nombre==machineType.Nombre))
                 {
@@ -720,7 +806,7 @@ namespace GymTECRelational.Models
         {
             HttpResponseMessage response = null;
 
-            if (tokenVerifier(token, "Admin"))
+            if (tokenVerifier(token, "Administrador"))
             {
                 if (context.Tipo_Equipo.Any(o => o.Nombre == currentName))
                 {
@@ -763,7 +849,7 @@ namespace GymTECRelational.Models
         {
             HttpResponseMessage response = null;
 
-            if(tokenVerifier(token,"Admin"))
+            if(tokenVerifier(token,"Administrador"))
             {
 
                 if(!context.Puestoes.Any(o=> o.Nombre==job.Nombre))
@@ -803,7 +889,7 @@ namespace GymTECRelational.Models
         {
             HttpResponseMessage response = null;
 
-            if (tokenVerifier(token, "Admin"))
+            if (tokenVerifier(token, "Administrador"))
             {
                 if (context.Puestoes.Any(o => o.Nombre == currentName))
                 {
@@ -819,8 +905,15 @@ namespace GymTECRelational.Models
                         }
                         catch (Exception e)
                         {
+                            if (e.InnerException.Message.Split('\r')[0].Equals("defaultJobModification"))
+                            {
+                                response = new HttpResponseMessage(HttpStatusCode.Conflict);
+                                response.Content = new StringContent("No es posible modificar los puestos por default");
+                                return response;
+                            }
+                            Console.WriteLine(e.ToString());
                             response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
-                            response.Content = new StringContent("Error inesperado");
+                            response.Content = new StringContent("Error inesperado!");
                             return response;
                         }
                     }
@@ -846,7 +939,7 @@ namespace GymTECRelational.Models
         {
             HttpResponseMessage response = null;
 
-            if (tokenVerifier(token, "Admin"))
+            if (tokenVerifier(token, "Administrador"))
             {
 
                 if (!context.Planillas.Any(o => o.Nombre == payRoll.Nombre))
@@ -886,7 +979,7 @@ namespace GymTECRelational.Models
         {
             HttpResponseMessage response = null;
 
-            if (tokenVerifier(token, "Admin"))
+            if (tokenVerifier(token, "Administrador"))
             {
                 if (context.Planillas.Any(o => o.Nombre == currentName))
                 {
@@ -929,7 +1022,7 @@ namespace GymTECRelational.Models
         {
             HttpResponseMessage response = null;
 
-            if (tokenVerifier(token, "Admin"))
+            if (tokenVerifier(token, "Administrador")||tokenVerifier(token,"Dependiente Spa"))
             {
 
                 try
@@ -963,7 +1056,7 @@ namespace GymTECRelational.Models
         {
             HttpResponseMessage response = null;
 
-            if (tokenVerifier(token, "Admin"))
+            if (tokenVerifier(token, "Administrador")||tokenVerifier(token,"Dependiente Spa"))
             {
                 try
                 {
@@ -1003,7 +1096,7 @@ namespace GymTECRelational.Models
         {
             HttpResponseMessage response = null;
 
-            if(tokenVerifier(token,"Admin"))
+            if(tokenVerifier(token,"Administrador"))
             {
                 if(!context.getTreatment(treatmentId).ToList()[0].Sucursal.Any(o=>o.Nombre==gymName))
                 {
@@ -1040,7 +1133,7 @@ namespace GymTECRelational.Models
         {
             HttpResponseMessage response = null;
 
-            if (tokenVerifier(token, "Admin"))
+            if (tokenVerifier(token, "Administrador"))
             {
                 if (context.getTreatment(treatmentId).ToList()[0].Sucursal.Any(o => o.Nombre == gymName))
                 {
@@ -1077,7 +1170,7 @@ namespace GymTECRelational.Models
         {
             HttpResponseMessage response = null;
 
-            if(tokenVerifier(token,"Admin"))
+            if(tokenVerifier(token,"Administrador"))
             {
                 if(!context.Tipo_Servicio.Any(o=>o.Nombre==service.Nombre))
                 {
@@ -1114,7 +1207,7 @@ namespace GymTECRelational.Models
         {
             HttpResponseMessage response = null;
 
-            if(tokenVerifier(token,"Admin"))
+            if(tokenVerifier(token,"Administrador"))
             {
 
                 if(currentName==service.Nombre||!context.Tipo_Servicio.Any(o=>o.Nombre==service.Nombre))
@@ -1154,7 +1247,7 @@ namespace GymTECRelational.Models
         public HttpResponseMessage createProduct(Producto product,string token)
         {
             HttpResponseMessage response = null;
-            if(tokenVerifier(token,"Admin"))
+            if(tokenVerifier(token,"Administrador")||tokenVerifier(token,"Dependiente Tienda"))
             {
                 if(!context.Productoes.Any(o=> o.Codigo_Barras==product.Codigo_Barras))
                 {
@@ -1191,7 +1284,7 @@ namespace GymTECRelational.Models
         {
             HttpResponseMessage response = null;
 
-            if (tokenVerifier(token, "Admin"))
+            if (tokenVerifier(token, "Administrador")||tokenVerifier(token,"Dependiente Tienda"))
             {
 
                 if (currentCode == product.Codigo_Barras ||!context.Productoes.Any(o => o.Codigo_Barras ==product.Codigo_Barras))
@@ -1230,7 +1323,7 @@ namespace GymTECRelational.Models
         {
             HttpResponseMessage response = null;
 
-            if(tokenVerifier(token,"Admin"))
+            if(tokenVerifier(token,"Administrador"))
             {
                 if(!context.getProduct(barCode).ToList()[0].Sucursals.Any(o=>o.Nombre==gymName))
                 {
@@ -1268,7 +1361,7 @@ namespace GymTECRelational.Models
         {
             HttpResponseMessage response = null;
 
-            if (tokenVerifier(token, "Admin"))
+            if (tokenVerifier(token, "Administrador"))
             {
                 if (context.getProduct(barCode).ToList()[0].Sucursals.Any(o => o.Nombre == gymName))
                 {
@@ -1345,15 +1438,30 @@ namespace GymTECRelational.Models
          * Entrada:Token a verificar,tipo de usuario al que pertenece
          * Salida: Booleano que indica si el token es valido.
          */
-        public bool tokenVerifier(string token,string type)
+        public bool tokenVerifier(string token,string job)
         {
-            if(type.Equals("Admin"))
-            {
-                return context.Empleadoes.Any(o => o.Token == token && o.Puesto=="Administrador");
-            }
-            return context.Empleadoes.Any(o => o.Token == token);
+            return context.Empleadoes.Any(o => o.Token == token && o.Puesto == job);
         }
 
+        public bool selfTokenVerifier(string token,string id)
+        {
+            return context.Empleadoes.Any(o => o.Token == token && o.Cedula == id);
+        }
+        /*Metodo para verificar que la fecha de una clase este dentro del horario de la sede donde se imparte.
+         * 
+         * Entrada:Informacion de la clase
+         * Salida: Booleano que indica si la fecha es correcta
+         */
+        public bool classDayScheduleVerifier(Clase classInfo)
+        {
+            string day = new CultureInfo("Es-Es").DateTimeFormat.GetDayName(classInfo.Fecha.DayOfWeek);
+            if (context.Sucursal_Horario.Any(o => o.Sucursal == classInfo.Sucursal && o.Dia == day))
+            {
+                Sucursal_Horario scheduleForTheDay = context.Sucursal_Horario.Where(m => m.Sucursal == classInfo.Sucursal && m.Dia == day).ToList()[0];
+                return (scheduleForTheDay.Hora_Apertura <= classInfo.Hora_Inicio && classInfo.Hora_Final <= scheduleForTheDay.Hora_Cierre);
+            }
+            return false;
+        }
         
 
         /*Metodo para eliminar valores de la base de datos.
@@ -1364,102 +1472,144 @@ namespace GymTECRelational.Models
         public HttpResponseMessage deleteFromDatabase(string token,string table,string key1,string key2)
         {
             HttpResponseMessage response = null;
+            string[] instructorTables = new string[] {"Clase"};
 
-            if(tokenVerifier(token,"Admin"))
+            List<Empleado> employees = context.Empleadoes.Where(m => m.Token == token).ToList();
+            if (employees.Count()==0)
             {
+                response = new HttpResponseMessage(HttpStatusCode.Conflict);
+                response.Content = new StringContent("Token invalido");
+                return response;
+            }
+            else if(employees[0].Puesto.Equals("Sin Asignar"))
+            {
+                response = new HttpResponseMessage(HttpStatusCode.Conflict);
+                response.Content = new StringContent("El usuario no tiene un puesto asignado dentro del sistema");
+                return response;
+            }
+            Empleado employee = employees[0];
+
+            if (!employee.Puesto.Equals("Administrador"))
+            {
+                if (employee.Puesto.Equals("Instructor") && !table.Equals("Clase")|| 
+                    employee.Puesto.Equals("Dependiente Tienda") && !table.Equals("Producto")||
+                    employee.Puesto.Equals("Dependiente Spa") && !table.Equals("Tratamiento_Spa")||
+                    Array.IndexOf(new string[] { "Instructor","Dependiente Tienda","Dependiente Spa"},employee.Puesto)==-1)
+
+                {
+                    response = new HttpResponseMessage(HttpStatusCode.Conflict);
+                    response.Content = new StringContent("Este usuario no tiene acceso a esta funcion");
+                    return response;
+                }
+                
+            }
+
+            try
+            {
+                if (table.Equals("Sucursal"))
+                {
+                    context.deleteGym(key1);
+                }
+                else if(table.Equals("Empleado"))
+                {
+                    context.deleteEmployee(key1);
+                }
+                else if(table.Equals("SucursalTelefono"))
+                {
+                    context.deletePhoneNumb(key1);
+                }
+                else if(table.Equals("Maquina"))
+                {
+                    context.deleteMachine(key1);
+                }
+                else if(table.Equals("Tipo_Equipo"))
+                {
+                    context.deleteMachineType(key1);
+                }
+                else if(table.Equals("Planilla"))
+                {
+                    context.deletePayroll(key1);
+                }
+                else if(table.Equals("Producto"))
+                {
+                    context.deleteProduct(key1);
+                }
+                else if(table.Equals("Clase"))
+                {
+                    context.deleteClass(Convert.ToInt32(key1));
+                }
+                else if(table.Equals("SucursalHorario"))
+                {
+                    context.deleteSchedule(key1, key2);
+                }
+                else if (table.Equals("Tipo_Servicio"))
+                {
+                    context.deleteService(key1);
+                }
+                else if(table.Equals("Tratamiento_Spa"))
+                {
                     try
                     {
-                        if (table.Equals("Sucursal"))
-                        {
-                           context.deleteGym(key1);
-                        }
-                        else if(table.Equals("Empleado"))
-                        {
-                            context.deleteEmployee(key1);
-                        }
-                        else if(table.Equals("SucursalTelefono"))
-                        {
-                            context.deletePhoneNumb(key1);
-                        }
-                        else if(table.Equals("Maquina"))
-                        {
-                            context.deleteMachine(key1);
-                        }
-                        else if(table.Equals("Tipo_Equipo"))
-                        {
-                            context.deleteMachineType(key1);
-                        }
-                        else if(table.Equals("Puesto"))
-                        {
-                            context.deleteJob(key1);
-                        }
-                        else if(table.Equals("Planilla"))
-                        {
-                            context.deletePayroll(key1);
-                        }
-                        else if(table.Equals("Tipo_Servicio"))
-                        {
-                            context.deleteService(key1);
-                        }
-                        else if(table.Equals("Producto"))
-                        {
-                            context.deleteProduct(key1);
-                        }
-                        else if(table.Equals("Clase"))
-                        {
-                            context.deleteClass(Convert.ToInt32(key1));
-                        }
-                        else if(table.Equals("SucursalHorario"))
-                        {
-                            context.deleteSchedule(key1, key2);
-                        }
-                        else if(table.Equals("Tratamiento_Spa"))
-                        {
-                            try
-                            {
-                                context.deleteTreatment(Convert.ToInt32(key1));
-                            }
-                            catch (Exception e)
-                            {
-                                if (e.InnerException.Message.Split('\r')[0].Equals("defaultTreatmentModification"))
-                                {
-                                    response = new HttpResponseMessage(HttpStatusCode.Conflict);
-                                    response.Content = new StringContent("No es posible eliminar los tratamientos por default");
-                                    return response;
-                                }
-                                else if (e.InnerException.Message.Split('\r')[0].Equals("assignedTreatment"))
-                                {
-                                    response = new HttpResponseMessage(HttpStatusCode.Conflict);
-                                    response.Content = new StringContent("No es posible eliminar un tratamiento que esta disponible en una sucursal");
-                                    return response;
-                                }
-                                response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
-                                response.Content = new StringContent("Error inesperado");
-                                return response;
-                            }
-                        }
-                        else
-                        {
-                            response = new HttpResponseMessage(HttpStatusCode.NotFound);
-                            response.Content = new StringContent("La tabla indicada no existe");
-                            return response;
-                        }
-                        context.SaveChanges();
-                        response = new HttpResponseMessage(HttpStatusCode.OK);
-                        response.Content = new StringContent("Valor eliminado correctamente");
-                        return response;
+                        context.deleteTreatment(Convert.ToInt32(key1));
                     }
                     catch (Exception e)
                     {
+
+                        if (e.InnerException.Message.Split('\r')[0].Equals("defaultTreatmentModification"))
+                        {
+                            response = new HttpResponseMessage(HttpStatusCode.Conflict);
+                            response.Content = new StringContent("No es posible eliminar los tratamientos por default");
+                            return response;
+                        }
+                        else if (e.InnerException.Message.Split('\r')[0].Equals("assignedTreatment"))
+                        {
+                            response = new HttpResponseMessage(HttpStatusCode.Conflict);
+                            response.Content = new StringContent("No es posible eliminar un tratamiento que esta disponible en una sucursal");
+                            return response;
+                        }
                         response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
                         response.Content = new StringContent("Error inesperado");
                         return response;
                     }
+                }
+                else if (table.Equals("Puesto"))
+                {
+                    try
+                    {
+                        context.deleteJob(key1);
+                    }
+                    catch (Exception e)
+                    {
 
+                        if (e.InnerException.Message.Split('\r')[0].Equals("defaultJobModification"))
+                        {
+                            response = new HttpResponseMessage(HttpStatusCode.Conflict);
+                            response.Content = new StringContent("No es posible eliminar los puestos por default");
+                            return response;
+                        }
+                        response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
+                        response.Content = new StringContent("Error inesperado");
+                        return response;
+                    }
+                }
+                else
+                {
+                    response = new HttpResponseMessage(HttpStatusCode.NotFound);
+                    response.Content = new StringContent("La tabla indicada no existe");
+                    return response;
+                }
+                context.SaveChanges();
+                response = new HttpResponseMessage(HttpStatusCode.OK);
+                response.Content = new StringContent("Valor eliminado correctamente");
+                return response;
             }
-            response = new HttpResponseMessage(HttpStatusCode.Conflict);
-            response.Content = new StringContent("Token invalido");
-            return response;
+            catch (Exception e)
+            {
+                response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
+                response.Content = new StringContent("Error inesperado");
+                return response;
+            }
+
         }
     }
 }

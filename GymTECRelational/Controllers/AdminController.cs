@@ -13,7 +13,7 @@ namespace GymTECRelational.Controllers
     public class AdminController : ApiController
     {
         Tools tools = new Tools();
-
+        GymTECEntities context = new GymTECEntities();
         /*Metodo para obtener todos los administradores registrados.
          * 
          * Entrada:-
@@ -21,16 +21,19 @@ namespace GymTECRelational.Controllers
          */
         public List<Empleado> Get()
         {
-            using (GymTECEntities context =new GymTECEntities())
-            {
-                return context.selectAllAdmins().ToList<Empleado>();
-            }
+            
+            return context.selectAllAdmins().ToList<Empleado>();
+            
         }
 
-        // GET: api/Admin/5
-        public string Get(int id)
+        [Route("api/Admin/getAdmin/{id}/{token}")]
+        public HttpResponseMessage Get(string id,string token)
         {
-            return "value";
+            if (tools.tokenVerifier(token, "Administrador"))
+            {
+                return Request.CreateResponse(HttpStatusCode.OK, context.getAdminById(id));
+            }
+            return Request.CreateResponse(HttpStatusCode.Conflict, "Token Invalido");
         }
 
         /*Metodo para realizar las operaciones de registro y login de los administradores.

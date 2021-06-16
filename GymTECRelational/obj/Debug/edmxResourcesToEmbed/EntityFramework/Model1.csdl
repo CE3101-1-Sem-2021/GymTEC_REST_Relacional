@@ -5,8 +5,8 @@
       <PropertyRef Name="Id" />
     </Key>
     <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="Hora_Inicio" Type="Time" Precision="0" />
-    <Property Name="Fecha" Type="DateTime" Precision="0" />
+    <Property Name="Hora_Inicio" Type="Time" Precision="0" Nullable="false" />
+    <Property Name="Fecha" Type="DateTime" Precision="0" Nullable="false" />
     <Property Name="Tipo_Servicio" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" />
     <Property Name="Hora_Final" Type="Time" Nullable="false" Precision="0" />
     <Property Name="Sucursal" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
@@ -45,6 +45,8 @@
     <Property Name="Contraseña" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
     <Property Name="Salt" Type="String" MaxLength="32" FixedLength="false" Unicode="false" Nullable="false" />
     <Property Name="Token" Type="String" MaxLength="32" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="imageURL" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+    <Property Name="Horas_Trabajadas" Type="Decimal" Precision="5" Scale="2" />
   </EntityType>
   <EntityType Name="Maquina">
     <Key>
@@ -55,6 +57,7 @@
     <Property Name="Sucursal" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
     <Property Name="Marca" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
     <Property Name="Costo" Type="Decimal" Precision="7" Scale="2" Nullable="false" />
+    <Property Name="imageURL" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
   </EntityType>
   <EntityType Name="Planilla">
     <Key>
@@ -62,6 +65,7 @@
     </Key>
     <Property Name="Nombre" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" />
     <Property Name="Descripcion" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="imageURL" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
   </EntityType>
   <EntityType Name="Producto">
     <Key>
@@ -72,6 +76,7 @@
     <Property Name="Descripcion" Type="String" MaxLength="300" FixedLength="false" Unicode="false" Nullable="false" />
     <Property Name="Costo" Type="Decimal" Precision="7" Scale="2" />
     <NavigationProperty Name="Sucursals" Relationship="Self.Producto_Sucursal" FromRole="Producto" ToRole="Sucursal" />
+    <Property Name="imageURL" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
   </EntityType>
   <EntityType Name="Puesto">
     <Key>
@@ -79,6 +84,7 @@
     </Key>
     <Property Name="Nombre" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" />
     <Property Name="Descripcion" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="imageURL" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
   </EntityType>
   <EntityType Name="Sucursal">
     <Key>
@@ -93,7 +99,7 @@
     <Property Name="Gerente" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
     <Property Name="Tienda_Act" Type="Boolean" annotation:StoreGeneratedPattern="Computed" />
     <Property Name="Spa_Act" Type="Boolean" annotation:StoreGeneratedPattern="Computed" />
-    <NavigationProperty Name="Sucursal_Horario" Relationship="GymTECModel.FKSucursal_Horario" FromRole="Sucursal" ToRole="Sucursal_Horario" />
+    <Property Name="imageURL" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
   </EntityType>
   <EntityType Name="Tipo_Equipo">
     <Key>
@@ -101,6 +107,7 @@
     </Key>
     <Property Name="Nombre" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" />
     <Property Name="Descripcion" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="imageURL" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
   </EntityType>
   <EntityType Name="Tipo_Servicio">
     <Key>
@@ -109,6 +116,7 @@
     <Property Name="Nombre" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" />
     <Property Name="Descripcion" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
     <NavigationProperty Name="Clases" Relationship="Self.FKTipoServicio_Clase" FromRole="Tipo_Servicio" ToRole="Clase" />
+    <Property Name="imageURL" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
   </EntityType>
   <EntityType Name="Tratamiento_Spa">
     <Key>
@@ -117,6 +125,7 @@
     <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="Nombre" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" />
     <NavigationProperty Name="Sucursal" Relationship="GymTECModel.Tratamiento_Sucursal" FromRole="Tratamiento_Spa" ToRole="Sucursal" />
+    <Property Name="imageURL" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
   </EntityType>
   <Association Name="FKInstructor_Clase">
     <End Role="Empleado" Type="Self.Empleado" Multiplicity="0..1" />
@@ -479,7 +488,6 @@
     <FunctionImport Name="getJob" EntitySet="Puestoes" ReturnType="Collection(GymTECModel.Puesto)">
       <Parameter Name="Nombre" Mode="In" Type="String" />
     </FunctionImport>
-    <FunctionImport Name="gettAllJobs" EntitySet="Puestoes" ReturnType="Collection(GymTECModel.Puesto)" />
     <FunctionImport Name="insertJob">
       <Parameter Name="Nombre" Mode="In" Type="String" />
       <Parameter Name="Descripcion" Mode="In" Type="String" />
@@ -625,13 +633,6 @@
       <End Role="Clase" EntitySet="Clases" />
       <End Role="Cliente_Clase" EntitySet="Cliente_Clase" />
     </AssociationSet>
-    <FunctionImport Name="searchClasses" EntitySet="Clases" ReturnType="Collection(GymTECModel.Clase)">
-      <Parameter Name="Hora_Inicio" Mode="In" Type="Time" />
-      <Parameter Name="Fecha" Mode="In" Type="DateTime" />
-      <Parameter Name="Tipo_Servicio" Mode="In" Type="String" />
-      <Parameter Name="Hora_Final" Mode="In" Type="Time" />
-      <Parameter Name="Sucursal" Mode="In" Type="String" />
-    </FunctionImport>
     <FunctionImport Name="getTreatmentsByGym" EntitySet="Tratamiento_Spa" ReturnType="Collection(GymTECModel.Tratamiento_Spa)">
       <Parameter Name="Sucursal" Mode="In" Type="String" />
     </FunctionImport>
@@ -662,6 +663,31 @@
       <Parameter Name="Sucursal" Mode="In" Type="String" />
       <Parameter Name="Hora_Apertura" Mode="In" Type="Time" />
       <Parameter Name="Hora_Cierre" Mode="In" Type="Time" />
+    </FunctionImport>
+    <FunctionImport Name="searchClasses" EntitySet="Clases" ReturnType="Collection(GymTECModel.Clase)">
+      <Parameter Name="Hora_Inicio" Mode="In" Type="Time" />
+      <Parameter Name="Fecha" Mode="In" Type="DateTime" />
+      <Parameter Name="Tipo_Servicio" Mode="In" Type="String" />
+      <Parameter Name="Hora_Final" Mode="In" Type="Time" />
+      <Parameter Name="Sucursal" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="calculatePayment" ReturnType="Collection(GymTECModel.calculatePayment_Result)">
+      <Parameter Name="Sucursal" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="generatePayment">
+      <Parameter Name="Sucursal" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="getAdminById" EntitySet="Empleadoes" ReturnType="Collection(GymTECModel.Empleado)">
+      <Parameter Name="Id" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="getAllJobs" EntitySet="Puestoes" ReturnType="Collection(GymTECModel.Puesto)" />
+    <FunctionImport Name="registerClass">
+      <Parameter Name="clientId" Mode="In" Type="String" />
+      <Parameter Name="classId" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="unregisterClass">
+      <Parameter Name="clientId" Mode="In" Type="String" />
+      <Parameter Name="classId" Mode="In" Type="Int32" />
     </FunctionImport>
   </EntityContainer>
   <ComplexType Name="selectAllAdmins_Result">
@@ -1026,7 +1052,6 @@
     <Property Name="Sucursal" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
     <Property Name="Hora_Apertura" Type="Time" Precision="0" />
     <Property Name="Hora_Cierre" Type="Time" Precision="0" />
-    <NavigationProperty Name="Sucursal1" Relationship="GymTECModel.FKSucursal_Horario" FromRole="Sucursal_Horario" ToRole="Sucursal" />
   </EntityType>
   <Association Name="FKSucursal_Horario">
     <End Type="GymTECModel.Sucursal" Role="Sucursal" Multiplicity="1">
@@ -1047,5 +1072,46 @@
     <Property Type="String" Name="Sucursal" Nullable="false" MaxLength="20" />
     <Property Type="Time" Name="Hora_Apertura" Nullable="true" />
     <Property Type="Time" Name="Hora_Cierre" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="searchClasses_Result1">
+    <Property Type="Int32" Name="Id" Nullable="false" />
+    <Property Type="Time" Name="Hora_Inicio" Nullable="false" />
+    <Property Type="DateTime" Name="Fecha" Nullable="false" />
+    <Property Type="String" Name="Tipo_Servicio" Nullable="false" MaxLength="25" />
+    <Property Type="Time" Name="Hora_Final" Nullable="false" />
+    <Property Type="String" Name="Sucursal" Nullable="false" MaxLength="20" />
+    <Property Type="String" Name="Instructor" Nullable="true" MaxLength="20" />
+    <Property Type="String" Name="Modalidad" Nullable="false" MaxLength="10" />
+    <Property Type="Int32" Name="Capacidad" Nullable="false" />
+  </ComplexType>
+  <ComplexType Name="calculatePayment_Result">
+    <Property Type="String" Name="Cedula" Nullable="true" MaxLength="20" />
+    <Property Type="String" Name="Nombre" Nullable="true" MaxLength="66" />
+    <Property Type="String" Name="Planilla" Nullable="true" MaxLength="25" />
+    <Property Type="Decimal" Name="Unidades" Nullable="true" Precision="7" Scale="2" />
+    <Property Type="Decimal" Name="Monto" Nullable="true" Precision="7" Scale="2" />
+  </ComplexType>
+  <ComplexType Name="getAdminById_Result">
+    <Property Type="String" Name="Cedula" Nullable="false" MaxLength="20" />
+    <Property Type="String" Name="Puesto" Nullable="false" MaxLength="25" />
+    <Property Type="String" Name="Planilla" Nullable="false" MaxLength="25" />
+    <Property Type="String" Name="Distrito" Nullable="false" MaxLength="25" />
+    <Property Type="String" Name="Canton" Nullable="false" MaxLength="25" />
+    <Property Type="String" Name="Provincia" Nullable="false" MaxLength="25" />
+    <Property Type="String" Name="Sucursal" Nullable="true" MaxLength="20" />
+    <Property Type="String" Name="Nombre" Nullable="false" MaxLength="20" />
+    <Property Type="String" Name="Apellidos" Nullable="false" MaxLength="45" />
+    <Property Type="Decimal" Name="Salario" Nullable="false" Precision="7" Scale="2" />
+    <Property Type="String" Name="Email" Nullable="false" MaxLength="50" />
+    <Property Type="String" Name="Contraseña" Nullable="false" MaxLength="50" />
+    <Property Type="String" Name="Salt" Nullable="false" MaxLength="32" />
+    <Property Type="String" Name="Token" Nullable="false" MaxLength="32" />
+    <Property Type="String" Name="imageURL" Nullable="true" MaxLength="500" />
+    <Property Type="Decimal" Name="Horas_Trabajadas" Nullable="true" Precision="5" Scale="2" />
+  </ComplexType>
+  <ComplexType Name="getAllJobs_Result">
+    <Property Type="String" Name="Nombre" Nullable="false" MaxLength="25" />
+    <Property Type="String" Name="Descripcion" Nullable="false" MaxLength="200" />
+    <Property Type="String" Name="imageURL" Nullable="true" MaxLength="500" />
   </ComplexType>
 </Schema>

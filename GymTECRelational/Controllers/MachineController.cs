@@ -23,7 +23,7 @@ namespace GymTECRelational.Controllers
         [Route("api/Maquina/getAllMachines/{token}")]
         public HttpResponseMessage Get(string token)
         {
-            if (tools.tokenVerifier(token,"Admin"))
+            if (tools.tokenVerifier(token,"Administrador"))
             {
                 return Request.CreateResponse(HttpStatusCode.OK, context.getAllMachines().ToList<Maquina>());
             }
@@ -39,7 +39,7 @@ namespace GymTECRelational.Controllers
         [Route("api/Maquina/getMachine/{type}/{column}/{token}")]
         public HttpResponseMessage Get(string column,string token,string type)
         {
-            if(tools.tokenVerifier(token,"Admin"))
+            if(tools.tokenVerifier(token,"Administrador"))
             {
                 if (type.Equals("Single"))
                 {

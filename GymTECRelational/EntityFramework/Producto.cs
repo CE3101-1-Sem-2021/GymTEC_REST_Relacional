@@ -24,6 +24,7 @@ namespace GymTECRelational.EntityFramework
         public string Nombre { get; set; }
         public string Descripcion { get; set; }
         public Nullable<decimal> Costo { get; set; }
+        public string imageURL { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Sucursal> Sucursals { get; set; }

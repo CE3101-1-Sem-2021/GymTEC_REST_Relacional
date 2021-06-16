@@ -21,8 +21,8 @@ namespace GymTECRelational.EntityFramework
         }
     
         public int Id { get; set; }
-        public Nullable<System.TimeSpan> Hora_Inicio { get; set; }
-        public Nullable<System.DateTime> Fecha { get; set; }
+        public System.TimeSpan Hora_Inicio { get; set; }
+        public System.DateTime Fecha { get; set; }
         public string Tipo_Servicio { get; set; }
         public System.TimeSpan Hora_Final { get; set; }
         public string Sucursal { get; set; }
